@@ -1,4 +1,0 @@
-write2chordpro
-==============
-
-Very small tool to aid in creating '.chordpro' files for apps like Onsong.  Using this as a beginner project. Not really useful yet.
