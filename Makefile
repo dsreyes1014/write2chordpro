@@ -1,5 +1,5 @@
 CC = gcc
-INSTALL_DIR = /usr/bin/w2c
+INSTALL_DIR = /usr/bin/
 CFLAGS = -Wall -c
 OBJ = main.o createdir.o openfile.o input.o editor.o
 OBJDIR = .objects/
@@ -31,8 +31,8 @@ editor.o: $(SRCDIR)editor.c
 clean:
 	rm -rfv $(OBJDIR) w2c
 install:
-	sudo cp -v w2c /usr/bin/
-uninstall: $(INSTALL_DIR)
-	sudo rm -v /usr/bin/w2c
+	sudo cp -v w2c $(INSTALL_DIR)
+uninstall: $(INSTALL_DIR)$(PROGRAM)
+	sudo rm -v $(INSTALL_DIR)$(PROGRAM)
 $(INSTALL_DIR):
 	ls /usr/bin/w2c
