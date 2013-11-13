@@ -16,7 +16,7 @@ static void menuCallBack(GtkMenuItem *item, gpointer data)
 	
 	if(strcmp(option,"Open") == 0) /* If option clicked is Open */
 	{
-		dialog = gtk_file_chooser_dialog_new("Open File",
+		dialog = gtk_file_chooser_dialog_new("Choose file to open",
                                              GTK_WINDOW(window),
                                              GTK_FILE_CHOOSER_ACTION_OPEN,
                                              ("_Cancel"), GTK_RESPONSE_CANCEL,
@@ -43,25 +43,30 @@ static void menuCallBack(GtkMenuItem *item, gpointer data)
 
 int main(int argc, char *argv[])
 {
-	GtkWidget *box1, *box2, *box3;
+	GtkWidget *box1, *box2;
 	GtkWidget *paned;
 	GtkWidget *frame1;
 	GtkWidget *notebook;
+	GtkWidget *grid;
+	GtkWidget *label1, *label2;
 	
 	GtkWidget *menuBar;
 	GtkWidget *fileMenu;
 	GtkWidget *menuItemFile;
+	GtkWidget *tabLabel;
 		
 	gtk_init(&argc, &argv);
 	
 	box1 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
 	box2 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
-	box3 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
 	paned = gtk_paned_new(GTK_ORIENTATION_HORIZONTAL);
 	menuBar = gtk_menu_bar_new();
 	fileMenu = gtk_menu_new();
 	menuItemFile = gtk_menu_item_new_with_label("File");
 	notebook = gtk_notebook_new();
+	grid = gtk_grid_new();
+	label1 = gtk_label_new("Song Title:");
+	label2 = gtk_label_new("Artist:");
 	
 	/* This creates main window titled 'Write 2 Chordpro'. */	
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -92,8 +97,22 @@ int main(int argc, char *argv[])
 	
 	gtk_frame_set_shadow_type(GTK_FRAME(frame1), GTK_SHADOW_IN);
 	
+	/* Attaches labels to grid */	
+	gtk_grid_attach(GTK_GRID(grid), label1, 0, 0, 1, 1);
+	gtk_grid_attach_next_to(GTK_GRID(grid), label2, label1, GTK_POS_BOTTOM, 1, 1);	
+	
+	/* Sets row spacing between widgets inside grid */
+	gtk_grid_set_row_spacing(GTK_GRID(grid), 7);
+	
+	/* Creates tabs for notebook */	
 	gtk_notebook_append_page(GTK_NOTEBOOK(notebook), box2, NULL);
-	gtk_notebook_append_page(GTK_NOTEBOOK(notebook), box3, NULL);
+	gtk_notebook_append_page(GTK_NOTEBOOK(notebook), grid, NULL);
+	
+	/* Sets labels for notebook tabs */	
+	tabLabel = gtk_label_new("Display");	
+	gtk_notebook_set_tab_label(GTK_NOTEBOOK(notebook), box2, tabLabel);	
+	tabLabel = gtk_label_new("Song Editor");	
+	gtk_notebook_set_tab_label(GTK_NOTEBOOK(notebook), grid, tabLabel);
 	
 	/* Packs frame 1 & notebook widgets inside panes 1 & 2 respectively */	
 	gtk_paned_pack1(GTK_PANED(paned), frame1, FALSE, FALSE);
