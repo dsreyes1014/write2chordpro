@@ -3,6 +3,9 @@
 
 GtkWidget *dialog;
 GtkWidget *window;
+GtkWidget *entryTitle, *entryArtist;
+GtkWidget *textView;
+GtkTextBuffer *buffer;
 
 static const char *titles[] = {"Open", "Quit"};
 
@@ -45,11 +48,10 @@ int main(int argc, char *argv[])
 {
 	GtkWidget *box1, *box2;
 	GtkWidget *paned;
-	GtkWidget *frame1;
+	GtkWidget *frame1, *frame2;
 	GtkWidget *notebook;
 	GtkWidget *grid;
 	GtkWidget *label1, *label2;
-	
 	GtkWidget *menuBar;
 	GtkWidget *fileMenu;
 	GtkWidget *menuItemFile;
@@ -65,9 +67,15 @@ int main(int argc, char *argv[])
 	menuItemFile = gtk_menu_item_new_with_label("File");
 	notebook = gtk_notebook_new();
 	grid = gtk_grid_new();
-	label1 = gtk_label_new("Song Title:");
+	label1 = gtk_label_new("Title:");
 	label2 = gtk_label_new("Artist:");
-	
+	entryTitle = gtk_entry_new();
+	entryArtist = gtk_entry_new();
+	textView = gtk_text_view_new();
+	buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(textView));
+	frame1 = gtk_frame_new(NULL);	
+	frame2 = gtk_frame_new(NULL);
+		
 	/* This creates main window titled 'Write 2 Chordpro'. */	
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title(GTK_WINDOW(window), "Write 2 Chordpro");
@@ -92,17 +100,23 @@ int main(int argc, char *argv[])
 	/* Packs menubar and paned in boxes 1 and 2 respectively of box1 */
 	gtk_box_pack_start(GTK_BOX(box1), menuBar, FALSE, FALSE, 2);
 	gtk_box_pack_end(GTK_BOX(box1), paned, FALSE, FALSE, 2);
-		
-	frame1 = gtk_frame_new(NULL);
 	
 	gtk_frame_set_shadow_type(GTK_FRAME(frame1), GTK_SHADOW_IN);
+	gtk_frame_set_shadow_type(GTK_FRAME(frame2), GTK_SHADOW_ETCHED_IN);
+	
+	/* Adds textView inside of frame2 */
+	gtk_container_add(GTK_CONTAINER(frame2), textView);
 	
 	/* Attaches labels to grid */	
 	gtk_grid_attach(GTK_GRID(grid), label1, 0, 0, 1, 1);
-	gtk_grid_attach_next_to(GTK_GRID(grid), label2, label1, GTK_POS_BOTTOM, 1, 1);	
+	gtk_grid_attach(GTK_GRID(grid), label2, 0, 10, 1, 1);	
+	gtk_grid_attach_next_to(GTK_GRID(grid), entryTitle, label1, GTK_POS_RIGHT, 1, 1);
+	gtk_grid_attach_next_to(GTK_GRID(grid), entryArtist, label2, GTK_POS_RIGHT, 1, 1);
+	gtk_grid_attach(GTK_GRID(grid), frame2, 0, 14, 130, 150);
 	
-	/* Sets row spacing between widgets inside grid */
-	gtk_grid_set_row_spacing(GTK_GRID(grid), 7);
+	/* Sets row & column spacing between widgets inside grid */
+	gtk_grid_set_row_spacing(GTK_GRID(grid), 3);
+	gtk_grid_set_column_spacing(GTK_GRID(grid), 3);
 	
 	/* Creates tabs for notebook */	
 	gtk_notebook_append_page(GTK_NOTEBOOK(notebook), box2, NULL);
