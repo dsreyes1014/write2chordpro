@@ -17,11 +17,11 @@ static void menuCallBack(GtkMenuItem *item, gpointer data)
 	if(strcmp(option,"Open") == 0) /* If option clicked is Open */
 	{
 		dialog = gtk_file_chooser_dialog_new("Open File",
-											GTK_WINDOW(window),
-											GTK_FILE_CHOOSER_ACTION_OPEN,
-											("_Cancel"), GTK_RESPONSE_CANCEL,
-											("_Open"), GTK_RESPONSE_ACCEPT,
-											NULL);
+                                             GTK_WINDOW(window),
+                                             GTK_FILE_CHOOSER_ACTION_OPEN,
+                                             ("_Cancel"), GTK_RESPONSE_CANCEL,
+                                             ("_Open"), GTK_RESPONSE_ACCEPT,
+                                             NULL);
 		gtk_widget_set_size_request(dialog, 800, 600);
 		
 		gtk_widget_show_all(dialog);
