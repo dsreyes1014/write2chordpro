@@ -75,13 +75,13 @@ int main(int argc, char *argv[])
 	buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(textView));
 	frame1 = gtk_frame_new(NULL);	
 	frame2 = gtk_frame_new(NULL);
-		
+	
 	/* This creates main window titled 'Write 2 Chordpro'. */	
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title(GTK_WINDOW(window), "Write 2 Chordpro");
 	
 	/* Sizes the paned widget */
-	gtk_widget_set_size_request(paned, 800, 600);
+	//gtk_widget_set_size_request(paned, 800, 600);
 	
 	gtk_menu_bar_set_pack_direction(GTK_MENU_BAR(menuBar), GTK_PACK_DIRECTION_LTR);
 	
@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
 		
 	/* Packs menubar and paned in boxes 1 and 2 respectively of box1 */
 	gtk_box_pack_start(GTK_BOX(box1), menuBar, FALSE, FALSE, 2);
-	gtk_box_pack_end(GTK_BOX(box1), paned, FALSE, FALSE, 2);
+	gtk_box_pack_start(GTK_BOX(box1), paned, FALSE, FALSE, 2);
 	
 	gtk_frame_set_shadow_type(GTK_FRAME(frame1), GTK_SHADOW_IN);
 	gtk_frame_set_shadow_type(GTK_FRAME(frame2), GTK_SHADOW_ETCHED_IN);
