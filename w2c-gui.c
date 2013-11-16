@@ -34,7 +34,7 @@ static void fileMenuCallBack(GtkMenuItem *item, gpointer data)
 		{
 			char *filename;
 			filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
-		
+
 			g_free(filename);
 		}
 		gtk_widget_destroy(dialog);
@@ -49,13 +49,23 @@ static void insertChord(GtkWidget *widget, gpointer data)
 {	
 	GtkTextMark *cursor;	
 	GtkTextIter iter;
-	gint moveCursor = gtk_text_iter_backward_chars(&iter, 1);	
-
+		
+	/* Assigns cursor variable to the actual cursor within buffer */	
 	cursor = gtk_text_buffer_get_insert(GTK_TEXT_BUFFER(buffer));
-	gtk_text_iter_backward_chars(GTK_TEXT_ITER(iter), 1);
 	
+	gtk_text_view_set_cursor_visible(GTK_TEXT_VIEW(textView), TRUE);
+	
+	/* Inserts string inside "..." at cursor location */
 	gtk_text_buffer_insert_at_cursor(GTK_TEXT_BUFFER(buffer), "[]", 2);
-	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(buffer), iter);
+	
+	/* Initializes variable 'iter' */	
+	gtk_text_buffer_get_iter_at_mark(GTK_TEXT_BUFFER(buffer), &iter, cursor);
+	
+	/* Moves cursor back one space */
+	gtk_text_iter_backward_chars(&iter, 1);	
+	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(buffer), &iter);
+	
+	
 }
 
 int main(int argc, char *argv[])
