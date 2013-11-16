@@ -49,10 +49,12 @@ static void insertChord(GtkWidget *widget, gpointer data)
 {	
 	GtkTextMark *cursor;	
 	GtkWidget *listBox;
+	GtkWidget *frame;
 	GtkTextIter iter;
 		
 	cursor = gtk_text_buffer_get_insert(GTK_TEXT_BUFFER(buffer));   /* Assigns cursor variable to the actual cursor within buffer */
 	listBox = gtk_list_box_new();
+	frame = gtk_frame_new("Chord");
 	
 	gtk_text_view_set_cursor_visible(GTK_TEXT_VIEW(textView), TRUE);
 	
@@ -65,7 +67,11 @@ static void insertChord(GtkWidget *widget, gpointer data)
 	/* Moves cursor back one space */
 	gtk_text_iter_backward_chars(&iter, 1);	
 	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(buffer), &iter);
-		
+	
+	gtk_widget_set_size_request(frame, 50, 50);	
+	
+	gtk_container_add(GTK_CONTAINER(listBox), frame);	
+			
 	gtk_widget_show(listBox);
 }
 
