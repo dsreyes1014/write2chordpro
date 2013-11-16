@@ -48,13 +48,19 @@ static void fileMenuCallBack(GtkMenuItem *item, gpointer data)
 static void insertChord(GtkWidget *widget, gpointer data)
 {	
 	GtkTextMark *cursor;	
-	GtkWidget *listBox;
-	GtkWidget *frame;
+	GtkWidget *scrolledWindow;
+	GtkWidget *frame, *dialog, *topHalf, *bottomHalf, *label;
 	GtkTextIter iter;
 		
 	cursor = gtk_text_buffer_get_insert(GTK_TEXT_BUFFER(buffer));   /* Assigns cursor variable to the actual cursor within buffer */
-	listBox = gtk_list_box_new();
-	frame = gtk_frame_new("Chord");
+	scrolledWindow = gtk_scrolled_window_new(NULL, NULL);	
+	frame = gtk_frame_new("Chord");		
+	dialog = gtk_dialog_new();
+	topHalf = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
+	bottomHalf = gtk_dialog_get_action_area(GTK_DIALOG(dialog));	
+	label = gtk_label_new("Choose");
+		
+	gtk_window_set_modal(GTK_WINDOW(dialog), TRUE);
 	
 	gtk_text_view_set_cursor_visible(GTK_TEXT_VIEW(textView), TRUE);
 	
@@ -68,11 +74,16 @@ static void insertChord(GtkWidget *widget, gpointer data)
 	gtk_text_iter_backward_chars(&iter, 1);	
 	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(buffer), &iter);
 	
-	gtk_widget_set_size_request(frame, 50, 50);	
+	/* Sets properties of frame widget */	
+	gtk_frame_set_shadow_type(GTK_FRAME(frame), GTK_SHADOW_ETCHED_IN);
+	gtk_widget_set_size_request(dialog, 200, 200);	
+	gtk_widget_set_size_request(frame, 180, 180);
 	
-	gtk_container_add(GTK_CONTAINER(listBox), frame);	
+	gtk_container_add(GTK_CONTAINER(frame), scrolledWindow);
+	gtk_container_add(GTK_CONTAINER(topHalf), label);
+	gtk_container_add(GTK_CONTAINER(bottomHalf), frame);
 			
-	gtk_widget_show(listBox);
+	gtk_widget_show_all(dialog);
 }
 
 int main(int argc, char *argv[])
