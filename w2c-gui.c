@@ -48,10 +48,11 @@ static void fileMenuCallBack(GtkMenuItem *item, gpointer data)
 static void insertChord(GtkWidget *widget, gpointer data)
 {	
 	GtkTextMark *cursor;	
+	GtkWidget *listBox;
 	GtkTextIter iter;
 		
-	/* Assigns cursor variable to the actual cursor within buffer */	
-	cursor = gtk_text_buffer_get_insert(GTK_TEXT_BUFFER(buffer));
+	cursor = gtk_text_buffer_get_insert(GTK_TEXT_BUFFER(buffer));   /* Assigns cursor variable to the actual cursor within buffer */
+	listBox = gtk_list_box_new();
 	
 	gtk_text_view_set_cursor_visible(GTK_TEXT_VIEW(textView), TRUE);
 	
@@ -64,8 +65,8 @@ static void insertChord(GtkWidget *widget, gpointer data)
 	/* Moves cursor back one space */
 	gtk_text_iter_backward_chars(&iter, 1);	
 	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(buffer), &iter);
-	
-	
+		
+	gtk_widget_show(listBox);
 }
 
 int main(int argc, char *argv[])
