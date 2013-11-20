@@ -1,3 +1,8 @@
+/* Description: Tool to help create chordpro text files for apps like Onsong for ipad or Songbook for Android 
+ * Author: Andrew Reyes
+ * Date : 11-19-2013
+ */
+
 #include <gtk/gtk.h>
 #include <string.h>
 #include <stdio.h>
@@ -6,7 +11,10 @@ GtkWidget *dialog;
 GtkWidget *window;
 GtkWidget *entryTitle, *entryArtist;
 GtkWidget *textView;
+GtkWidget *listBox, *row, *header;
+GtkListStore *listStore;
 GtkTextBuffer *buffer;
+/* GtkListStore *listStore; */
 
 static const char *fileMenuTitles[] = {"Open", "Save", "Quit"};
 
@@ -47,21 +55,38 @@ static void fileMenuCallBack(GtkMenuItem *item, gpointer data)
 
 static void insertChord(GtkWidget *widget, gpointer data)
 {	
-	GtkTextMark *cursor;	
+	GtkTextMark *cursor;
 	GtkWidget *scrolledWindow;
 	GtkWidget *frame, *dialog, *topHalf, *bottomHalf, *label;
+	/* GtkWidget *treeView; */
+	/* GtkTreeViewColumn *column;
+	GtkCellRenderer *cell; */
 	GtkTextIter iter;
-		
+	/* GtkTreeIter listIter; */
+											
+	/* cell = gtk_cell_renderer_text_new(); 
+	listStore = gtk_list_store_new(1, G_TYPE_STRING); 
+	treeView = gtk_tree_view_new_with_model(GTK_TREE_MODEL(listStore));	*/
 	cursor = gtk_text_buffer_get_insert(GTK_TEXT_BUFFER(buffer));   /* Assigns cursor variable to the actual cursor within buffer */
 	scrolledWindow = gtk_scrolled_window_new(NULL, NULL);	
+	/* column = gtk_tree_view_column_new_with_attributes(NULL, cell, "text", 0, NULL); */
 	frame = gtk_frame_new("Chord");		
 	dialog = gtk_dialog_new();
 	topHalf = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
 	bottomHalf = gtk_dialog_get_action_area(GTK_DIALOG(dialog));	
-	label = gtk_label_new("Choose");
-		
+	label = gtk_label_new("Choose Chord");
+	listBox = gtk_list_box_new();
+	row = gtk_list_box_row_new();
+			
+	/* gtk_list_store_append(GTK_LIST_STORE(listStore), &listIter);
+	gtk_list_store_set(GTK_LIST_STORE(listStore), &listIter, 0, "A", -1);	
+	gtk_tree_view_append_column(GTK_TREE_VIEW(treeView), column);
+	
+	gtk_cell_renderer_activate(GTK_CELL_RENDERER(cell), button, GTK_WIDGET(treeView), ); */	
+	
 	gtk_window_set_modal(GTK_WINDOW(dialog), TRUE);
 	
+	/* Sets cursor to visible. I think it's set by default but adding it to make sure */
 	gtk_text_view_set_cursor_visible(GTK_TEXT_VIEW(textView), TRUE);
 	
 	/* Inserts string inside "..." at cursor location */
@@ -74,11 +99,16 @@ static void insertChord(GtkWidget *widget, gpointer data)
 	gtk_text_iter_backward_chars(&iter, 1);	
 	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(buffer), &iter);
 	
-	/* Sets properties of frame widget */	
+	/* Sets properties of frame & dialog widgets */	
 	gtk_frame_set_shadow_type(GTK_FRAME(frame), GTK_SHADOW_ETCHED_IN);
 	gtk_widget_set_size_request(dialog, 200, 200);	
-	gtk_widget_set_size_request(frame, 180, 180);
+	gtk_widget_set_size_request(frame, 190, 190);
 	
+	gtk_list_box_prepend(GTK_LIST_BOX(listBox), row);
+	gtk_list_box_row_set_header(GTK_LIST_BOX_ROW(row), header);
+	
+	/* Pack widgets */
+	gtk_container_add(GTK_CONTAINER(scrolledWindow), listBox);
 	gtk_container_add(GTK_CONTAINER(frame), scrolledWindow);
 	gtk_container_add(GTK_CONTAINER(topHalf), label);
 	gtk_container_add(GTK_CONTAINER(bottomHalf), frame);
@@ -99,7 +129,7 @@ int main(int argc, char *argv[])
 	GtkWidget *menuItemFile;
 	GtkWidget *tabLabel;
 	GtkWidget *scrolledWindow;
-	GtkWidget *button1, *button2;
+	GtkWidget *button1, *button2, *button3;
 		
 	gtk_init(&argc, &argv);
 	
@@ -116,21 +146,22 @@ int main(int argc, char *argv[])
 	label2 = gtk_label_new("Artist:");
 	entryTitle = gtk_entry_new();
 	entryArtist = gtk_entry_new();
-	frame1 = gtk_frame_new(NULL);	
+	frame1 = gtk_frame_new("Songs");	
 	frame2 = gtk_frame_new(NULL);
 	scrolledWindow = gtk_scrolled_window_new(NULL, NULL);
 	button1 = gtk_button_new_with_label("Insert Chord");
 	button2 = gtk_button_new_with_label("Transpose");
+	button3 = gtk_button_new_with_label("Edit Song");
 	textView = gtk_text_view_new();	
 	buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(textView));
-	
+	listStore = gtk_list_store_new(1, G_TYPE_STRING);
 	
 	/* This creates main window titled 'Write 2 Chordpro'. */	
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title(GTK_WINDOW(window), "Write 2 Chordpro");
 	
-	/* Sizes the paned widget */
-	//gtk_widget_set_size_request(paned, 800, 600);
+	/* Sizes the paned widget 
+	gtk_widget_set_size_request(paned, 800, 600); */
 	
 	gtk_menu_bar_set_pack_direction(GTK_MENU_BAR(menuBar), GTK_PACK_DIRECTION_LTR);
 	
@@ -150,7 +181,7 @@ int main(int argc, char *argv[])
 	gtk_box_pack_start(GTK_BOX(box1), menuBar, FALSE, FALSE, 2);
 	gtk_box_pack_start(GTK_BOX(box1), paned, FALSE, FALSE, 2);
 	
-	gtk_frame_set_shadow_type(GTK_FRAME(frame1), GTK_SHADOW_IN);
+	gtk_frame_set_shadow_type(GTK_FRAME(frame1), GTK_SHADOW_ETCHED_IN);
 	gtk_frame_set_shadow_type(GTK_FRAME(frame2), GTK_SHADOW_ETCHED_IN);
 
 	/* Sizes frame2 */	
@@ -192,7 +223,7 @@ int main(int argc, char *argv[])
 	tabLabel = gtk_label_new("Song Editor");	
 	gtk_notebook_set_tab_label(GTK_NOTEBOOK(notebook), grid, tabLabel);
 	
-	/* Packs frame1 & notebook widgets inside panes 1 & 2 respectively */	
+	/* Packs frame1 & notebook widgets inside pane 1 & 2 respectively */	
 	gtk_paned_pack1(GTK_PANED(paned), frame1, FALSE, FALSE);
 	gtk_paned_pack2(GTK_PANED(paned), notebook, FALSE, FALSE);
 	
