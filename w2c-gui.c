@@ -17,6 +17,7 @@ GtkTreeStore *treeStore;
 GtkTreeSelection *selection;
 GtkTreeViewColumn *column;
 GtkTreeModel *model;
+GtkTextMark *cursor;
 /* GtkListStore *listStore; */
 
 static const char *fileMenuTitles[] = {"Open", "Save", "Quit"};
@@ -58,7 +59,8 @@ static void fileMenuCallBack(GtkMenuItem *item, gpointer data)
 
 void rowChange(GtkWidget *widget, gpointer data)
 {
-	GtkTreeIter selChord; 
+	GtkTreeIter selChord;
+	GtkTextIter iter; 
 	gchar *getChord;
 	
 	if(gtk_tree_selection_get_selected(GTK_TREE_SELECTION(widget), &model, &selChord))
@@ -69,21 +71,27 @@ void rowChange(GtkWidget *widget, gpointer data)
 		
 		gtk_text_buffer_insert_at_cursor(GTK_TEXT_BUFFER(buffer), getChord, -1);
 		
-		g_free(getChord);	
+		g_free(getChord);
 		
-		gtk_widget_destroy(chordDialog);
+		gtk_text_buffer_get_iter_at_mark(GTK_TEXT_BUFFER(buffer), &iter, cursor);
+		
+		/* Move cursor forward one space out of brackets */
+		gtk_text_iter_forward_chars(&iter, 1);
+		gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(buffer), &iter);	
+		
+		/* Hides dialog window from screen */ 
+		gtk_widget_hide(chordDialog);
 	}
 }
 
 static void insertChord(GtkWidget *widget, gpointer data)
 {	
-	GtkTextMark *cursor;
 	GtkWidget *scrolledWindow;
 	GtkWidget *frame, *topHalf, *bottomHalf, *label;
 	GtkTreeViewColumn *column;
 	GtkCellRenderer *cell; 
 	GtkTextIter iter;
-	GtkTreeIter parent, child;
+	GtkTreeIter parent, child1, child2;
 	GtkTreeSelection *selection;
 	GtkTreeStore *treeStore;
 	gchar *brackets;
@@ -136,20 +144,52 @@ static void insertChord(GtkWidget *widget, gpointer data)
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &parent, NULL);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &parent, 0, "A", -1);	
 	
-	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child, &parent);
-	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child, 0, "A", -1);
-	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child, &parent);
-	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child, 0, "Am", -1);
-	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child, &parent);
-	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child, 0, "A7", -1);
-	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child, &parent);
-	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child, 0, "Amaj7", -1);
-	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child, &parent);
-	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child, 0, "Am7", -1);
-	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child, &parent);
-	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child, 0, "A2", -1);
-	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child, &parent);
-	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child, 0, "Asus", -1);	
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "A#", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "A#", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "A#m", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "A#7", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "A#M7", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "A#m7", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "A#sus2", -1);	
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "A#sus4", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "Ab", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Ab", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Abm", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Ab7", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "AbM7", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Abm7", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Absus2", -1);	
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Absus4", -1);	
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "A", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "Am", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "A7", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "AM7", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "Am7", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "Asus2", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "Asus4", -1);	
 	
 	gtk_tree_view_append_column(GTK_TREE_VIEW(treeView), column);
 		
