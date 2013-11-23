@@ -102,8 +102,8 @@ static void insertChord(GtkWidget *widget, gpointer data)
 	treeView = gtk_tree_view_new_with_model(GTK_TREE_MODEL(treeStore));	
 	cursor = gtk_text_buffer_get_insert(GTK_TEXT_BUFFER(buffer));   /* Assigns cursor variable to the actual cursor within buffer */
 	scrolledWindow = gtk_scrolled_window_new(NULL, NULL);	
-	column = gtk_tree_view_column_new_with_attributes(NULL, cell, "text", 0, NULL); 
-	frame = gtk_frame_new("Chord");		
+	column = gtk_tree_view_column_new_with_attributes("Chord", cell, "text", 0, NULL); 
+	frame = gtk_frame_new(NULL);		
 	chordDialog = gtk_dialog_new();
 	topHalf = gtk_dialog_get_content_area(GTK_DIALOG(chordDialog));
 	bottomHalf = gtk_dialog_get_action_area(GTK_DIALOG(chordDialog));	
@@ -126,7 +126,6 @@ static void insertChord(GtkWidget *widget, gpointer data)
 	
 	/* Sets properties of frame & dialog widgets */	
 	gtk_frame_set_shadow_type(GTK_FRAME(frame), GTK_SHADOW_ETCHED_IN);
-	gtk_widget_set_size_request(frame, 490, 490);
 		
 	/* Pack widgets */
 	gtk_container_add(GTK_CONTAINER(scrolledWindow), treeView);
@@ -141,6 +140,7 @@ static void insertChord(GtkWidget *widget, gpointer data)
 	g_object_unref(treeStore);	
 	
 	
+	/* Adds Chords to the list */	
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &parent, NULL);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &parent, 0, "A", -1);	
 	
@@ -191,12 +191,47 @@ static void insertChord(GtkWidget *widget, gpointer data)
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "Asus4", -1);	
 	
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &parent, NULL);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &parent, 0, "B", -1);
+	
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "Bb", -1);	
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Bb", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Bbm", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Bb7", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "BbM7", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Bbm7", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Bbsus2", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Bbsus4", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "B", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "Bm", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "B7", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "BM7", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "Bm7", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "Bsus2", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "Bsus4", -1);	
+		
+	/* Adds column to treeView */	
 	gtk_tree_view_append_column(GTK_TREE_VIEW(treeView), column);
 		
 	/* Sets properties for chordDialog widget */	
 	gtk_window_set_modal(GTK_WINDOW(chordDialog), TRUE);
-	gtk_widget_set_size_request(chordDialog, 500, 500);	
-	gtk_widget_set_size_request(frame, 490, 490);
+	gtk_widget_set_size_request(chordDialog, 200, 320);	
+	gtk_widget_set_size_request(frame, 190, 300);
 	
 	gtk_tree_selection_set_mode(GTK_TREE_SELECTION(selection), GTK_SELECTION_BROWSE);
 	
@@ -215,8 +250,12 @@ int main(int argc, char *argv[])
 	GtkWidget *fileMenu;
 	GtkWidget *menuItemFile;
 	GtkWidget *tabLabel;
-	GtkWidget *scrolledWindow;
+	GtkWidget *treeView1;
+	GtkWidget *scrolledWindow, *scrolledWindow1;
 	GtkWidget *button1, *button2; //*button3;
+	GtkListStore *listStore;
+	GtkCellRenderer *cell;
+	GtkTreeViewColumn *column;
 		
 	gtk_init(&argc, &argv);
 	
@@ -233,14 +272,19 @@ int main(int argc, char *argv[])
 	label2 = gtk_label_new("Artist:");
 	entryTitle = gtk_entry_new();
 	entryArtist = gtk_entry_new();
-	frame1 = gtk_frame_new("Songs");	
+	frame1 = gtk_frame_new(NULL);	
 	frame2 = gtk_frame_new(NULL);
 	scrolledWindow = gtk_scrolled_window_new(NULL, NULL);
+	scrolledWindow1 = gtk_scrolled_window_new(NULL, NULL);
 	button1 = gtk_button_new_with_label("Insert Chord");
 	button2 = gtk_button_new_with_label("Transpose");
 	//button3 = gtk_button_new_with_label("Edit Song");
 	textView = gtk_text_view_new();	
 	buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(textView));
+	listStore = gtk_list_store_new(1, G_TYPE_STRING);
+	treeView1 = gtk_tree_view_new_with_model(GTK_TREE_MODEL(listStore));
+	cell = gtk_cell_renderer_text_new();	
+	column = gtk_tree_view_column_new_with_attributes("Songs", cell, "text", NULL);	
 	
 	/* This creates main window titled 'Write 2 Chordpro'. */	
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -309,11 +353,17 @@ int main(int argc, char *argv[])
 	tabLabel = gtk_label_new("Song Editor");	
 	gtk_notebook_set_tab_label(GTK_NOTEBOOK(notebook), grid, tabLabel);
 	
+	gtk_tree_view_append_column(GTK_TREE_VIEW(treeView1), column);
+	
+	/* Packs treeView1 into scrolledWindow1 and scrolledWindow1 into frame1 */
+	gtk_container_add(GTK_CONTAINER(scrolledWindow1), treeView1);	
+	gtk_container_add(GTK_CONTAINER(frame1), scrolledWindow1);
+	
 	/* Packs frame1 & notebook widgets inside pane 1 & 2 respectively */	
 	gtk_paned_pack1(GTK_PANED(paned), frame1, FALSE, FALSE);
 	gtk_paned_pack2(GTK_PANED(paned), notebook, FALSE, FALSE);
 	
-	/* Sizes both frame widgets */ 
+	/* Sizes both frame and notebook widgets */ 
 	gtk_widget_set_size_request(frame1, 200, 75);
 	gtk_widget_set_size_request(notebook, 300, 150);
 	
