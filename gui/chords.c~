@@ -3,7 +3,7 @@
 
 #include <gtk/gtk.h>
 #include <stdio.h>
-#include <string.h>
+#include <strings.h>
 
 #include "chords.h"
 #include "editor.h"

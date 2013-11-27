@@ -7,7 +7,6 @@
 
 #include "menu.h"
 
-GtkWidget *menuBar;
 extern GtkWidget *window;
 const char *fileMenuTitles[] = {"Open", "Save", "Quit"}; // Declared for 'menuItemFile' named "File".
 
@@ -48,7 +47,7 @@ void fileMenuCallBack(GtkMenuItem *item, gpointer data)
 
 void menuFunction(void)
 {
-					           // Creates menu
+	GtkWidget *menuBar;        // Creates menu
 	GtkWidget *fileMenu;       // widgets to
 	GtkWidget *menuItemFile;   // complete menu.
 	
