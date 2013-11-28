@@ -32,8 +32,8 @@ void save(GtkWidget *widget, gpointer data)
 	
 	pFile = fopen(newFile, "w+");
 		
-	fprintf(pFile, "{title: %s}\n", getTitle);
-	fprintf(pFile, "{subtitle: %s}\n\n", getArtist);
+	fprintf(pFile, "\{title: %s\}\n", getTitle);
+	fprintf(pFile, "\{subtitle: %s\}\n\n", getArtist);
 	fprintf(pFile, "%s", body);
 	
 	fclose(pFile);

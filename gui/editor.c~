@@ -13,7 +13,7 @@ const gchar *getTitle, *getArtist;
 extern char directory[];
 extern GtkListStore *listStore;
 
-void addSong(GtkWidget *widget, gpointer data)
+void save(GtkWidget *widget, gpointer data)
 {
 	GtkTextIter start, end;	
 	gchar *body;
@@ -102,5 +102,5 @@ void editor(void)
 	// Connects function 'insertChord' to 'button1' widget.	
 	g_signal_connect(button1, "clicked", G_CALLBACK(insertChord), NULL);
 	// Connects function 'save' to 'button3' labeled "Save".
-	g_signal_connect(button3, "clicked", G_CALLBACK(addSong), NULL);
+	g_signal_connect(button3, "clicked", G_CALLBACK(save), NULL);
 }

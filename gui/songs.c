@@ -44,7 +44,7 @@ void songSelect(void)
 	gchar *getSong;
 	gchar ch;
 	gchar textL1[100], textL2[100], title[100], artist[100], song[50], songPath[50], body[999];
-	gint i, line1, line2;
+	gint i, line1, line2, pos;
 		
 	FILE *fp;	
 		
@@ -64,18 +64,43 @@ void songSelect(void)
 		{
 			i = 0;
 			
-			fseek(fp, 0, SEEK_SET);
+			pos = ftell(fp);
+			
+			g_print("Position in file before setting it for firstline read: %d\n", pos);
+			
+			fseek(fp, 0, SEEK_SET);			
+			
+			pos = ftell(fp);
+			
+			g_print("Position in file after setting it for firstline read: %d\n", pos);
 			
 			while((ch = fgetc(fp)) != '\n')
 			{
 				textL1[i++] = ch;			
 			}
 				
-			line1 = strlen(textL1) + 1;	
+			line1 = strlen(textL1) + 1;
 			
+			fclose(fp);
+		}
+	
+		if((fp = fopen(songPath, "r")) == NULL)
+		{
+			g_print("Error");
+		}
+		else
+		{
 			i = 0;
+			
+			pos = ftell(fp);
+			
+			g_print("Position in file before setting it for secondline read: %d\n", pos);
 
 			fseek(fp, line1, SEEK_SET);		
+			
+			pos = ftell(fp);
+			
+			g_print("Position in file after setting it for secondline read: %d\n", pos);
 						
 			while((ch = fgetc(fp)) != '\n')
 			{
@@ -84,10 +109,27 @@ void songSelect(void)
 						
 			line2 = strlen(textL2) + 1;
 			
+			fclose(fp);
+		}		
+				
+		if((fp = fopen(songPath, "r")) == NULL)
+		{
+			g_print("Error");
+		}
+		else
+		{		
 			i = 0;
+			
+			pos = ftell(fp);
+			
+			g_print("Position in file before setting it for title read: %d\n", pos);
 							
 			// Postion in file where we grab title for visibility.
 			fseek(fp, 8, SEEK_SET);			
+			
+			pos = ftell(fp);
+			
+			g_print("Position in file after setting it for title read: %d\n", pos);			
 			
 			// Grab characters 'til we reach the '\n' character
 			// and place it in 'title'.
@@ -95,17 +137,35 @@ void songSelect(void)
 			{
 				title[i++] = ch;			
 			}
-			
+		
 			// Manually set null terminator.
 			title[strlen(title) -1] = '\0';
 			
 			// Place 'title' in entry widget for title.
 			gtk_entry_set_text(GTK_ENTRY(entryTitle), title);
+		
+			fclose(fp);
+		}
+		
+		if((fp = fopen(songPath, "r")) == NULL)
+		{
+			g_print("Error");
+		}
+		else
+		{
+		
+			i = 0;		
 			
-			i = 0;			
+			pos = ftell(fp);
+			
+			g_print("Position in file before setting it for artist read: %d\n", pos);
 			
 			// Position in file where artist is set.
-			fseek(fp, line1, SEEK_SET);
+			fseek(fp, (line1 -1) + 11, SEEK_SET);
+			
+			pos = ftell(fp);
+			
+			g_print("Position in file after setting it for artist read: %d\n", pos);			
 			
 			// Grab characters 'til we reach the '\n' character
 			// and place it in 'artist'.
@@ -116,13 +176,30 @@ void songSelect(void)
 		
 			// Manually set null terminator.		
 			artist[strlen(artist) -1] = '\0';
-			
+		
 			// Place 'artist' in entry widget for artist.
 			gtk_entry_set_text(GTK_ENTRY(entryArtist), artist);	
-			
+		
+			fclose(fp);
+		}
+		
+		if((fp = fopen(songPath, "r")) == NULL)
+		{
+			g_print("Error");
+		}
+		else
+		{		
 			i = 0;
 			
+			pos = ftell(fp);
+			
+			g_print("Position in file before setting it for body read: %d\n", pos);
+			
 			fseek(fp, line1 + line2 + 1, SEEK_SET);
+			
+			pos = ftell(fp);
+			
+			g_print("Position in file after setting it for body read: %d\n", pos);			
 			
 			while((ch = fgetc(fp)) != EOF)
 			{
@@ -130,12 +207,16 @@ void songSelect(void)
 			}
 		
 			body[strlen(body)] = '\0';
+		
+			gtk_text_buffer_set_text(GTK_TEXT_BUFFER(buffer), body, -1);					
+
+			g_print("Count of first line: %d\n", line1);
 			
-			gtk_text_buffer_set_text(GTK_TEXT_BUFFER(buffer), body, -1);			
+			g_print("Count of second line: %d\n", line2);			
 			
-			g_print("String: %s\n", body);		
-				
-			g_print("Count: %d\n", line1);
+			g_print("Count of first and second line: %d\n", line1+line2);
+			
+			g_print("String: %s\n", body);
 			
 			fclose(fp);		
 		}
