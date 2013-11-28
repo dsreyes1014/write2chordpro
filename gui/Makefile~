@@ -1,6 +1,6 @@
 CC = gcc
 INSTALL_DIR = /usr/local/bin/
-CFLAGS = -Wall -c -std=c99
+CFLAGS = -Wall -c
 PROGRAM = w2c-gui
 OBJECTS = main.o menu.o chords.o songs.o editor.o
 HEADERS = menu.h chords.h songs.h editor.h

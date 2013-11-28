@@ -41,10 +41,12 @@ void createDir(void)
 void songSelect(void)
 {
 	GtkTreeIter songIter;
+	GtkTextIter start;
 	gchar *getSong;
-	gchar song[50], line1[100], line2[100], title[50], artist[50], songPath[100], 
-	      text[10][100];
-	gint firstLine, secondLine, titleL, artistL, line, chars;
+	gchar song[50], line1[100], line2[100], title[50], artist[50], songPath[100];
+	gint firstLine, secondLine, titleL, artistL, lines, line, n;
+	
+	gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(buffer), &start);	
 	
 	FILE *fp;	
 		
@@ -62,7 +64,7 @@ void songSelect(void)
 		}
 		else
 		{
-			fgets(line1, 100, fp);  // Grabs first line of file and puts it in 'title'.
+			fgets(line1, 100, fp);  // Grabs first line of file and puts it in 'line1'.
 			
 			firstLine = strlen(line1);	// Counts number of characters for 'firstLine'.		
 			
@@ -90,19 +92,51 @@ void songSelect(void)
 			
 			fseek(fp, firstLine + secondLine + 2, SEEK_SET);				
 			
-			for(line = 0; line < 10; line++)			
+			while((n = fgetc(fp)) != EOF)			
 			{							
-				fgets(text[line], 100, fp);		
+				if(n == '\n')
+				{
+					lines++;		
+				}						
+				//g_print("%d\n", lines);
 			}
-			for(line = 0; line < 10 && strchr(text[line], '\0') != NULL; line++)
-			{		
-				g_print("Line %d: %s\n", line, text[line]);
-						
-				//sprintf(body, "%s", text[line]);	
-				
-			}
-			//gtk_text_buffer_set_text(GTK_TEXT_BUFFER(buffer), text[10], -1);
+		
+			//gchar text[lines][50];		
+		
+			//fseek(fp, firstLine + secondLine + 2, SEEK_SET);					
 			
+			/*for(line = 0; line <= lines; line++)
+			{						
+				fgets(&text[line], 50, fp);	
+				
+				//gtk_text_buffer_set_text(GTK_TEXT_BUFFER(buffer), text[line], -1);
+			}			
+			for(line = 0; line <= lines; line++)
+			{
+				g_print("Line %d: %s\n", line, text[line]);												
+			}	*/
+			
+			line = 0;			
+			
+			gchar text[line], body;
+			 			
+			text[line] = '\0';			
+			
+			while((body = fgetc(fp)) != EOF)
+			{
+				text[line++] = body;
+				
+				g_print("%c", body);			
+				
+				gtk_text_buffer_set_text(GTK_TEXT_BUFFER(buffer), &body, -1);
+			}
+			
+			//line = 0;
+			
+			//gtk_text_buffer_set_text(GTK_TEXT_BUFFER(buffer), *text, -1);
+			
+			//gtk_text_buffer_insert(GTK_TEXT_BUFFER(buffer), &start, *text[lines], -1);
+
 			gtk_entry_set_text(GTK_ENTRY(entryTitle), title);	
 			
 			gtk_entry_set_text(GTK_ENTRY(entryArtist), artist);
