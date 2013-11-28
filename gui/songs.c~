@@ -41,13 +41,11 @@ void createDir(void)
 void songSelect(void)
 {
 	GtkTreeIter songIter;
-	GtkTextIter start;
 	gchar *getSong;
-	gchar song[50], line1[100], line2[100], title[50], artist[50], songPath[100];
-	gint firstLine, secondLine, titleL, artistL, lines, line, n;
-	
-	gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(buffer), &start);	
-	
+	gchar ch;
+	gchar textL1[100], textL2[100], title[100], artist[100], song[50], songPath[50], body[999];
+	gint i, line1, line2;
+		
 	FILE *fp;	
 		
 	if(gtk_tree_selection_get_selected(GTK_TREE_SELECTION(selection), &model, &songIter))
@@ -64,88 +62,85 @@ void songSelect(void)
 		}
 		else
 		{
-			fgets(line1, 100, fp);  // Grabs first line of file and puts it in 'line1'.
+			i = 0;
 			
-			firstLine = strlen(line1);	// Counts number of characters for 'firstLine'.		
+			fseek(fp, 0, SEEK_SET);
 			
-			fseek(fp, 8, SEEK_SET);  // Sets position in file relative to beginning of file.
-			
-			fgets(title, 50, fp);   // Reads line in file at set position.
-			
-			titleL = strlen(title);  // Counts number of characters for 'titleL'.
-			
-			title[titleL - 2] = '\0';
-			
-			fseek(fp, firstLine + 11 , SEEK_SET);			
-			
-			fgets(artist, 50, fp);   
-					
-			artistL = strlen(artist);
-			
-			artist[artistL -2] = '\0';
-			
-			fseek(fp, firstLine + 1, SEEK_SET);
-			
-			fgets(line2, 100, fp);
-			
-			secondLine = strlen(line2);
-			
-			fseek(fp, firstLine + secondLine + 2, SEEK_SET);				
-			
-			while((n = fgetc(fp)) != EOF)			
-			{							
-				if(n == '\n')
-				{
-					lines++;		
-				}						
-				//g_print("%d\n", lines);
-			}
-		
-			//gchar text[lines][50];		
-		
-			fseek(fp, firstLine + secondLine + 2, SEEK_SET);					
-			
-			/*for(line = 0; line <= lines; line++)
-			{						
-				fgets(&text[line], 50, fp);	
-				
-				//gtk_text_buffer_set_text(GTK_TEXT_BUFFER(buffer), text[line], -1);
-			}			
-			for(line = 0; line <= lines; line++)
+			while((ch = fgetc(fp)) != '\n')
 			{
-				g_print("Line %d: %s\n", line, text[line]);												
-			}	*/
-			
-			line = 0;			
-			
-			gchar text[line], body;
-			 			
-			text[line] = '\0';			
-			
-			while((body = fgetc(fp)) != EOF)
-			{
-				text[line++] = body;
-				
-				g_print("%c", body);			
-				
-				gtk_text_buffer_set_text(GTK_TEXT_BUFFER(buffer), &body, -1);
+				textL1[i++] = ch;			
 			}
+				
+			line1 = strlen(textL1) + 1;	
 			
-			//line = 0;
-			
-			//gtk_text_buffer_set_text(GTK_TEXT_BUFFER(buffer), *text, -1);
-			
-			//gtk_text_buffer_insert(GTK_TEXT_BUFFER(buffer), &start, *text[lines], -1);
+			i = 0;
 
-			gtk_entry_set_text(GTK_ENTRY(entryTitle), title);	
+			fseek(fp, line1, SEEK_SET);		
+						
+			while((ch = fgetc(fp)) != '\n')
+			{
+				textL2[i++] = ch;			
+			}
+						
+			line2 = strlen(textL2) + 1;
 			
-			gtk_entry_set_text(GTK_ENTRY(entryArtist), artist);
-			//g_print("%s\n", song);	
+			i = 0;
+							
+			// Postion in file where we grab title for visibility.
+			fseek(fp, 8, SEEK_SET);			
+			
+			// Grab characters 'til we reach the '\n' character
+			// and place it in 'title'.
+			while((ch = fgetc(fp)) != '\n')
+			{
+				title[i++] = ch;			
+			}
+			
+			// Manually set null terminator.
+			title[strlen(title) -1] = '\0';
+			
+			// Place 'title' in entry widget for title.
+			gtk_entry_set_text(GTK_ENTRY(entryTitle), title);
+			
+			i = 0;			
+			
+			// Position in file where artist is set.
+			fseek(fp, line1, SEEK_SET);
+			
+			// Grab characters 'til we reach the '\n' character
+			// and place it in 'artist'.
+			while((ch = fgetc(fp)) != '\n')
+			{
+				artist[i++] = ch;
+			}
+		
+			// Manually set null terminator.		
+			artist[strlen(artist) -1] = '\0';
+			
+			// Place 'artist' in entry widget for artist.
+			gtk_entry_set_text(GTK_ENTRY(entryArtist), artist);	
+			
+			i = 0;
+			
+			fseek(fp, line1 + line2 + 1, SEEK_SET);
+			
+			while((ch = fgetc(fp)) != EOF)
+			{
+				body[i++] = ch;			
+			}
+		
+			body[strlen(body)] = '\0';
+			
+			gtk_text_buffer_set_text(GTK_TEXT_BUFFER(buffer), body, -1);			
+			
+			g_print("String: %s\n", body);		
+				
+			g_print("Count: %d\n", line2);
+			
+			fclose(fp);		
 		}
 	}
-
 }
-
 
 void listFiles(void)
 {	
