@@ -17,7 +17,7 @@ GtkTreeViewColumn *column;
 GtkTreeSelection *selection;
 GtkTreeModel *model;
 gchar directory[75];
-extern GtkWidget *entryTitle, *entryArtist;
+extern GtkWidget *entryTitle, *entryArtist, *textView;
 extern GtkTextBuffer *buffer;
 
 void createDir(void)
@@ -43,9 +43,10 @@ void songSelect(void)
 	GtkTreeIter songIter;
 	gchar *getSong;
 	gchar ch;
-	gchar textL1[100], textL2[100], title[100], artist[100], song[50], songPath[50], body[999];
-	gint i, line1, line2, pos;
+	gchar title[50], artist[50], song[50], songPath[50], body[999];
+	gint i, line1, line2, pos, lineCount;
 		
+	
 	FILE *fp;	
 		
 	if(gtk_tree_selection_get_selected(GTK_TREE_SELECTION(selection), &model, &songIter))
@@ -56,133 +57,100 @@ void songSelect(void)
 		sprintf(song, "%s.chordpro", getSong);
 		sprintf(songPath, "%s%s", directory, song);		
 
-		if((fp = fopen(songPath, "r")) == NULL)
-		{
-			g_print("Error");
-		}
-		else
-		{
-			i = 0;
-			
-			pos = ftell(fp);
-			
-			g_print("Position in file before setting it for firstline read: %d\n", pos);
-			
-			fseek(fp, 0, SEEK_SET);			
-			
-			pos = ftell(fp);
-			
-			g_print("Position in file after setting it for firstline read: %d\n", pos);
-			
-			while((ch = fgetc(fp)) != '\n')
-			{
-				textL1[i++] = ch;			
-			}
-				
-			line1 = strlen(textL1) + 1;
-			
-			fclose(fp);
-		}
+		if((fp = fopen(songPath, "r")) == NULL)				//  
+		{																   // 
+			g_print("Error");											//	
+		}                                                  // 
+		else																// This if/else
+		{																	// statement will count how
+			lineCount = 0;												// many lines
+																			// are in the file.
+			while((ch = fgetc(fp)) != EOF)						// 
+			{																//
+				if(ch == '\n')											//
+				{															//
+					lineCount++;										//
+				}															//
+			}																//
+		
+			g_print("Line count is: %d\n", lineCount);
+		
+			fclose(fp);		
+		}	
 	
+		gchar lines[lineCount][100];	
+		
+		
+		
+		if((fp = fopen(songPath, "r")) == NULL)            //
+		{																	//
+			g_print("Error");											// This if/else 
+		}																	// statement will 
+		else																// read each line
+		{																	//	for future 
+			for(i = 0; i < lineCount; i++)						// text manipulation.
+			{																//
+				fgets(lines[i], 100, fp);							//
+			}																
+																			
+			fclose(fp);													
+		}			
+		
+		line1 = strlen(lines[0]);
+		line2 = strlen(lines[1]);
+		
+		g_print("Count of first line: %d\n", line1);			// This section
+																			// is for debugging
+		g_print("Count of second line: %d\n", line2);		// purposes only.
+																			//
+		g_print("All of line1: %s\n", lines[0]);				//
+																			//
+		g_print("All of line1: %s\n", lines[1]);				//												
+		
+		if((fp = fopen(songPath, "r")) == NULL)						
+		{																			
+			g_print("Error");													//
+		}																			//
+		else																		// This if/else
+		{																			// statement sets 
+			if(strlen(lines[0]) != 0)										// the title and 
+			{																		// enters it into
+				fseek(fp, 8, SEEK_SET);										// the GtkEntry
+																					// widget.
+				fgets(title, 50, fp);										//
+																					//
+				title[strlen(title) -2] = '\0';							
+																					
+				gtk_entry_set_text(GTK_ENTRY(entryTitle), title);	
+																					
+				gtk_editable_set_editable(GTK_EDITABLE(entryTitle), FALSE);				
+								
+				fclose(fp);													
+			}	
+		}
+															
 		if((fp = fopen(songPath, "r")) == NULL)
 		{
 			g_print("Error");
 		}
 		else
 		{
-			i = 0;
-			
-			pos = ftell(fp);
-			
-			g_print("Position in file before setting it for secondline read: %d\n", pos);
-
-			fseek(fp, line1, SEEK_SET);		
-			
-			pos = ftell(fp);
-			
-			g_print("Position in file after setting it for secondline read: %d\n", pos);
-						
-			while((ch = fgetc(fp)) != '\n')
-			{
-				textL2[i++] = ch;			
-			}
-						
-			line2 = strlen(textL2) + 1;
-			
-			fclose(fp);
-		}		
+			if(strlen(lines[1]) != 0)
+			{					
+				fseek(fp, strlen(lines[0]) + 11, SEEK_SET);
 				
-		if((fp = fopen(songPath, "r")) == NULL)
-		{
-			g_print("Error");
-		}
-		else
-		{		
-			i = 0;
-			
-			pos = ftell(fp);
-			
-			g_print("Position in file before setting it for title read: %d\n", pos);
-							
-			// Postion in file where we grab title for visibility.
-			fseek(fp, 8, SEEK_SET);			
-			
-			pos = ftell(fp);
-			
-			g_print("Position in file after setting it for title read: %d\n", pos);			
-			
-			// Grab characters 'til we reach the '\n' character
-			// and place it in 'title'.
-			while((ch = fgetc(fp)) != '\n')
-			{
-				title[i++] = ch;			
-			}
-		
-			// Manually set null terminator.
-			title[strlen(title) -1] = '\0';
-			
-			// Place 'title' in entry widget for title.
-			gtk_entry_set_text(GTK_ENTRY(entryTitle), title);
-		
-			fclose(fp);
-		}
-		
-		if((fp = fopen(songPath, "r")) == NULL)
-		{
-			g_print("Error");
-		}
-		else
-		{
-		
-			i = 0;		
-			
-			pos = ftell(fp);
-			
-			g_print("Position in file before setting it for artist read: %d\n", pos);
-			
-			// Position in file where artist is set.
-			fseek(fp, (line1 -2) + 11, SEEK_SET);
-			
-			pos = ftell(fp);
-			
-			g_print("Position in file after setting it for artist read: %d\n", pos);			
-			
-			// Grab characters 'til we reach the '\n' character
-			// and place it in 'artist'.
-			while((ch = fgetc(fp)) != '\n')
-			{
-				artist[i++] = ch;
-			}
-		
-			// Manually set null terminator.		
-			artist[strlen(artist) -1] = '\0';
-		
-			// Place 'artist' in entry widget for artist.
-			gtk_entry_set_text(GTK_ENTRY(entryArtist), artist);	
-		
-			fclose(fp);
-		}
-		
+				fgets(artist, 50, fp);					
+				
+				artist[strlen(artist) -2] = '\0';
+				
+				gtk_entry_set_text(GTK_ENTRY(entryArtist), artist);
+				
+				gtk_editable_set_editable(GTK_EDITABLE(entryTitle), FALSE);
+				
+				fclose(fp);		
+			}	
+		}			
+						
 		if((fp = fopen(songPath, "r")) == NULL)
 		{
 			g_print("Error");
@@ -206,17 +174,11 @@ void songSelect(void)
 				body[i++] = ch;			
 			}
 		
-			body[strlen(body)] = '\0';
-		
-			gtk_text_buffer_set_text(GTK_TEXT_BUFFER(buffer), body, -1);					
-
-			g_print("Count of first line: %d\n", line1);
+			gtk_text_buffer_set_text(GTK_TEXT_BUFFER(buffer), body, -1);		
 			
-			g_print("Count of second line: %d\n", line2);			
+			gtk_text_view_set_editable(GTK_TEXT_VIEW(textView), FALSE);					
 			
-			g_print("Count of first and second line: %d\n", line1+line2);
-			
-			g_print("String: %s\n", body);
+			g_print("Body:\n%s\n", body);
 			
 			fclose(fp);		
 		}
