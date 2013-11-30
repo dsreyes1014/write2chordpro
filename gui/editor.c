@@ -6,8 +6,9 @@
 
 #include "chords.h"
 #include "songs.h"
+#include "editor.h"
 
-GtkWidget *entryTitle, *entryArtist, *textView, *grid;
+GtkWidget *entryTitle, *entryArtist, *textView, *grid, *button5;
 GtkEntryBuffer *entryBuffer;
 GtkTextBuffer *buffer;
 const gchar *getTitle, *getArtist;
@@ -36,7 +37,7 @@ void save(GtkWidget *widget, gpointer data)
 		
 	fprintf(pFile, "{title: %s}\n", getTitle);
 	fprintf(pFile, "{subtitle: %s}\n\n", getArtist);
-	fprintf(pFile, "%s\n", body);
+	fprintf(pFile, "%s\0", body);
 	
 	fclose(pFile);
 	
@@ -64,21 +65,34 @@ void newSong(GtkWidget *widget, gpointer data)
 	gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(buffer), &end);
 	
 	gtk_text_buffer_delete(GTK_TEXT_BUFFER(buffer), &start, &end);
+	
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button5), TRUE);	
 }
 
-void editSong(GtkWidget *widget, gpointer data)
+void editSong(void)
 {
-	gtk_editable_set_editable(GTK_EDITABLE(entryTitle), TRUE);
+	if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button5)) == TRUE)
+	{
+		gtk_editable_set_editable(GTK_EDITABLE(entryTitle), TRUE);
 	
-	gtk_editable_set_editable(GTK_EDITABLE(entryArtist), TRUE);
+		gtk_editable_set_editable(GTK_EDITABLE(entryArtist), TRUE);
 	
-	gtk_text_view_set_editable(GTK_TEXT_VIEW(textView), TRUE);
+		gtk_text_view_set_editable(GTK_TEXT_VIEW(textView), TRUE);
+	}
+	else 
+	{
+		gtk_editable_set_editable(GTK_EDITABLE(entryTitle), FALSE);
+	
+		gtk_editable_set_editable(GTK_EDITABLE(entryArtist), FALSE);
+	
+		gtk_text_view_set_editable(GTK_TEXT_VIEW(textView), FALSE);
+	}
 }
 
 void editor(void)
 {
 	GtkWidget *label1, *label2, *button1, *button2, *button3,
-			    *button4, *button5, *frame, *boxTop, *scrolledWindow,
+			    *button4, *frame, *boxTop, *scrolledWindow,
 			    *boxBottom;
 		
 	grid = gtk_grid_new();

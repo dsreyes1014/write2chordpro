@@ -145,7 +145,7 @@ void songSelect(void)
 				
 				gtk_entry_set_text(GTK_ENTRY(entryArtist), artist);
 				
-				gtk_editable_set_editable(GTK_EDITABLE(entryTitle), FALSE);
+				gtk_editable_set_editable(GTK_EDITABLE(entryArtist), FALSE);
 				
 				fclose(fp);		
 			}	
