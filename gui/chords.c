@@ -12,7 +12,7 @@ GtkWidget *chordDialog;
 GtkTreeModel *model;
 GtkTreeStore *treeStore;
 GtkTextMark *cursor;
-extern GtkTextBuffer *buffer;
+extern GtkTextBuffer *tBufferEditor;
 
 void listChords(void)
 {
@@ -351,15 +351,15 @@ void chordSelect(GtkWidget *widget, gpointer data)
 
 			g_print("%s\n", getChord);		
 		
-			gtk_text_buffer_insert_at_cursor(GTK_TEXT_BUFFER(buffer), getChord, -1);
+			gtk_text_buffer_insert_at_cursor(GTK_TEXT_BUFFER(tBufferEditor), getChord, -1);
 		
 			g_free(getChord);
 		
-			gtk_text_buffer_get_iter_at_mark(GTK_TEXT_BUFFER(buffer), &iter, cursor);
+			gtk_text_buffer_get_iter_at_mark(GTK_TEXT_BUFFER(tBufferEditor), &iter, cursor);
 		
 		// Move cursor forward one space out of brackets.
 		gtk_text_iter_forward_chars(&iter, 1);
-		gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(buffer), &iter);	
+		gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(tBufferEditor), &iter);	
 		
 		// Hides dialog window from screen.
 		gtk_widget_hide(chordDialog);
@@ -381,7 +381,7 @@ void insertChord(GtkWidget *widget, gpointer data)
 	cell = gtk_cell_renderer_text_new(); 
 	treeStore = gtk_tree_store_new(1, G_TYPE_STRING); 
 	treeView = gtk_tree_view_new_with_model(GTK_TREE_MODEL(treeStore));	
-	cursor = gtk_text_buffer_get_insert(GTK_TEXT_BUFFER(buffer));   // Assigns cursor variable to the actual cursor within buffer.
+	cursor = gtk_text_buffer_get_insert(GTK_TEXT_BUFFER(tBufferEditor));   // Assigns cursor variable to the actual cursor within buffer.
 	scrolledWindow = gtk_scrolled_window_new(NULL, NULL);	
 	column = gtk_tree_view_column_new_with_attributes("Chord", cell, "text", 0, NULL); 
 	frame = gtk_frame_new(NULL);		
@@ -393,14 +393,14 @@ void insertChord(GtkWidget *widget, gpointer data)
 	model = gtk_tree_view_get_model(GTK_TREE_VIEW(treeView));		
 	
 	// Inserts string inside "..." at cursor location.
-	gtk_text_buffer_insert_at_cursor(GTK_TEXT_BUFFER(buffer), brackets, 2);	
+	gtk_text_buffer_insert_at_cursor(GTK_TEXT_BUFFER(tBufferEditor), brackets, 2);	
 	
 	// Initializes variable 'iter'.	
-	gtk_text_buffer_get_iter_at_mark(GTK_TEXT_BUFFER(buffer), &iter, cursor);	
+	gtk_text_buffer_get_iter_at_mark(GTK_TEXT_BUFFER(tBufferEditor), &iter, cursor);	
 	
 	// Moves cursor back one space.
 	gtk_text_iter_backward_chars(&iter, 1);	
-	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(buffer), &iter);		
+	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(tBufferEditor), &iter);		
 	
 	// Sets properties of frame & dialog widgets.	
 	gtk_frame_set_shadow_type(GTK_FRAME(frame), GTK_SHADOW_ETCHED_IN);

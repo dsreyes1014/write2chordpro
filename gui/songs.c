@@ -16,9 +16,9 @@ GtkListStore *listStore;
 GtkTreeViewColumn *column;
 GtkTreeSelection *selection;
 GtkTreeModel *model;
-gchar directory[75];
-extern GtkWidget *entryTitle, *entryArtist, *textView;
-extern GtkTextBuffer *buffer;
+gchar directory[75], song[50], songPath[100];
+extern GtkWidget *entryTitle, *entryArtist, *tViewEditor;
+extern GtkTextBuffer *tBufferEditor;
 
 void createDir(void)
 {
@@ -43,15 +43,14 @@ void songSelect(void)
 	GtkTreeIter songIter;
 	gchar *getSong;
 	gchar ch;
-	gchar title[50], artist[50], song[50], songPath[50], body[999];
+	gchar title[50], artist[50], body[999];
 	gint i, line1, line2, pos, lineCount;
 		
 	
 	FILE *fp;	
 		
 	if(gtk_tree_selection_get_selected(GTK_TREE_SELECTION(selection), &model, &songIter))
-	{
-		gtk_tree_view_set_activate_on_single_click(GTK_TREE_VIEW(treeView), FALSE);		
+	{		
 		gtk_tree_model_get(GTK_TREE_MODEL(listStore), &songIter, 0, &getSong, -1);	
 		
 		sprintf(song, "%s.chordpro", getSong);
@@ -174,9 +173,9 @@ void songSelect(void)
 				body[i++] = ch;			
 			}
 		
-			gtk_text_buffer_set_text(GTK_TEXT_BUFFER(buffer), body, -1);		
+			gtk_text_buffer_set_text(GTK_TEXT_BUFFER(tBufferEditor), body, -1);		
 			
-			gtk_text_view_set_editable(GTK_TEXT_VIEW(textView), FALSE);					
+			gtk_text_view_set_editable(GTK_TEXT_VIEW(tViewEditor), FALSE);					
 			
 			g_print("Body:\n%s\n", body);
 			

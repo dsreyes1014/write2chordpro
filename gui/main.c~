@@ -38,8 +38,6 @@ int main(int argc, char *argv[])
 	scrolledWindow1 = gtk_scrolled_window_new(NULL, NULL);
    scrolledWindow2 = gtk_scrolled_window_new(NULL, NULL);
    
-   display();
-   
 	// This creates toplevel 'window' widget titled "Write 2 Chordpro".
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title(GTK_WINDOW(window), "Write 2 Chordpro");
@@ -49,6 +47,8 @@ int main(int argc, char *argv[])
 	// Packs 'menuBar' and 'paned' widgets in 'box1' widget.
 	gtk_box_pack_start(GTK_BOX(box1), menuBar, FALSE, FALSE, 2);
 	gtk_box_pack_start(GTK_BOX(box1), paned, TRUE, TRUE, 2);	
+	
+	display();
 	
 	songList();	
 	

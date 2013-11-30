@@ -8,9 +8,9 @@
 #include "songs.h"
 #include "editor.h"
 
-GtkWidget *entryTitle, *entryArtist, *textView, *grid, *button5;
+GtkWidget *entryTitle, *entryArtist, *tViewEditor, *grid, *button5;
 GtkEntryBuffer *entryBuffer;
-GtkTextBuffer *buffer;
+GtkTextBuffer *tBufferEditor;
 const gchar *getTitle, *getArtist;
 extern char directory[];
 extern GtkListStore *listStore;
@@ -24,12 +24,12 @@ void save(GtkWidget *widget, gpointer data)
 	
 	FILE *pFile;		
 	
-	gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(buffer), &start);
-	gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(buffer), &end);	
+	gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(tBufferEditor), &start);
+	gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(tBufferEditor), &end);	
 	
 	getTitle = gtk_entry_get_text(GTK_ENTRY(entryTitle));
 	getArtist = gtk_entry_get_text(GTK_ENTRY(entryArtist));
-	body = gtk_text_buffer_get_text(GTK_TEXT_BUFFER(buffer), &start, &end, TRUE);
+	body = gtk_text_buffer_get_text(GTK_TEXT_BUFFER(tBufferEditor), &start, &end, TRUE);
 	
 	sprintf(newFile, "%s%s.chordpro", directory, getTitle);
 	
@@ -61,10 +61,10 @@ void newSong(GtkWidget *widget, gpointer data)
 	
 	gtk_entry_buffer_delete_text(GTK_ENTRY_BUFFER(entryBuffer), 0, -1);
 	
-	gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(buffer), &start);
-	gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(buffer), &end);
+	gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(tBufferEditor), &start);
+	gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(tBufferEditor), &end);
 	
-	gtk_text_buffer_delete(GTK_TEXT_BUFFER(buffer), &start, &end);
+	gtk_text_buffer_delete(GTK_TEXT_BUFFER(tBufferEditor), &start, &end);
 	
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button5), TRUE);	
 }
@@ -77,7 +77,7 @@ void editSong(void)
 	
 		gtk_editable_set_editable(GTK_EDITABLE(entryArtist), TRUE);
 	
-		gtk_text_view_set_editable(GTK_TEXT_VIEW(textView), TRUE);
+		gtk_text_view_set_editable(GTK_TEXT_VIEW(tViewEditor), TRUE);
 	}
 	else 
 	{
@@ -85,7 +85,7 @@ void editSong(void)
 	
 		gtk_editable_set_editable(GTK_EDITABLE(entryArtist), FALSE);
 	
-		gtk_text_view_set_editable(GTK_TEXT_VIEW(textView), FALSE);
+		gtk_text_view_set_editable(GTK_TEXT_VIEW(tViewEditor), FALSE);
 	}
 }
 
@@ -100,8 +100,8 @@ void editor(void)
 	entryArtist = gtk_entry_new();
 	label1 = gtk_label_new("Title:");
 	label2 = gtk_label_new("Artist:");
-	textView = gtk_text_view_new();
-	buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(textView));
+	tViewEditor = gtk_text_view_new();
+	tBufferEditor = gtk_text_view_get_buffer(GTK_TEXT_VIEW(tViewEditor));
 	button1 = gtk_button_new_with_label("Insert Chord");
 	button2 = gtk_button_new_with_label("Transpose");
 	button3 = gtk_button_new_with_label("Add New");
@@ -116,7 +116,7 @@ void editor(void)
 	gtk_entry_set_placeholder_text(GTK_ENTRY(entryArtist), "Enter name of artist here");
 	
 	// Sets cursor to visible. I think it's set by default but adding it to make sure.
-	gtk_text_view_set_cursor_visible(GTK_TEXT_VIEW(textView), TRUE);
+	gtk_text_view_set_cursor_visible(GTK_TEXT_VIEW(tViewEditor), TRUE);
 
 	// Properties for 'frame' widget.	
 	gtk_frame_set_shadow_type(GTK_FRAME(frame), GTK_SHADOW_ETCHED_IN);	
@@ -133,7 +133,7 @@ void editor(void)
 	gtk_box_pack_start(GTK_BOX(boxBottom), button2, FALSE, FALSE, 2);    
 	
 	// Packs 'textView' widget inside of 'scrolledWindow' widget.	
-	gtk_container_add(GTK_CONTAINER(scrolledWindow), textView);
+	gtk_container_add(GTK_CONTAINER(scrolledWindow), tViewEditor);
 	
 	// Packs 'scrolledWindow' widget into 'frame2' widget.
 	gtk_container_add(GTK_CONTAINER(frame), scrolledWindow);
