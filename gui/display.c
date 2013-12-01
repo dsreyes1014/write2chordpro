@@ -6,31 +6,33 @@
 
 #include "display.h"
 #include "editor.h"
+#include "songs.h"
 
 GtkWidget *tViewDisplay;
+GtkTextBuffer *tBufferDisplay;
 extern GtkWidget *entryTitle, *entryArtist, *tViewEditor;
+extern const gchar *titleDisplay;
+extern gchar displayBody[];
 
 void display(void)
-{
-	GtkTextBuffer *tBufferDisplay;
-	GtkTextIter start, end;
-	gchar display[15][100];
-	const gchar *title, *artist;	
+{	
+	GtkTextIter start, end, line, ch;
+	
+	gint lineCount;
 	
 	tViewDisplay = gtk_text_view_new();
 	tBufferDisplay = gtk_text_view_get_buffer(GTK_TEXT_VIEW(tViewDisplay));
 	
 	gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(tBufferDisplay), &start);
 	gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(tBufferDisplay), &end);
+	gtk_text_buffer_get_iter_at_line(GTK_TEXT_BUFFER(tBufferDisplay), &line, 0);
+	gtk_text_buffer_get_iter_at_offset(GTK_TEXT_BUFFER(tBufferDisplay), &ch, 0);
+	
+	lineCount = gtk_text_buffer_get_line_count(GTK_TEXT_BUFFER(tBufferDisplay));
+	
+	g_print("Line count is: %d\n", lineCount);
 	
 	gtk_text_view_set_editable(GTK_TEXT_VIEW(tViewDisplay), FALSE);
 	
-	title = gtk_entry_get_text(GTK_ENTRY(entryTitle));
-	
-	g_print("%s\n", title);
-	
-	gtk_text_buffer_insert_at_cursor(GTK_TEXT_BUFFER(tBufferDisplay), title, -1);
-	
-	artist = gtk_entry_get_text(GTK_ENTRY(entryArtist));
-	
+	g_print("This is for the display: %s\n", displayBody);
 }

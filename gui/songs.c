@@ -10,15 +10,17 @@
 
 #include "songs.h"
 #include "editor.h"
+#include "display.h"
 
 GtkWidget *treeView;
 GtkListStore *listStore;
 GtkTreeViewColumn *column;
 GtkTreeSelection *selection;
 GtkTreeModel *model;
-gchar directory[75], song[50], songPath[100];
-extern GtkWidget *entryTitle, *entryArtist, *tViewEditor;
-extern GtkTextBuffer *tBufferEditor;
+gchar directory[75], song[50], songPath[100], displayBody[999];
+const gchar *titleDisplay;
+extern GtkWidget *entryTitle, *entryArtist, *tViewEditor, *tViewDisplay;
+extern GtkTextBuffer *tBufferEditor, *tBufferDisplay;
 
 void createDir(void)
 {
@@ -41,6 +43,7 @@ void createDir(void)
 void songSelect(void)
 {
 	GtkTreeIter songIter;
+	GtkTextIter startEditor, endEditor, startDisplay, endDisplay;
 	gchar *getSong;
 	gchar ch;
 	gchar title[50], artist[50], body[999];
@@ -53,25 +56,36 @@ void songSelect(void)
 	{		
 		gtk_tree_model_get(GTK_TREE_MODEL(listStore), &songIter, 0, &getSong, -1);	
 		
+		gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(tBufferEditor), &startEditor);
+		gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(tBufferEditor), &endEditor);
+		
+		gtk_text_buffer_delete(GTK_TEXT_BUFFER(tBufferEditor), &startEditor, &endEditor);
+		
+		gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(tBufferDisplay), &startDisplay);
+		gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(tBufferDisplay), &endDisplay);
+		
+		gtk_text_buffer_delete(GTK_TEXT_BUFFER(tBufferDisplay), &startDisplay, &endDisplay);		
+		
 		sprintf(song, "%s.chordpro", getSong);
 		sprintf(songPath, "%s%s", directory, song);		
 
-		if((fp = fopen(songPath, "r")) == NULL)				//  
-		{																   // 
-			g_print("Error");											//	
-		}                                                  // 
-		else																// This if/else
-		{																	// statement will count how
-			lineCount = 0;												// many lines
-																			// are in the file.
-			while((ch = fgetc(fp)) != EOF)						// 
-			{																//
-				if(ch == '\n')											//
-				{															//
-					lineCount++;										//
-				}															//
-			}																//
-		
+		// This gets the line count for file.
+		if((fp = fopen(songPath, "r")) == NULL)				
+		{													 
+			g_print("Error");									
+		}                                                   
+		else												
+		{													
+			lineCount = 0;									
+															
+			while((ch = fgetc(fp)) != EOF)					 
+			{														
+				if(ch == '\n')										
+				{													
+					lineCount++;									
+				}													
+			}														
+					
 			g_print("Line count is: %d\n", lineCount);
 		
 			fclose(fp);		
@@ -80,16 +94,17 @@ void songSelect(void)
 		gchar lines[lineCount][100];	
 		
 		
-		
-		if((fp = fopen(songPath, "r")) == NULL)            //
-		{																	//
-			g_print("Error");											// This if/else 
-		}																	// statement will 
-		else																// read each line
-		{																	//	for future 
-			for(i = 0; i < lineCount; i++)						// text manipulation.
-			{																//
-				fgets(lines[i], 100, fp);							//
+		// This will read each line for 
+		// future text manipulation.
+		if((fp = fopen(songPath, "r")) == NULL)            
+		{														
+			g_print("Error");									 
+		}														 
+		else													
+		{														 
+			for(i = 0; i < lineCount; i++)						
+			{													
+				fgets(lines[i], 100, fp);							
 			}																
 																			
 			fclose(fp);													
@@ -98,36 +113,40 @@ void songSelect(void)
 		line1 = strlen(lines[0]);
 		line2 = strlen(lines[1]);
 		
-		g_print("Count of first line: %d\n", line1);			// This section
-																			// is for debugging
-		g_print("Count of second line: %d\n", line2);		// purposes only.
-																			//
-		g_print("All of line1: %s\n", lines[0]);				//
-																			//
-		g_print("All of line1: %s\n", lines[1]);				//												
+		g_print("Count of first line: %d\n", line1);			
+																			
+		g_print("Count of second line: %d\n", line2);		
+																			
+		g_print("All of line1: %s\n", lines[0]);				
+																			
+		g_print("All of line1: %s\n", lines[1]);															
 		
+		
+		// This will get title and input into
+		// entry.		
 		if((fp = fopen(songPath, "r")) == NULL)						
 		{																			
-			g_print("Error");													//
-		}																			//
-		else																		// This if/else
-		{																			// statement sets 
-			if(strlen(lines[0]) != 0)										// the title and 
-			{																		// enters it into
-				fseek(fp, 8, SEEK_SET);										// the GtkEntry
-																					// widget.
-				fgets(title, 50, fp);										//
-																					//
+			g_print("Error");													
+		}																		
+		else																	
+		{																		 
+			if(strlen(lines[0]) != 0)										 
+			{																
+				fseek(fp, 8, SEEK_SET);										
+																			
+				fgets(title, 50, fp);										
+																									
 				title[strlen(title) -2] = '\0';							
 																					
-				gtk_entry_set_text(GTK_ENTRY(entryTitle), title);	
+				gtk_entry_set_text(GTK_ENTRY(entryTitle), title);
 																					
 				gtk_editable_set_editable(GTK_EDITABLE(entryTitle), FALSE);				
 								
 				fclose(fp);													
 			}	
 		}
-															
+	
+		// This will get artist and input into entry.													
 		if((fp = fopen(songPath, "r")) == NULL)
 		{
 			g_print("Error");
@@ -149,7 +168,9 @@ void songSelect(void)
 				fclose(fp);		
 			}	
 		}			
-						
+		
+		// This will get the rest of file after artist and 
+		// put it in the song editor text view.				
 		if((fp = fopen(songPath, "r")) == NULL)
 		{
 			g_print("Error");
@@ -173,11 +194,43 @@ void songSelect(void)
 				body[i++] = ch;			
 			}
 		
-			gtk_text_buffer_set_text(GTK_TEXT_BUFFER(tBufferEditor), body, -1);		
+			gtk_text_buffer_set_text(GTK_TEXT_BUFFER(tBufferEditor), body, i);		
 			
 			gtk_text_view_set_editable(GTK_TEXT_VIEW(tViewEditor), FALSE);					
 			
 			g_print("Body:\n%s\n", body);
+			
+			fclose(fp);		
+		}
+	
+		// This grabs everything from file and 
+		// puts it in notebook tab display.
+		if((fp = fopen(songPath, "r")) == NULL)
+		{
+			g_print("Error");
+		}
+		else
+		{					
+			i = 0;
+			
+			pos = ftell(fp);
+			
+			g_print("Position in file before setting it for body read: %d\n", pos);
+			
+			fseek(fp, 0, SEEK_SET);
+			
+			pos = ftell(fp);
+			
+			g_print("Position in file after setting it for body read: %d\n", pos);	
+			
+					
+			
+			while((ch = fgetc(fp)) != EOF)
+			{
+				displayBody[i++] = ch;		
+			}
+		
+			gtk_text_buffer_set_text(GTK_TEXT_BUFFER(tBufferDisplay), displayBody, i);			
 			
 			fclose(fp);		
 		}

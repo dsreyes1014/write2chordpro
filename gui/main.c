@@ -36,9 +36,7 @@ int main(int argc, char *argv[])
 	frame1 = gtk_frame_new(NULL);
 	frame2 = gtk_frame_new("Song");
 	scrolledWindow1 = gtk_scrolled_window_new(NULL, NULL);
-   scrolledWindow2 = gtk_scrolled_window_new(NULL, NULL);
-   
-   display();
+    scrolledWindow2 = gtk_scrolled_window_new(NULL, NULL);
    
 	// This creates toplevel 'window' widget titled "Write 2 Chordpro".
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -49,6 +47,8 @@ int main(int argc, char *argv[])
 	// Packs 'menuBar' and 'paned' widgets in 'box1' widget.
 	gtk_box_pack_start(GTK_BOX(box1), menuBar, FALSE, FALSE, 2);
 	gtk_box_pack_start(GTK_BOX(box1), paned, TRUE, TRUE, 2);	
+	
+	display();
 	
 	songList();	
 	
@@ -61,12 +61,12 @@ int main(int argc, char *argv[])
 	gtk_container_add(GTK_CONTAINER(scrolledWindow1), treeView);	
 	gtk_container_add(GTK_CONTAINER(frame1), scrolledWindow1);	
 	
-	editor();
-		
-	gtk_box_pack_start(GTK_BOX(box2), frame2, TRUE, TRUE, 2);	
-	gtk_container_add(GTK_CONTAINER(scrolledWindow2), tViewDisplay);
-	gtk_container_add(GTK_CONTAINER(frame2), scrolledWindow2);
+	editor();		
 	
+	gtk_container_add(GTK_CONTAINER(scrolledWindow2), tViewDisplay);
+	//gtk_container_add(GTK_CONTAINER(frame2), scrolledWindow2);
+	gtk_box_pack_start(GTK_BOX(box2), scrolledWindow2, TRUE, TRUE, 2);
+
 	// Creates tabs for 'notebook' widget.
 	gtk_notebook_append_page(GTK_NOTEBOOK(notebook), box2, NULL);
 	gtk_notebook_append_page(GTK_NOTEBOOK(notebook), grid, NULL);
