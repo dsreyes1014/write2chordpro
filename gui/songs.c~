@@ -335,10 +335,22 @@ void songSelect(void)
 			{
 				tag = gtk_text_buffer_create_tag(tBufferDisplay, NULL, "font", "italic 12", NULL);
 				gtk_text_buffer_apply_tag(tBufferDisplay, tag, &matchStart, &matchEnd);			
-			}						
+			}
+		
+			gtk_text_iter_forward_search(&startOfLine, "[", 1, &matchStart, &matchEnd, NULL);
 			
-			//g_print("Chord: %s\n", chord);
-			//g_print("Number of \'[\': %d\n", i);
+			i = 0;
+			
+			chordStart = gtk_text_iter_forward_search(&startOfLine, "[", 1, &matchStart, &matchEnd, NULL);
+			
+			gtk_text_buffer_create_mark(tBufferDisplay, "startChord", &matchEnd, TRUE);			
+			
+			chordEnd = gtk_text_iter_forward_search(&startOfLine, "]", 1, &matchStart, &matchEnd, NULL);
+		
+						
+			
+			g_print("Chord: %s\n", chord);
+			g_print("Number of \'[\': %d\n", i);
 			
 			lineDisplay = gtk_text_buffer_get_line_count(GTK_TEXT_BUFFER(tBufferDisplay));
 			

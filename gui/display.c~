@@ -26,7 +26,20 @@ void display(void)
 	gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(tBufferDisplay), &start);
 	gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(tBufferDisplay), &end);
 	gtk_text_buffer_get_iter_at_line(GTK_TEXT_BUFFER(tBufferDisplay), &line, 0);
-	gtk_text_buffer_get_iter_at_offset(GTK_TEXT_BUFFER(tBufferDisplay), &chars, 0);	
+	gtk_text_buffer_get_iter_at_offset(GTK_TEXT_BUFFER(tBufferDisplay), &chars, 0);
+	
+	lineCount = gtk_text_buffer_get_line_count(GTK_TEXT_BUFFER(tBufferDisplay));
+	
+	charCount = gtk_text_buffer_get_char_count(GTK_TEXT_BUFFER(tBufferDisplay));
+	
+	g_print("Line count is: %d\n", lineCount);
+	g_print("Char count is: %d\n", charCount);
+	
+	//gtk_text_buffer_get_iter_at_line_offset(GTK_TEXT_BUFFER(tBufferDisplay), &chars, 0, 8);
+	
+	//gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(tBufferDisplay), &title);	
 	
 	gtk_text_view_set_editable(GTK_TEXT_VIEW(tViewDisplay), FALSE);
+	
+	g_print("This is for the display: %s\n", displayBody);
 }

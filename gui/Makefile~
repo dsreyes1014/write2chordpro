@@ -25,8 +25,8 @@ editor.o: editor.c chords.h
 clean: 
 	rm -rfv $(OBJECTS) w2c-gui
 install:
-	cp -v $(PROGRAM) $(INSTALL_DIR)
+	sudo cp -v $(PROGRAM) $(INSTALL_DIR)
 uninstall: $(INSTALL_DIR)$(PROGRAM)
-	rm -v $(INSTALL_DIR)$(PROGRAM)
+	sudo rm -v $(INSTALL_DIR)$(PROGRAM)
 $(INSTALL_DIR)$(PROGRAM):
 	ls $(INSTALL_DIR)$(PROGRAM)
