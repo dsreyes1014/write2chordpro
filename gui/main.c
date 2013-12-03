@@ -48,9 +48,7 @@ int main(int argc, char *argv[])
 	gtk_box_pack_start(GTK_BOX(box1), menuBar, FALSE, FALSE, 2);
 	gtk_box_pack_start(GTK_BOX(box1), paned, TRUE, TRUE, 2);	
 	
-	songList();	
-	
-	display();	
+	songList();		
 	
 	// Properties for 'frame1 & frame2' widgets.	
 	gtk_frame_set_shadow_type(GTK_FRAME(frame1), GTK_SHADOW_ETCHED_IN);
@@ -64,7 +62,6 @@ int main(int argc, char *argv[])
 	editor();		
 	
 	gtk_container_add(GTK_CONTAINER(scrolledWindow2), tViewDisplay);
-	//gtk_container_add(GTK_CONTAINER(frame2), scrolledWindow2);
 	gtk_box_pack_start(GTK_BOX(box2), scrolledWindow2, TRUE, TRUE, 2);
 
 	// Creates tabs for 'notebook' widget.

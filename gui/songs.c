@@ -17,10 +17,12 @@ GtkListStore *listStore;
 GtkTreeViewColumn *column;
 GtkTreeSelection *selection;
 GtkTreeModel *model;
+GtkWidget *tViewDisplay;
+GtkTextBuffer *tBufferDisplay;
 gchar directory[75], song[50], songPath[100], displayBody[999];
 const gchar *titleDisplay;
-extern GtkWidget *entryTitle, *entryArtist, *tViewEditor, *tViewDisplay;
-extern GtkTextBuffer *tBufferEditor, *tBufferDisplay;
+extern GtkWidget *entryTitle, *entryArtist, *tViewEditor;
+extern GtkTextBuffer *tBufferEditor;
 
 void createDir(void)
 {
@@ -43,11 +45,11 @@ void createDir(void)
 void songSelect(void)
 {
 	GtkTreeIter songIter;
-	GtkTextIter startEditor, endEditor, startDisplay, endDisplay;
+	GtkTextIter startEditor, endEditor;
 	gchar *getSong;
 	gchar ch;
 	gchar title[50], artist[50], body[999];
-	gint i, line1, line2, pos, lineCount, lineDisplay;
+	gint i, line1, line2, pos, lineCount;
 		
 	
 	FILE *fp;	
@@ -59,12 +61,7 @@ void songSelect(void)
 		gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(tBufferEditor), &startEditor);
 		gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(tBufferEditor), &endEditor);
 		
-		gtk_text_buffer_delete(GTK_TEXT_BUFFER(tBufferEditor), &startEditor, &endEditor);
-		
-		gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(tBufferDisplay), &startDisplay);
-		gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(tBufferDisplay), &endDisplay);
-		
-		gtk_text_buffer_delete(GTK_TEXT_BUFFER(tBufferDisplay), &startDisplay, &endDisplay);		
+		gtk_text_buffer_delete(GTK_TEXT_BUFFER(tBufferEditor), &startEditor, &endEditor);		
 		
 		sprintf(song, "%s.chordpro", getSong);
 		sprintf(songPath, "%s%s", directory, song);		
@@ -216,133 +213,9 @@ void songSelect(void)
 			while((ch = fgetc(fp)) != EOF)
 			{
 				displayBody[i++] = ch;		
-			}
-		
-			gtk_text_buffer_set_text(GTK_TEXT_BUFFER(tBufferDisplay), displayBody, i);						
+			}		
 			
-			fclose(fp);
-			
-			GtkTextTag *tag;
-			GtkTextIter startOfLine, endOfLine, ch, matchStart, matchEnd;
-			gchar *chord;		
-			gboolean chordStart, chordEnd;
-			
-			// Sets these iters to a range on line 0 to delete and set desired visible text.
-			gtk_text_buffer_get_iter_at_line(GTK_TEXT_BUFFER(tBufferDisplay), &startOfLine, 0);
-			gtk_text_buffer_get_iter_at_line_offset(GTK_TEXT_BUFFER(tBufferDisplay), &ch, 0, 8);
-			gtk_text_buffer_delete(GTK_TEXT_BUFFER(tBufferDisplay), &startOfLine, &ch);
-			
-			
-			// Deletes last character of line 0 to output just the title. 
-			gtk_text_buffer_get_iter_at_line(GTK_TEXT_BUFFER(tBufferDisplay), &endOfLine, 0);
-			gtk_text_iter_forward_to_line_end(&endOfLine);
-			gtk_text_buffer_backspace(GTK_TEXT_BUFFER(tBufferDisplay), &endOfLine, FALSE, TRUE);
-			
-			// Sets attributes for Title (line 0).			
-			gtk_text_buffer_get_iter_at_line(GTK_TEXT_BUFFER(tBufferDisplay), &startOfLine, 0);
-			gtk_text_buffer_get_iter_at_line(GTK_TEXT_BUFFER(tBufferDisplay), &endOfLine, 0);
-			gtk_text_iter_forward_to_line_end(&endOfLine);			
-			
-			tag = gtk_text_buffer_create_tag(GTK_TEXT_BUFFER(tBufferDisplay), 
-												  NULL, "weight", "850",
-												  "justification", GTK_JUSTIFY_CENTER, 
-												  "font", "30", NULL);
-												  
-			gtk_text_buffer_apply_tag(GTK_TEXT_BUFFER(tBufferDisplay), tag, &startOfLine, &endOfLine);
-			
-			// Sets these iters to a range on line 1 to delete and set desired visible text. 				
-			gtk_text_buffer_get_iter_at_line(GTK_TEXT_BUFFER(tBufferDisplay), &startOfLine, 1);
-			gtk_text_buffer_get_iter_at_line_offset(GTK_TEXT_BUFFER(tBufferDisplay), &ch, 1, 11);
-			gtk_text_buffer_delete(GTK_TEXT_BUFFER(tBufferDisplay), &startOfLine, &ch);			
-			
-			// Deletes last character of line 1 to output just the artist.
-			gtk_text_buffer_get_iter_at_line(GTK_TEXT_BUFFER(tBufferDisplay), &endOfLine, 1);
-			gtk_text_iter_forward_to_line_end(&endOfLine);
-			gtk_text_buffer_backspace(GTK_TEXT_BUFFER(tBufferDisplay), &endOfLine, FALSE, TRUE);	
-			
-		    // Inserts text before artist with attributes.
-		    tag = gtk_text_buffer_create_tag(tBufferDisplay, NULL, "font", "12", 
-		    								 "justification", GTK_JUSTIFY_CENTER, NULL);
-			gtk_text_buffer_get_iter_at_line(tBufferDisplay, &startOfLine, 1);
-			gtk_text_buffer_insert_with_tags(tBufferDisplay, &startOfLine, "by: ", 4, tag, NULL);
-			
-			// Sets attributes for Artist (line 1).
-			gtk_text_buffer_get_iter_at_line_offset(GTK_TEXT_BUFFER(tBufferDisplay), &startOfLine, 1, 4);
-			gtk_text_buffer_get_iter_at_line(GTK_TEXT_BUFFER(tBufferDisplay), &endOfLine, 1);
-			gtk_text_iter_forward_to_line_end(&endOfLine);			
-			tag = gtk_text_buffer_create_tag(GTK_TEXT_BUFFER(tBufferDisplay), 
-												  NULL, "weight", "600",
-												  "weight-set", TRUE, 
-												  "font", "italic 18", NULL);
-												  
-			gtk_text_buffer_apply_tag(GTK_TEXT_BUFFER(tBufferDisplay), tag, &startOfLine, &endOfLine);	
-			
-			// This section is for setting the attributes of the text
-			// 'Verse:', 'Chorus:'etc...			
-			gtk_text_buffer_get_start_iter(tBufferDisplay, &startOfLine);		
-			
-			if(gtk_text_iter_forward_search(&startOfLine, "Verse:", 
-											1, 
-											&matchStart, &matchEnd, NULL))
-			{
-				tag = gtk_text_buffer_create_tag(tBufferDisplay, NULL, "font", "italic 12", NULL);
-				gtk_text_buffer_apply_tag(tBufferDisplay, tag, &matchStart, &matchEnd);			
-			}
-				
-			if(gtk_text_iter_forward_search(&startOfLine, "PreChorus:", 
-											1, 
-											&matchStart, &matchEnd, NULL))
-			{
-				tag = gtk_text_buffer_create_tag(tBufferDisplay, NULL, "font", "italic 12", NULL);
-				gtk_text_buffer_apply_tag(tBufferDisplay, tag, &matchStart, &matchEnd);			
-			}
-		
-			if(gtk_text_iter_forward_search(&matchEnd, "Chorus:", 
-											1, 
-											&matchStart, &matchEnd, NULL))
-			{	
-				tag = gtk_text_buffer_create_tag(tBufferDisplay, NULL, "font", "italic 12", NULL);
-				gtk_text_buffer_apply_tag(tBufferDisplay, tag, &matchStart, &matchEnd);			
-			}
-			
-			if(gtk_text_iter_forward_search(&startOfLine, "Intro:", 
-											1, 
-											&matchStart, &matchEnd, NULL))
-			{
-				tag = gtk_text_buffer_create_tag(tBufferDisplay, NULL, "font", "italic 12", NULL);
-				gtk_text_buffer_apply_tag(tBufferDisplay, tag, &matchStart, &matchEnd);			
-			}
-		
-			if(gtk_text_iter_forward_search(&startOfLine, "Bridge:", 
-											1, 
-											&matchStart, &matchEnd, NULL))
-			{
-				tag = gtk_text_buffer_create_tag(tBufferDisplay, NULL, "font", "italic 12", NULL);
-				gtk_text_buffer_apply_tag(tBufferDisplay, tag, &matchStart, &matchEnd);			
-			}
-		
-			if(gtk_text_iter_forward_search(&startOfLine, "Verse 1:", 
-											1, 
-											&matchStart, &matchEnd, NULL))
-			{
-				tag = gtk_text_buffer_create_tag(tBufferDisplay, NULL, "font", "italic 12", NULL);
-				gtk_text_buffer_apply_tag(tBufferDisplay, tag, &matchStart, &matchEnd);			
-			}
-		
-			if(gtk_text_iter_forward_search(&startOfLine, "Verse 3:", 
-											1, 
-											&matchStart, &matchEnd, NULL))
-			{
-				tag = gtk_text_buffer_create_tag(tBufferDisplay, NULL, "font", "italic 12", NULL);
-				gtk_text_buffer_apply_tag(tBufferDisplay, tag, &matchStart, &matchEnd);			
-			}						
-			
-			//g_print("Chord: %s\n", chord);
-			//g_print("Number of \'[\': %d\n", i);
-			
-			lineDisplay = gtk_text_buffer_get_line_count(GTK_TEXT_BUFFER(tBufferDisplay));
-			
-			g_print("Line count for display is: %d\n", lineDisplay);					
+			display(tBufferDisplay, displayBody, i);			
 		}
 	}
 }
@@ -401,6 +274,9 @@ void songList(void)
 	treeView = gtk_tree_view_new_with_model(GTK_TREE_MODEL(listStore));	
 	
 	g_object_unref(listStore);	
+	
+	tViewDisplay = gtk_text_view_new();
+	tBufferDisplay = gtk_text_view_get_buffer(GTK_TEXT_VIEW(tViewDisplay));
 		
 	cell = gtk_cell_renderer_text_new();	
 	column = gtk_tree_view_column_new_with_attributes("Songs", cell, "text", NULL);
