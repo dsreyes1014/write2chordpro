@@ -7,23 +7,13 @@
 #include "display.h"
 #include "songs.h"
 
-//extern GtkWidget *tViewDisplay;
-//extern GtkTextBuffer *tBufferDisplay;
-//extern gchar displayBody[];
-
 void display(GtkTextBuffer *buffer, gchar *view, gint number)
 {	
 	GtkTextTag *tag;
-	GtkTextIter startOfLine, endOfLine, ch, matchStart, matchEnd;
-	gchar *chord;	
-	gint lineDisplay;
-	
-	//tViewDisplay = gtk_text_view_new();
-	//tBufferDisplay = gtk_text_view_get_buffer(GTK_TEXT_VIEW(tViewDisplay));	
+	GtkTextIter startOfLine, endOfLine, ch, matchStart, matchEnd;	
+	gint lineDisplay;	
 	
 	gtk_text_buffer_set_text(buffer, view, number);	
-	
-	//gtk_text_view_set_editable(GTK_TEXT_VIEW(tViewDisplay), FALSE);
 	
 	// Sets these iters to a range on line 0 to delete and set desired visible text.
 	gtk_text_buffer_get_iter_at_line(buffer, &startOfLine, 0);
@@ -140,6 +130,4 @@ void display(GtkTextBuffer *buffer, gchar *view, gint number)
 	lineDisplay = gtk_text_buffer_get_line_count(buffer);
 			
 	g_print("Line count for display is: %d\n", lineDisplay);
-	
-	g_print("Display content: %s\n", view);
 }

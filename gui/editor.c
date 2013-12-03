@@ -69,7 +69,7 @@ void newSong(GtkWidget *widget, gpointer data)
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button5), TRUE);	
 }
 
-void editSong(void)
+void editSong(GtkWidget *widget, gpointer data)
 {
 	if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button5)) == TRUE)
 	{
@@ -120,7 +120,7 @@ void editor(void)
 
 	// Properties for 'frame' widget.	
 	gtk_frame_set_shadow_type(GTK_FRAME(frame), GTK_SHADOW_ETCHED_IN);	
-	gtk_widget_set_size_request(GTK_WIDGET(frame), 100, 100);
+	//gtk_widget_set_size_request(GTK_WIDGET(frame), 100, 100);
 	
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button5), FALSE);
 	
@@ -140,13 +140,12 @@ void editor(void)
     
     // Attaches widgets to widget grid.	
 	gtk_grid_attach(GTK_GRID(grid), label1, 3, 1, 1, 1);
-	gtk_grid_attach(GTK_GRID(grid), label2, 3, 10, 1, 1);	
+	gtk_grid_attach(GTK_GRID(grid), label2, 3, 2, 1, 1);	
 	gtk_grid_attach_next_to(GTK_GRID(grid), entryTitle, label1, GTK_POS_RIGHT, 80, 1);
 	gtk_grid_attach_next_to(GTK_GRID(grid), entryArtist, label2, GTK_POS_RIGHT, 80, 1);
-	gtk_grid_attach(GTK_GRID(grid), frame, 0, 14, 130, 150);
+	gtk_grid_attach(GTK_GRID(grid), frame, 0, 3, 130, 150);
 	gtk_grid_attach_next_to(GTK_GRID(grid), boxTop, frame, GTK_POS_RIGHT, 1, 50);
 	gtk_grid_attach_next_to(GTK_GRID(grid), boxBottom, boxTop, GTK_POS_BOTTOM, 1, 1);
-	gtk_grid_attach(GTK_GRID(grid), button3, 80, 10, 1, 1);
 	
 	// Sets row & column spacing between widgets inside 'grid' widget.
 	gtk_grid_set_row_spacing(GTK_GRID(grid), 3);

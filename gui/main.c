@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
 	
 	// Packs 'frame' & 'notebook' widgets inside pane 1 & 2 respectively.
 	gtk_paned_pack1(GTK_PANED(paned), frame1, FALSE, FALSE);
-	gtk_paned_pack2(GTK_PANED(paned), notebook, TRUE, FALSE);
+	gtk_paned_pack2(GTK_PANED(paned), notebook, TRUE, TRUE);
 	
 	// Sizes both 'frame' and 'notebook' widgets. 
 	gtk_widget_set_size_request(frame1, 200, 75);

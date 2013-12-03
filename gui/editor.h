@@ -7,7 +7,7 @@
 // Prototypes.
 void save(GtkWidget *widget, gpointer data);
 void newSong(GtkWidget *widget, gpointer data);
-void editSong(void);
+void editSong(GtkWidget *widget, gpointer data);
 void editor(void);
 
 #endif
