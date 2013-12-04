@@ -31,9 +31,9 @@ void display(GtkTextBuffer *buffer, gchar *view, gint number)
 	gtk_text_iter_forward_to_line_end(&endOfLine);			
 			
 	tag = gtk_text_buffer_create_tag(buffer, 
-	  										   NULL, "weight", "850",
-												"justification", GTK_JUSTIFY_CENTER, 
-												"font", "30", NULL);
+	  								 NULL, "weight", "850",
+									 "justification", GTK_JUSTIFY_CENTER, 
+									 "font", "30", NULL);
 												  
 	gtk_text_buffer_apply_tag(buffer, tag, &startOfLine, &endOfLine);
 			
@@ -49,7 +49,7 @@ void display(GtkTextBuffer *buffer, gchar *view, gint number)
 			
 	// Inserts text before artist with attributes.
 	tag = gtk_text_buffer_create_tag(buffer, NULL, "font", "12", 
-		    								 "justification", GTK_JUSTIFY_CENTER, NULL);
+		    						 "justification", GTK_JUSTIFY_CENTER, NULL);
 	gtk_text_buffer_get_iter_at_line(buffer, &startOfLine, 1);
 	gtk_text_buffer_insert_with_tags(buffer, &startOfLine, "by: ", 4, tag, NULL);
 			
@@ -69,16 +69,31 @@ void display(GtkTextBuffer *buffer, gchar *view, gint number)
 	gtk_text_buffer_get_start_iter(buffer, &startOfLine);		
 			
 	if(gtk_text_iter_forward_search(&startOfLine, "Verse:", 
-	   									  1, 
-											  &matchStart, &matchEnd, NULL))
+	   								1, 
+									&matchStart, &matchEnd, NULL))
 	{
+		tag = gtk_text_buffer_create_tag(buffer, NULL, "font", "italic 12", NULL);
+		gtk_text_buffer_apply_tag(buffer, tag, &matchStart, &matchEnd);			
+	}
+
+	if(gtk_text_iter_forward_search(&startOfLine, "PreChorus:", 
+	   								1, 
+									&matchStart, &matchEnd, NULL))
+	{
+		tag = gtk_text_buffer_create_tag(buffer, NULL, "font", "italic 12", NULL);
+		gtk_text_buffer_apply_tag(buffer, tag, &matchStart, &matchEnd);			
+	
+		gtk_text_iter_forward_search(&matchEnd, "Chorus:",
+									 1, &matchStart, &matchEnd,
+									 NULL);
+									 
 		tag = gtk_text_buffer_create_tag(buffer, NULL, "font", "italic 12", NULL);
 		gtk_text_buffer_apply_tag(buffer, tag, &matchStart, &matchEnd);			
 	}
 				
 	if(gtk_text_iter_forward_search(&startOfLine, "Chorus:", 
-		 									  1, 
-											  &matchStart, &matchEnd, NULL))
+		 							1, 
+									&matchStart, &matchEnd, NULL))
 	{
 		tag = gtk_text_buffer_create_tag(buffer, NULL, "font", "italic 12", NULL);
 		gtk_text_buffer_apply_tag(buffer, tag, &matchStart, &matchEnd);			
@@ -93,32 +108,32 @@ void display(GtkTextBuffer *buffer, gchar *view, gint number)
 			}*/
 						
 	if(gtk_text_iter_forward_search(&startOfLine, "Intro:", 
-											  1, 
-											  &matchStart, &matchEnd, NULL))
+									1, 
+									&matchStart, &matchEnd, NULL))
 	{
 		tag = gtk_text_buffer_create_tag(buffer, NULL, "font", "italic 12", NULL);
 		gtk_text_buffer_apply_tag(buffer, tag, &matchStart, &matchEnd);			
 	}
 					
 	if(gtk_text_iter_forward_search(&startOfLine, "Bridge:", 
-											  1, 
-											  &matchStart, &matchEnd, NULL))
+									1, 
+									&matchStart, &matchEnd, NULL))
 	{
 		tag = gtk_text_buffer_create_tag(buffer, NULL, "font", "italic 12", NULL);
 		gtk_text_buffer_apply_tag(buffer, tag, &matchStart, &matchEnd);			
 	}
 					
 	if(gtk_text_iter_forward_search(&startOfLine, "Verse 1:", 
-											  1, 
-											  &matchStart, &matchEnd, NULL))
+									1, 
+									&matchStart, &matchEnd, NULL))
 	{
 		tag = gtk_text_buffer_create_tag(buffer, NULL, "font", "italic 12", NULL);
 		gtk_text_buffer_apply_tag(buffer, tag, &matchStart, &matchEnd);			
 	}
 					
 	if(gtk_text_iter_forward_search(&startOfLine, "Verse 3:", 
-											  1, 
-											  &matchStart, &matchEnd, NULL))
+									1, 
+									&matchStart, &matchEnd, NULL))
 	{
 		tag = gtk_text_buffer_create_tag(buffer, NULL, "font", "italic 12", NULL);
 		gtk_text_buffer_apply_tag(buffer, tag, &matchStart, &matchEnd);			
