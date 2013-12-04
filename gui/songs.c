@@ -215,7 +215,7 @@ void songSelect(void)
 				displayBody[i++] = ch;		
 			}		
 			
-			display(tBufferDisplay, displayBody, i);			
+			display(tBufferDisplay, tViewDisplay, displayBody, i);			
 		}
 	}
 }

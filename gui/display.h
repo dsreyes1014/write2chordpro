@@ -5,7 +5,7 @@
 #define DISPLAY_H
 
 // Prototypes.
-void display(GtkTextBuffer *buffer, gchar *view, gint number);
+void display(GtkTextBuffer *buffer, GtkWidget *tView, gchar *view, gint number);
 
 #endif
 
