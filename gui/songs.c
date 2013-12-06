@@ -42,10 +42,10 @@ void createDir(void)
 	mkdir(directory, S_IRWXU);
 }
 
-void songSelect(void)
+void songSelect(GtkTreeSelection *selection, gpointer data)
 {
 	GtkTreeIter songIter;
-	GtkTextIter startEditor, endEditor;
+	GtkTextIter start, end;
 	gchar *getSong;
 	gchar ch;
 	gchar title[50], artist[50], body[999];
@@ -54,14 +54,19 @@ void songSelect(void)
 	
 	FILE *fp;	
 		
-	if(gtk_tree_selection_get_selected(GTK_TREE_SELECTION(selection), &model, &songIter))
+	if(gtk_tree_selection_get_selected(selection, &model, &songIter))
 	{		
 		gtk_tree_model_get(GTK_TREE_MODEL(listStore), &songIter, 0, &getSong, -1);	
 		
-		gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(tBufferEditor), &startEditor);
-		gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(tBufferEditor), &endEditor);
+		gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(tBufferEditor), &start);
+		gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(tBufferEditor), &end);
 		
-		gtk_text_buffer_delete(GTK_TEXT_BUFFER(tBufferEditor), &startEditor, &endEditor);		
+		gtk_text_buffer_delete(GTK_TEXT_BUFFER(tBufferEditor), &start, &end);
+		
+		gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(tBufferEditor), &start);
+		gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(tBufferEditor), &end);
+		
+		gtk_text_buffer_delete(GTK_TEXT_BUFFER(tBufferDisplay), &start, &end);
 		
 		sprintf(song, "%s.chordpro", getSong);
 		sprintf(songPath, "%s%s", directory, song);		

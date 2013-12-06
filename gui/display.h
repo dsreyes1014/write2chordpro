@@ -6,6 +6,8 @@
 
 // Prototypes.
 void display(GtkTextBuffer *buffer, GtkWidget *tView, gchar *view, gint number);
+gint searchCharPos(gchar body[], gchar ch);
+gint charCount(gchar body[], gchar ch);
 
 #endif
 

@@ -9,7 +9,7 @@
 
 GtkWidget *menuBar;
 extern GtkWidget *window;
-const char *fileMenuTitles[] = {"Open", "Save", "Quit"}; // Declared for 'menuItemFile' named "File".
+const gchar *fileMenuTitles[] = {"Open", "Save", "Quit"}; // Declared for 'menuItemFile' named "File".
 
 void fileMenuCallBack(GtkMenuItem *item, gpointer data)
 {

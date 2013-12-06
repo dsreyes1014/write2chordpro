@@ -37,7 +37,7 @@ void save(GtkWidget *widget, gpointer data)
 		
 	fprintf(fp, "{title: %s}\n", getTitle);
 	fprintf(fp, "{subtitle: %s}\n\n", getArtist);
-	fprintf(fp, "%s\0", body);
+	fprintf(fp, "%s", body);
 	
 	fclose(fp);
 	

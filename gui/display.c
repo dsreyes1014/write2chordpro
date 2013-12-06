@@ -7,11 +7,45 @@
 #include "display.h"
 #include "songs.h"
 
+gint searchCharPos(gchar body[], gchar ch)
+{	
+	gint i;	
+	
+	for(i = 0; body[i] != '\0'; i++)
+ 	{
+		if(body[i] == ch)
+		{
+			return i;
+		}	
+	}
+
+	return -1;
+}
+
+gint charCount(gchar body[], gchar ch)
+{
+	gint i, count = 0;
+	
+	for(i = 0; body[i] != '\0'; i++)
+	{
+		if(body[i] == ch)
+		{
+			count++;		
+		}	
+	}
+	
+	return count;
+}
+
 void display(GtkTextBuffer *buffer, GtkWidget *tView, gchar *view, gint number)
 {	
 	GtkTextTag *tag;
 	GtkTextIter startOfLine, endOfLine, ch, matchStart, matchEnd;	
-	gint lineDisplay;	
+	gint lineCount, i, bracketS, bracketE, positionS, positionE;
+	const gchar *songSection[] = {"Verse:", "Verse 1", "Verse 2:",
+								  "Verse 3:","Bridge:", "Bridge 1:",
+								  "Bridge 2:", "Bridge 3:", "Intro:",
+								  "End", "Pre"};
 	
 	gtk_text_buffer_set_text(buffer, view, number);	
 	
@@ -51,7 +85,8 @@ void display(GtkTextBuffer *buffer, GtkWidget *tView, gchar *view, gint number)
 			
 	// Inserts text before artist with attributes.
 	tag = gtk_text_buffer_create_tag(buffer, NULL, "font", "12", 
-		    						 "justification", GTK_JUSTIFY_CENTER, NULL);
+		    						 "justification", GTK_JUSTIFY_CENTER, 
+		    						 "weight", "850", NULL);
 	gtk_text_buffer_get_iter_at_line(buffer, &startOfLine, 1);
 	gtk_text_buffer_insert_with_tags(buffer, &startOfLine, "by: ", 4, tag, NULL);
 			
@@ -60,27 +95,28 @@ void display(GtkTextBuffer *buffer, GtkWidget *tView, gchar *view, gint number)
 	gtk_text_buffer_get_iter_at_line(buffer, &endOfLine, 1);
 	gtk_text_iter_forward_to_line_end(&endOfLine);			
 	tag = gtk_text_buffer_create_tag(buffer, 
-	  										   NULL, "weight", "600",
-												"weight-set", TRUE, 
-												"font", "italic 18", NULL);
+	  								 NULL, "weight", "600",
+									 "weight-set", TRUE, 
+									 "font", "italic 18", NULL);
 												  
 	gtk_text_buffer_apply_tag(buffer, tag, &startOfLine, &endOfLine);	
 			
 	// This section is for setting the attributes of the text
 	// 'Verse:', 'Chorus:'etc...			
-	gtk_text_buffer_get_start_iter(buffer, &startOfLine);		
-			
-	if(gtk_text_iter_forward_search(&startOfLine, "Verse:", 
-	   								1, 
-									&matchStart, &matchEnd, NULL))
+	gtk_text_buffer_get_start_iter(buffer, &startOfLine);
+	
+	for(i = 0; i < 11; i++)
 	{
-		tag = gtk_text_buffer_create_tag(buffer, NULL, "font", "italic 12", NULL);
-		gtk_text_buffer_apply_tag(buffer, tag, &matchStart, &matchEnd);			
-	}
-
-	if(gtk_text_iter_forward_search(&startOfLine, "PreChorus:", 
-	   								1, 
-									&matchStart, &matchEnd, NULL))
+		if(gtk_text_iter_forward_search(&startOfLine, songSection[i], 1,
+										&matchStart, &matchEnd, NULL))
+		{
+			tag = gtk_text_buffer_create_tag(buffer, NULL, "font", "italic 12", NULL);
+			gtk_text_buffer_apply_tag(buffer, tag, &matchStart, &matchEnd);
+		}	
+	}		
+	
+	if(gtk_text_iter_forward_search(&startOfLine, "Chorus:", 
+	   								1, &matchStart, &matchEnd, NULL))
 	{
 		tag = gtk_text_buffer_create_tag(buffer, NULL, "font", "italic 12", NULL);
 		gtk_text_buffer_apply_tag(buffer, tag, &matchStart, &matchEnd);			
@@ -91,60 +127,17 @@ void display(GtkTextBuffer *buffer, GtkWidget *tView, gchar *view, gint number)
 									 
 		tag = gtk_text_buffer_create_tag(buffer, NULL, "font", "italic 12", NULL);
 		gtk_text_buffer_apply_tag(buffer, tag, &matchStart, &matchEnd);			
-	}
-				
-	if(gtk_text_iter_forward_search(&startOfLine, "Chorus:", 
-		 							1, 
-									&matchStart, &matchEnd, NULL))
-	{
-		tag = gtk_text_buffer_create_tag(buffer, NULL, "font", "italic 12", NULL);
-		gtk_text_buffer_apply_tag(buffer, tag, &matchStart, &matchEnd);			
-	}
-		
-			/*if(gtk_text_iter_forward_search(&matchEnd, "Chorus:", 
-											1, 
-											&matchStart, &matchEnd, NULL))
-			{	
-				tag = gtk_text_buffer_create_tag(tBufferDisplay, NULL, "font", "italic 12", NULL);
-				gtk_text_buffer_apply_tag(tBufferDisplay, tag, &matchStart, &matchEnd);			
-			}*/
-						
-	if(gtk_text_iter_forward_search(&startOfLine, "Intro:", 
-									1, 
-									&matchStart, &matchEnd, NULL))
-	{
-		tag = gtk_text_buffer_create_tag(buffer, NULL, "font", "italic 12", NULL);
-		gtk_text_buffer_apply_tag(buffer, tag, &matchStart, &matchEnd);			
-	}
-					
-	if(gtk_text_iter_forward_search(&startOfLine, "Bridge:", 
-									1, 
-									&matchStart, &matchEnd, NULL))
-	{
-		tag = gtk_text_buffer_create_tag(buffer, NULL, "font", "italic 12", NULL);
-		gtk_text_buffer_apply_tag(buffer, tag, &matchStart, &matchEnd);			
-	}
-					
-	if(gtk_text_iter_forward_search(&startOfLine, "Verse 1:", 
-									1, 
-									&matchStart, &matchEnd, NULL))
-	{
-		tag = gtk_text_buffer_create_tag(buffer, NULL, "font", "italic 12", NULL);
-		gtk_text_buffer_apply_tag(buffer, tag, &matchStart, &matchEnd);			
-	}
-					
-	if(gtk_text_iter_forward_search(&startOfLine, "Verse 3:", 
-									1, 
-									&matchStart, &matchEnd, NULL))
-	{
-		tag = gtk_text_buffer_create_tag(buffer, NULL, "font", "italic 12", NULL);
-		gtk_text_buffer_apply_tag(buffer, tag, &matchStart, &matchEnd);			
-	} 						
+	}	
+	
+	positionS = searchCharPos(view, '[');		
+	positionE = searchCharPos(view, ']');		
+	
+	bracketS = charCount(view, '[');
+	bracketE = charCount(view, ']');	
 			
-			//g_print("Chord: %s\n", chord);
-			//g_print("Number of \'[\': %d\n", i);
+	lineCount = gtk_text_buffer_get_line_count(buffer);
 			
-	lineDisplay = gtk_text_buffer_get_line_count(buffer);
-			
-	g_print("Line count for display is: %d\n", lineDisplay);
+	g_print("Line count for display is: %d\n", lineCount);
+	g_print("Count for '[' and ']' characters: \n%d\n%d\n", bracketS, bracketE);
+	g_print("Position for the first '[' and ']' characters: \n%d:%d\n", positionS, positionE);
 }
