@@ -63,8 +63,8 @@ void songSelect(GtkTreeSelection *selection, gpointer data)
 		
 		gtk_text_buffer_delete(GTK_TEXT_BUFFER(tBufferEditor), &start, &end);
 		
-		gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(tBufferEditor), &start);
-		gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(tBufferEditor), &end);
+		gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(tBufferDisplay), &start);
+		gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(tBufferDisplay), &end);
 		
 		gtk_text_buffer_delete(GTK_TEXT_BUFFER(tBufferDisplay), &start, &end);
 		

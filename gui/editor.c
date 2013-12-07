@@ -15,7 +15,7 @@ const gchar *getTitle, *getArtist;
 extern char directory[];
 extern GtkListStore *listStore;
 extern GtkTreeSelection *selection;
-
+//-----------------------------------------------------------------------------
 void save(GtkWidget *widget, gpointer data)
 {	
 	GtkTextIter start, end;	
@@ -45,7 +45,7 @@ void save(GtkWidget *widget, gpointer data)
 	
 	listFiles();	
 }
-
+//-----------------------------------------------------------------------------
 void newSong(GtkWidget *widget, gpointer data)
 {
 	GtkTextIter start, end;	
@@ -68,7 +68,7 @@ void newSong(GtkWidget *widget, gpointer data)
 	
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button5), TRUE);	
 }
-
+//-----------------------------------------------------------------------------
 void editSong(GtkWidget *widget, gpointer data)
 {
 	if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button5)) == TRUE)
@@ -88,7 +88,7 @@ void editSong(GtkWidget *widget, gpointer data)
 		gtk_text_view_set_editable(GTK_TEXT_VIEW(tViewEditor), FALSE);
 	}
 }
-
+//-----------------------------------------------------------------------------
 void editor(void)
 {
 	GtkWidget *label1, *label2, *button1, *button2, *button3,
@@ -114,30 +114,32 @@ void editor(void)
 	
 	gtk_entry_set_placeholder_text(GTK_ENTRY(entryTitle), "Enter name of title here");
 	gtk_entry_set_placeholder_text(GTK_ENTRY(entryArtist), "Enter name of artist here");
-	
-	// Sets cursor to visible. I think it's set by default but adding it to make sure.
+//-----------------------------------------------------------------------------	
+	// Sets cursor to visible. I think it's set by default 
+	// but adding it to make sure.
 	gtk_text_view_set_cursor_visible(GTK_TEXT_VIEW(tViewEditor), TRUE);
-
+//-----------------------------------------------------------------------------
 	// Properties for 'frame' widget.	
 	gtk_frame_set_shadow_type(GTK_FRAME(frame), GTK_SHADOW_ETCHED_IN);	
 	//gtk_widget_set_size_request(GTK_WIDGET(frame), 100, 100);
 	
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button5), FALSE);
-	
+//-----------------------------------------------------------------------------	
 	// Packs 'button3' & 'button4' into 'boxTop'.
 	gtk_box_pack_start(GTK_BOX(boxTop), button3, FALSE, FALSE, 2);
 	gtk_box_pack_start(GTK_BOX(boxTop), button5, FALSE, FALSE, 2);
 	gtk_box_pack_start(GTK_BOX(boxTop), button4, FALSE, FALSE, 2); 
+	
 	// Packs 'button1' & 'button2' widgets into 'boxBottom' widget.
 	gtk_box_pack_start(GTK_BOX(boxBottom), button1, FALSE, FALSE, 2);
 	gtk_box_pack_start(GTK_BOX(boxBottom), button2, FALSE, FALSE, 2);    
-	
+
 	// Packs 'textView' widget inside of 'scrolledWindow' widget.	
 	gtk_container_add(GTK_CONTAINER(scrolledWindow), tViewEditor);
 	
 	// Packs 'scrolledWindow' widget into 'frame2' widget.
 	gtk_container_add(GTK_CONTAINER(frame), scrolledWindow);
-    
+//-----------------------------------------------------------------------------    
     // Attaches widgets to widget grid.	
 	gtk_grid_attach(GTK_GRID(grid), label1, 3, 1, 1, 1);
 	gtk_grid_attach(GTK_GRID(grid), label2, 3, 2, 1, 1);	
@@ -150,10 +152,8 @@ void editor(void)
 	// Sets row & column spacing between widgets inside 'grid' widget.
 	gtk_grid_set_row_spacing(GTK_GRID(grid), 3);
 	gtk_grid_set_column_spacing(GTK_GRID(grid), 3);	
-	
-	// Connects function 'insertChord' to 'button1' widget.	
+//-----------------------------------------------------------------------------	
 	g_signal_connect(button1, "clicked", G_CALLBACK(insertChord), NULL);
-	// Connects function 'save' to 'button3' labeled "Save".
 	g_signal_connect(button4, "clicked", G_CALLBACK(save), NULL);
 	g_signal_connect(button3, "clicked", G_CALLBACK(newSong), NULL);
 	g_signal_connect(button5, "toggled", G_CALLBACK(editSong), NULL);
