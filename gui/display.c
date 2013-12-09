@@ -41,7 +41,8 @@ void display(GtkTextBuffer *buffer, GtkWidget *tView, gchar *view, gint number)
 {	
 	GtkTextTag *tag;
 	GtkTextIter startOfLine, endOfLine, ch, matchStart, matchEnd;	
-	gint lineCount, i, bracketS, bracketE, positionS, positionE;
+	gint lineCount, i, j, bracketS, bracketE, positionS, positionE;
+	GtkClipboard *clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
 	
 	const gchar *songSection[] = {"Verse:", "Verse 1", "Verse 2:",
 								  "Verse 3:","Bridge:", "Bridge 1:",
@@ -160,9 +161,19 @@ void display(GtkTextBuffer *buffer, GtkWidget *tView, gchar *view, gint number)
 	{
 		i = gtk_text_iter_get_line(&matchStart);
 		
-		gtk_text_iter_set_line(&startOfLine, i);		
+		j = gtk_text_iter_get_line_offset(&matchStart);	
 		
-		gtk_text_buffer_insert(buffer, &startOfLine, "\n", -1);		
+		gtk_text_buffer_select_range(buffer, &matchStart, &matchEnd);
+		
+		gtk_text_buffer_cut_clipboard(buffer, clipboard, TRUE);		
+		
+		gtk_text_buffer_get_iter_at_line(buffer, &startOfLine, i);		
+		
+		gtk_text_buffer_insert(buffer, &startOfLine, "\n", -1);
+		
+		gtk_text_buffer_get_iter_at_line_offset(buffer, &ch, i, j);
+		
+		gtk_text_buffer_paste_clipboard(buffer, clipboard, &ch, TRUE);		
 	}		
 //-----------------------------------------------------------------------------
 	positionS = searchCharPos(view, '[');		
