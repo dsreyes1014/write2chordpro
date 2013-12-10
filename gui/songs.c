@@ -11,7 +11,7 @@
 #include "songs.h"
 #include "editor.h"
 #include "display.h"
-
+//-----------------------------------------------------------------------------
 GtkWidget *treeView;
 GtkListStore *listStore;
 GtkTreeViewColumn *column;
@@ -23,7 +23,7 @@ gchar directory[75], song[50], songPath[100], displayBody[999];
 const gchar *titleDisplay;
 extern GtkWidget *entryTitle, *entryArtist, *tViewEditor;
 extern GtkTextBuffer *tBufferEditor;
-
+//-----------------------------------------------------------------------------
 void createDir(void)
 {
 	char user[30];
@@ -41,7 +41,7 @@ void createDir(void)
 	// Creates directory.
 	mkdir(directory, S_IRWXU);
 }
-
+//-----------------------------------------------------------------------------
 void songSelect(GtkTreeSelection *selection, gpointer data)
 {
 	GtkTreeIter songIter;
@@ -56,7 +56,8 @@ void songSelect(GtkTreeSelection *selection, gpointer data)
 		
 	if(gtk_tree_selection_get_selected(selection, &model, &songIter))
 	{		
-		gtk_tree_model_get(GTK_TREE_MODEL(listStore), &songIter, 0, &getSong, -1);	
+		gtk_tree_model_get(GTK_TREE_MODEL(listStore), &songIter, 0, 
+					       &getSong, -1);	
 		
 		gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(tBufferEditor), &start);
 		gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(tBufferEditor), &end);
@@ -70,7 +71,7 @@ void songSelect(GtkTreeSelection *selection, gpointer data)
 		
 		sprintf(song, "%s.chordpro", getSong);
 		sprintf(songPath, "%s%s", directory, song);		
-
+//-----------------------------------------------------------------------------
 		// This gets the line count for file.
 		if((fp = fopen(songPath, "r")) == NULL)				
 		{													 
@@ -92,7 +93,7 @@ void songSelect(GtkTreeSelection *selection, gpointer data)
 		
 			fclose(fp);		
 		}	
-	
+//-----------------------------------------------------------------------------	
 		gchar lines[lineCount][100];	
 		
 		
@@ -122,8 +123,7 @@ void songSelect(GtkTreeSelection *selection, gpointer data)
 		g_print("All of line1: %s\n", lines[0]);				
 																			
 		g_print("All of line2: %s\n", lines[1]);															
-		
-		
+//-----------------------------------------------------------------------------		
 		// This will get title and input into
 		// entry.		
 		if((fp = fopen(songPath, "r")) == NULL)						
@@ -147,7 +147,7 @@ void songSelect(GtkTreeSelection *selection, gpointer data)
 				fclose(fp);													
 			}	
 		}
-	
+//-----------------------------------------------------------------------------
 		// This will get artist and input into entry.													
 		if((fp = fopen(songPath, "r")) == NULL)
 		{
@@ -170,7 +170,7 @@ void songSelect(GtkTreeSelection *selection, gpointer data)
 				fclose(fp);		
 			}	
 		}			
-		
+//-----------------------------------------------------------------------------
 		// This will get the rest of file after artist and 
 		// put it in the song editor text view.				
 		if((fp = fopen(songPath, "r")) == NULL)
@@ -202,7 +202,7 @@ void songSelect(GtkTreeSelection *selection, gpointer data)
 			
 			fclose(fp);		
 		}
-	
+//-----------------------------------------------------------------------------
 		// This grabs everything from file and 
 		// puts it in notebook tab display.
 		if((fp = fopen(songPath, "r")) == NULL)
@@ -224,7 +224,7 @@ void songSelect(GtkTreeSelection *selection, gpointer data)
 		}
 	}
 }
-
+//-----------------------------------------------------------------------------
 void listFiles(void)
 {	
 	DIR *pdir;
@@ -252,11 +252,13 @@ void listFiles(void)
 		
 		if(length >= 3)
 		{						
-			gtk_list_store_insert_with_values(GTK_LIST_STORE(listStore), &iter, -1, 0, files, -1);		
+			gtk_list_store_insert_with_values(GTK_LIST_STORE(listStore), 
+											  &iter, -1, 0, files, -1);		
 		
 			gtk_tree_view_column_set_sort_column_id(GTK_TREE_VIEW_COLUMN(column), 0);	
 			gtk_tree_view_column_set_sort_indicator(GTK_TREE_VIEW_COLUMN(column), TRUE);
-			gtk_tree_view_column_set_sort_order(GTK_TREE_VIEW_COLUMN(column), GTK_SORT_ASCENDING);
+			gtk_tree_view_column_set_sort_order(GTK_TREE_VIEW_COLUMN(column), 
+											    GTK_SORT_ASCENDING);
 			
 			g_print("%s\n", files);
 		}
@@ -270,7 +272,7 @@ void listFiles(void)
 
 	closedir(pdir);
 }
-
+//-----------------------------------------------------------------------------
 void songList(void)
 {
 	GtkCellRenderer *cell;

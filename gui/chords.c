@@ -13,6 +13,7 @@ GtkTreeModel *model;
 GtkTreeStore *treeStore;
 GtkTextMark *cursor;
 extern GtkTextBuffer *tBufferEditor;
+extern GtkWidget *button5;
 
 void listChords(void)
 {
@@ -345,7 +346,7 @@ void chordSelect(GtkWidget *widget, gpointer data)
 			|| (strcmp(stringPath, "6:1") == 0))
 		{
 		}
-		else 
+		else if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button5)) != FALSE)
 		{
 			gtk_tree_model_get(model, &selChord, 0, &getChord, -1);		
 
@@ -392,16 +393,18 @@ void insertChord(GtkWidget *widget, gpointer data)
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(treeView));	
 	model = gtk_tree_view_get_model(GTK_TREE_VIEW(treeView));		
 	
-	// Inserts string inside "..." at cursor location.
-	gtk_text_buffer_insert_at_cursor(GTK_TEXT_BUFFER(tBufferEditor), brackets, 2);	
+	if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button5)) != FALSE)	
+	{
+		// Inserts string inside "..." at cursor location.
+		gtk_text_buffer_insert_at_cursor(GTK_TEXT_BUFFER(tBufferEditor), brackets, 2);	
 	
-	// Initializes variable 'iter'.	
-	gtk_text_buffer_get_iter_at_mark(GTK_TEXT_BUFFER(tBufferEditor), &iter, cursor);	
+		// Initializes variable 'iter'.	
+		gtk_text_buffer_get_iter_at_mark(GTK_TEXT_BUFFER(tBufferEditor), &iter, cursor);	
 	
-	// Moves cursor back one space.
-	gtk_text_iter_backward_chars(&iter, 1);	
-	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(tBufferEditor), &iter);		
-	
+		// Moves cursor back one space.
+		gtk_text_iter_backward_chars(&iter, 1);	
+		gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(tBufferEditor), &iter);		
+	}
 	// Sets properties of frame & dialog widgets.	
 	gtk_frame_set_shadow_type(GTK_FRAME(frame), GTK_SHADOW_ETCHED_IN);
 		
