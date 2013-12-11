@@ -14,8 +14,9 @@
 GtkWidget *window;
 GtkTreeSelection *selection;
 GtkTreeViewColumn *column;
+extern GtkToolItem *toggleTB;
 gchar *filename;
-extern GtkWidget *treeView, *menuBar, *grid, *tViewDisplay;
+extern GtkWidget *treeView, *menuBar, *grid, *tViewDisplay, *button5;
 
 int main(int argc, char *argv[])
 {
@@ -25,8 +26,9 @@ int main(int argc, char *argv[])
 	GtkWidget *notebook;
 	GtkWidget *tabLabel;
 	GtkWidget *scrolledWindow1, *scrolledWindow2;
+	GtkWidget *toolBar;
 	
-		
+	
 	gtk_init(&argc, &argv);
 	
 	box1 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
@@ -37,6 +39,8 @@ int main(int argc, char *argv[])
 	frame2 = gtk_frame_new("Song");
 	scrolledWindow1 = gtk_scrolled_window_new(NULL, NULL);
     scrolledWindow2 = gtk_scrolled_window_new(NULL, NULL);
+    toolBar = gtk_toolbar_new();
+    
    
 	// This creates toplevel 'window' widget titled "Write 2 Chordpro".
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -45,8 +49,9 @@ int main(int argc, char *argv[])
 	menuFunction();
 
 	// Packs 'menuBar' and 'paned' widgets in 'box1' widget.
-	gtk_box_pack_start(GTK_BOX(box1), menuBar, FALSE, FALSE, 2);
-	gtk_box_pack_start(GTK_BOX(box1), paned, TRUE, TRUE, 2);	
+	gtk_box_pack_start(GTK_BOX(box1), menuBar, FALSE, FALSE, 1);
+	//gtk_box_pack_start(GTK_BOX(box1), button5, FALSE, FALSE, 2);
+	gtk_box_pack_end(GTK_BOX(box1), paned, TRUE, TRUE, 1);	
 	
 	songList();		
 	
@@ -60,6 +65,11 @@ int main(int argc, char *argv[])
 	gtk_container_add(GTK_CONTAINER(frame1), scrolledWindow1);	
 	
 	editor();		
+	
+	gtk_toolbar_insert(GTK_TOOLBAR(toolBar), toggleTB, 0);
+	gtk_toolbar_set_style(GTK_TOOLBAR(toolBar), GTK_TOOLBAR_TEXT);
+	gtk_widget_set_size_request(toolBar, 1, 10);
+	gtk_box_pack_start(GTK_BOX(box1), toolBar, FALSE, FALSE, 0);
 	
 	gtk_container_add(GTK_CONTAINER(scrolledWindow2), tViewDisplay);
 	gtk_box_pack_start(GTK_BOX(box2), scrolledWindow2, TRUE, TRUE, 2);

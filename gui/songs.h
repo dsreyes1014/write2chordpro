@@ -6,6 +6,7 @@
 
 // Prototypes.
 void createDir(void);
+void songSelect(GtkTreeSelection *selection, gpointer data);
 void listFiles(void);
 void songList(void);
 

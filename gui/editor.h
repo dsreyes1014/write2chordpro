@@ -7,7 +7,7 @@
 // Prototypes.
 void save(GtkWidget *widget, gpointer data);
 void newSong(GtkWidget *widget, gpointer data);
-void editSong(GtkWidget *widget, gpointer data);
+void editSong(GtkToggleToolButton *toggleTB, gpointer data);
 void editor(void);
 
 #endif

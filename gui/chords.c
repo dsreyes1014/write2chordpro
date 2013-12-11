@@ -13,7 +13,8 @@ GtkTreeModel *model;
 GtkTreeStore *treeStore;
 GtkTextMark *cursor;
 extern GtkTextBuffer *tBufferEditor;
-extern GtkWidget *button5;
+extern GtkWidget *button5, *tViewEditor;
+extern GtkToolItem *toggleTB;
 
 void listChords(void)
 {
@@ -346,7 +347,7 @@ void chordSelect(GtkWidget *widget, gpointer data)
 			|| (strcmp(stringPath, "6:1") == 0))
 		{
 		}
-		else if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button5)) != FALSE)
+		else if(gtk_text_view_get_editable(GTK_TEXT_VIEW(tViewEditor)) == TRUE)
 		{
 			gtk_tree_model_get(model, &selChord, 0, &getChord, -1);		
 
@@ -364,6 +365,8 @@ void chordSelect(GtkWidget *widget, gpointer data)
 		
 		// Hides dialog window from screen.
 		gtk_widget_hide(chordDialog);
+		
+		gtk_widget_grab_focus(tViewEditor);
 		}
 	}	
 }
@@ -393,7 +396,7 @@ void insertChord(GtkWidget *widget, gpointer data)
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(treeView));	
 	model = gtk_tree_view_get_model(GTK_TREE_VIEW(treeView));		
 	
-	if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button5)) != FALSE)	
+	if(gtk_text_view_get_editable(GTK_TEXT_VIEW(tViewEditor)) == TRUE)	
 	{
 		// Inserts string inside "..." at cursor location.
 		gtk_text_buffer_insert_at_cursor(GTK_TEXT_BUFFER(tBufferEditor), brackets, 2);	
