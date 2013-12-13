@@ -45,15 +45,78 @@ void createDir(void)
 	mkdir(directory, S_IRWXU);
 }
 /*---------------------------------------------------------------------------*/
+void activateRow(GtkTreeView *treeView, gpointer data)
+{
+	gint i, n,  line1, line2, line3, line4;
+	gchar chars[2000], ch;
+	FILE *fp;	
+	
+	n = 0;
+	
+	n = getLineCount(songPath);
+	//g_print("Line count is: %d\n", n);
+		
+	gchar text[n][COLUMN_N];
+	
+	getTextForEachLine(text, n);
+		
+	line1 = getLineCharCount(text, 0);
+	line2 = getLineCharCount(text, 1);
+	line3 = getLineCharCount(text, 2);
+	line4 = getLineCharCount(text, 3);
+		
+	setTitle(chars, songPath, 0);
+	gtk_entry_set_text(GTK_ENTRY(entryTitle), chars);
+	gtk_editable_set_editable(GTK_EDITABLE(entryTitle), FALSE);
+	setArtist(chars, songPath, line1 + 11);
+	gtk_entry_set_text(GTK_ENTRY(entryArtist), chars);
+	gtk_editable_set_editable(GTK_EDITABLE(entryArtist), FALSE);
+	setGenre(chars, songPath, line1 + line2 + 7);
+	gtk_entry_set_text(GTK_ENTRY(entryGenre), chars);
+	gtk_editable_set_editable(GTK_EDITABLE(entryGenre), FALSE);
+	setGenre(chars, songPath, line1 + line2 + line3 + 6);
+	gtk_entry_set_text(GTK_ENTRY(entryKey), chars);
+	gtk_editable_set_editable(GTK_EDITABLE(entryKey), FALSE);
+	i = setEditorView(chars, songPath, line1 + line2
+    			      + line3 + line4 + 1);
+	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(tBufferEditor), chars, i);
+	gtk_text_view_set_editable(GTK_TEXT_VIEW(tViewEditor), FALSE);
+	
+	g_print("Variable i: %d\n", i);
+	
+	// This grabs everything from file and 
+	// puts it in notebook tab display.
+	if((fp = fopen(songPath, "r")) == NULL)
+	{
+		g_print("Error");
+	}
+	else //if(gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(toggleTB)) == TRUE)
+	{								
+		i = 0;
+					
+		fseek(fp, 0, SEEK_SET);
+		
+		while((ch = fgetc(fp)) != EOF)
+		{
+			displayBody[i++] = ch;		
+		}		
+			
+		display(tBufferDisplay, tViewDisplay, displayBody, i);			
+			
+		
+		fclose(fp);		
+	}	
+}
+/*---------------------------------------------------------------------------*/
 void songSelect(GtkTreeSelection *selection, gpointer data)
 {
 	GtkTreeIter songIter;
 	gchar *getSong;
-	gchar ch;
-	gchar chars[2000];
-	gint i, n = 0,  line1, line2, line3, line4; 	
+	//gchar ch;
+	//gchar chars[2000];
+	//gint i; //n = 0,  line1, line2, line3, line4; 	
 	
-	FILE *fp;	
+	//FILE *fp;	
 		
 	if(gtk_tree_selection_get_selected(selection, &model, &songIter))
 	{		
@@ -64,62 +127,6 @@ void songSelect(GtkTreeSelection *selection, gpointer data)
 		sprintf(songPath, "%s%s", directory, song);		
 		
 		g_free(getSong);
-		
-		n = getLineCount(songPath);
-		//g_print("Line count is: %d\n", n);
-		
-		gchar text[n][COLUMN_N];
-	
-		getTextForEachLine(text, n);
-		
-		line1 = getLineCharCount(text, 0);
-		line2 = getLineCharCount(text, 1);
-		line3 = getLineCharCount(text, 2);
-		line4 = getLineCharCount(text, 3);
-		
-		setTitle(chars, songPath, 0);
-		gtk_entry_set_text(GTK_ENTRY(entryTitle), chars);
-		setArtist(chars, songPath, line1 + 11);
-		gtk_entry_set_text(GTK_ENTRY(entryArtist), chars);
-		setGenre(chars, songPath, line1 + line2 + 7);
-		gtk_entry_set_text(GTK_ENTRY(entryGenre), chars);
-		setGenre(chars, songPath, line1 + line2 + line3 + 6);
-		gtk_entry_set_text(GTK_ENTRY(entryKey), chars);
-		i = setEditorView(chars, songPath, line1 + line2
-				      + line3 + line4 + 1);
-		gtk_text_buffer_set_text(GTK_TEXT_BUFFER(tBufferEditor), chars, i);
-		
-		g_print("Variable i: %d\n", i);
-//-----------------------------------------------------------------------------
-		// This grabs everything from file and 
-		// puts it in notebook tab display.
-		if((fp = fopen(songPath, "r")) == NULL)
-		{
-			g_print("Error");
-		}
-		else //if(gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(toggleTB)) == TRUE)
-		{								
-			i = 0;
-						
-			fseek(fp, 0, SEEK_SET);
-			
-			while((ch = fgetc(fp)) != EOF)
-			{
-				displayBody[i++] = ch;		
-			}		
-			
-			display(tBufferDisplay, tViewDisplay, displayBody, i);			
-			
-		
-			fclose(fp);		
-		}
-	
-		gtk_tree_view_set_model(GTK_TREE_VIEW(treeView), NULL);
-		listStore = gtk_list_store_new(1, G_TYPE_STRING);
-		gtk_tree_view_set_model(GTK_TREE_VIEW(treeView), GTK_TREE_MODEL(listStore));
-		g_object_unref(listStore);
-		
-		listFiles();
 	}
 }
 /*---------------------------------------------------------------------------*/
@@ -159,8 +166,6 @@ void listFiles(void)
 		{
 			//g_print("%s\n", files);		
 		}	
-		
-		//g_signal_connect(selection, "changed", G_CALLBACK(songSelect), NULL);
 	}
 
 	closedir(pdir);
@@ -187,6 +192,8 @@ void songList(void)
 	gtk_tree_model_sort_new_with_model(GTK_TREE_MODEL(listStore));
 	gtk_tree_view_column_set_sort_indicator(GTK_TREE_VIEW_COLUMN(column), TRUE);
 	gtk_tree_view_column_set_sort_order(GTK_TREE_VIEW_COLUMN(column), GTK_SORT_ASCENDING);
+	
+	gtk_tree_selection_set_mode(selection, GTK_SELECTION_BROWSE);
 		
 	listFiles();	
 	
@@ -194,4 +201,5 @@ void songList(void)
 	gtk_tree_view_append_column(GTK_TREE_VIEW(treeView), column);
 	
 	g_signal_connect(selection, "changed", G_CALLBACK(songSelect), NULL);
+	g_signal_connect(treeView, "row-activated", G_CALLBACK(activateRow), NULL);
 }

@@ -92,7 +92,7 @@ gint setChordPosition(GtkWidget *tView, GtkTextBuffer *buffer)
 	if(gtk_text_iter_get_char(&ch) == '\n')
 	{	
 		gtk_text_buffer_insert(buffer, &ch, 
-							   "                                                                      ",
+	    "                                                                                                                      ",
 							    -1);		
 	}
 	
