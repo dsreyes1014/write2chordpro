@@ -14,8 +14,6 @@
 //-----------------------------------------------------------------------------
 GtkWidget *treeView;
 GtkListStore *listStore;
-//GtkTreeStore *treeStore;
-GtkTreeViewColumn *column;
 GtkTreeSelection *selection;
 GtkTreeModel *model;
 GtkWidget *tViewDisplay;
@@ -23,17 +21,20 @@ GtkTextBuffer *tBufferDisplay;
 gchar directory[75], song[50], songPath[100], displayBody[999];
 const gchar *titleDisplay;
 extern GtkWidget *entryTitle, *entryArtist, *entryKey, *entryGenre,
-				 *tViewEditor, *button5;
+				 *tViewEditor;
 extern GtkTextBuffer *tBufferEditor;
-extern GtkToolItem *toggleTB;
 //-----------------------------------------------------------------------------
 void createDir(void)
 {
-	char user[30];
+	gchar user[30];
 	
-	char *userVariable = "USER";
-	char *homeDir = "home";
-	char *programDir = "W2C";
+	gchar *userVariable; 
+	gchar *homeDir; 
+	gchar *programDir; 
+	
+	userVariable = "USER";
+	homeDir = "home";
+	programDir = "W2C";
 	
 	// Checks environment's user variable. 
 	sprintf(user, "%s", getenv(userVariable));
@@ -110,23 +111,19 @@ void activateRow(GtkTreeView *treeView, gpointer data)
 /*---------------------------------------------------------------------------*/
 void songSelect(GtkTreeSelection *selection, gpointer data)
 {
-	GtkTreeIter songIter;
-	gchar *getSong;
-	//gchar ch;
-	//gchar chars[2000];
-	//gint i; //n = 0,  line1, line2, line3, line4; 	
+	GtkTreeIter iter;	
 	
-	//FILE *fp;	
-		
-	if(gtk_tree_selection_get_selected(selection, &model, &songIter))
+	gchar *getSong;	
+		                                           	
+	if(gtk_tree_selection_get_selected(selection, &model, &iter))
 	{		
-		gtk_tree_model_get(GTK_TREE_MODEL(listStore), &songIter, 0, 
+		gtk_tree_model_get(GTK_TREE_MODEL(listStore), &iter, 0, 
 					       &getSong, -1);	
-			
+					       
 		sprintf(song, "%s.chordpro", getSong);
 		sprintf(songPath, "%s%s", directory, song);		
 		
-		g_free(getSong);
+		g_free(getSong);		                                               
 	}
 }
 /*---------------------------------------------------------------------------*/
@@ -159,7 +156,6 @@ void listFiles(void)
 		{						
 			gtk_list_store_insert_with_values(GTK_LIST_STORE(listStore), 
 											  &iter, -1, 0, files, -1);		
-			
 			//g_print("%s\n", files);
 		}
 		else 
@@ -174,11 +170,12 @@ void listFiles(void)
 void songList(void)
 {
 	GtkCellRenderer *cell;
+	GtkTreeViewColumn *column;
 		
-	listStore = gtk_list_store_new(1, G_TYPE_STRING);	
+	listStore = gtk_list_store_new(1, G_TYPE_STRING);		
 	treeView = gtk_tree_view_new_with_model(GTK_TREE_MODEL(listStore));
 		
-	g_object_unref(listStore);
+	g_object_unref(listStore);	
 		
 	tViewDisplay = gtk_text_view_new();
 	tBufferDisplay = gtk_text_view_get_buffer(GTK_TEXT_VIEW(tViewDisplay));
@@ -188,9 +185,8 @@ void songList(void)
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(treeView));
 	model = gtk_tree_view_get_model(GTK_TREE_VIEW(treeView));	
 	
-	//gtk_tree_view_column_set_sort_column_id(GTK_TREE_VIEW_COLUMN(column), 0);	
-	gtk_tree_model_sort_new_with_model(GTK_TREE_MODEL(listStore));
-	gtk_tree_view_column_set_sort_indicator(GTK_TREE_VIEW_COLUMN(column), TRUE);
+	gtk_tree_view_column_set_sort_column_id(GTK_TREE_VIEW_COLUMN(column), 0);	
+	
 	gtk_tree_view_column_set_sort_order(GTK_TREE_VIEW_COLUMN(column), GTK_SORT_ASCENDING);
 	
 	gtk_tree_selection_set_mode(selection, GTK_SELECTION_BROWSE);

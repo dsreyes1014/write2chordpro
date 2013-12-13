@@ -16,9 +16,9 @@ gint getLineCharCount(gchar line[][COLUMN_N], gint lineNum);
 gint getTextForEachLine(gchar lines[][COLUMN_N], gint lineNum);
 gint getLineCount(gchar *filePath);
 void save(GtkWidget *widget, gpointer data);
-void newSong(GtkWidget *widget, gpointer data);
-void editSong(GtkToggleToolButton *toggleTB, gpointer data);
-void editor(void);
+void newSong(GtkWidget *widget, gpointer button);
+void editSong(GtkToggleButton *button, gpointer data);
+void editor(GtkWidget *grid);
 
 #endif
 

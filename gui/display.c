@@ -11,13 +11,28 @@ gint lineNumC, lineCountC;
 //-----------------------------------------------------------------------------
 gint setChordPosition(GtkWidget *tView, GtkTextBuffer *buffer)
 {
-	GtkTextMark *startChord, *endChord;
-	GtkTextTag *tag;
-	GtkClipboard *clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
-	GtkTextIter chordS, chordE, startOfLine, matchStart, matchEnd, ch;	
-	gint lineCountV, lineNum1, lineNum2, lineOffset1, lineOffset2;
+	GtkTextTag *tag;	
+
+	GtkTextMark *endChord;
+	GtkTextMark *startChord;	
+
+	GtkTextIter ch;	
+	GtkTextIter chordS;
+	GtkTextIter chordE;
+	GtkTextIter matchEnd;
+	GtkTextIter matchStart;	
+	GtkTextIter startOfLine;
+	
+	GtkClipboard *clipboard;
+		
+	gint lineNum1;
+	gint lineNum2;
+	gint lineCountV;	
+	gint lineOffset1;
+	gint lineOffset2;
 
 	lineCountV = gtk_text_buffer_get_line_count(buffer);
+	clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);	
 	
 	gtk_text_buffer_get_start_iter(buffer, &startOfLine);
 	
@@ -92,7 +107,7 @@ gint setChordPosition(GtkWidget *tView, GtkTextBuffer *buffer)
 	if(gtk_text_iter_get_char(&ch) == '\n')
 	{	
 		gtk_text_buffer_insert(buffer, &ch, 
-	    "                                                                                                                      ",
+	    "                                                                                                              ",
 							    -1);		
 	}
 	
@@ -114,7 +129,7 @@ gint setChordPosition(GtkWidget *tView, GtkTextBuffer *buffer)
 	return 0;
 }
 //-----------------------------------------------------------------------------
-gint searchCharPos(gchar body[], gchar ch)
+/*gint searchCharPos(gchar body[], gchar ch)
 {	
 	gint i;	
 	
@@ -142,7 +157,7 @@ gint charCount(gchar body[], gchar ch)
 	}
 	
 	return count;
-}
+}*/
 //-----------------------------------------------------------------------------
 void display(GtkTextBuffer *buffer, GtkWidget *tView, gchar *view, gint number)
 {	
