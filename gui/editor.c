@@ -3,6 +3,7 @@
 
 #include <gtk/gtk.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "chords.h"
 #include "songs.h"
@@ -12,12 +13,204 @@ GtkWidget *entryTitle, *entryArtist, *entryKey, *entryGenre,
 		  *tViewEditor, *grid, *button5;
 GtkEntryBuffer *entryBuffer;
 GtkTextBuffer *tBufferEditor;
+GtkToolItem *toggleTB;
 const gchar *getTitle, *getArtist, *getKey, *getGenre;
 extern char directory[];
 extern GtkListStore *listStore;
 extern GtkTreeSelection *selection;
-GtkToolItem *toggleTB;
-//-----------------------------------------------------------------------------
+extern GtkWidget *treeView;
+extern gchar songPath[];
+/*---------------------------------------------------------------------------*/
+gint setTitle(gchar *text, gchar *filePath, gint lineNum)
+{
+	FILE *fp;
+	
+	if((fp = fopen(filePath, "r")) == NULL)
+	{
+		g_print("Error. No such file exists.\n");
+		
+		return -1;
+	}
+	else 
+	{
+		fseek(fp, 8, SEEK_SET);
+		fgets(text, COLUMN_N, fp);
+		
+		text[strlen(text) -2] = '\0';	
+		
+		return 0;
+	}
+}
+/*---------------------------------------------------------------------------*/
+gint setArtist(gchar *text, gchar *filePath, gint pos)
+{
+	FILE *fp;
+	
+	if((fp = fopen(filePath, "r")) == NULL)
+	{
+		g_print("Error. No such file exists.\n");
+		
+		return -1;
+	}
+	else 
+	{
+		fseek(fp, pos, SEEK_SET);
+		fgets(text, COLUMN_N, fp);
+		
+		text[strlen(text) -2] = '\0';	
+		
+		return 0;
+	}
+}
+/*---------------------------------------------------------------------------*/
+gint setGenre(gchar *text, gchar *filePath, gint pos)
+{
+	FILE *fp;
+	
+	if((fp = fopen(filePath, "r")) == NULL)
+	{
+		g_print("Error. No such file exists.\n");
+		
+		return -1;
+	}
+	else 
+	{
+		fseek(fp, pos, SEEK_SET);
+		fgets(text, COLUMN_N, fp);
+		
+		text[strlen(text) -2] = '\0';	
+		
+		return 0;
+	}
+}
+/*---------------------------------------------------------------------------*/
+gint setKey(gchar *text, gchar *filePath, gint pos)
+{
+	FILE *fp;
+	
+	if((fp = fopen(filePath, "r")) == NULL)
+	{
+		g_print("Error. No such file exists.\n");
+		
+		return -1;
+	}
+	else 
+	{
+		fseek(fp, pos, SEEK_SET);
+		fgets(text, COLUMN_N, fp);
+		
+		text[strlen(text) -2] = '\0';	
+		
+		return 0;
+	}
+}
+/*---------------------------------------------------------------------------*/
+// Grabs text starting from 'pos' to 'EOF' and outputs text to 'text'.
+// Returns char count through to 'i'. 
+gint setEditorView(gchar *text, gchar *filePath, gint pos)
+{
+	gint i;
+	gchar ch;	
+	FILE *fp;	
+	
+	if((fp = fopen(filePath, "r")) == NULL)
+	{
+		g_print("Error\n");
+		
+		return -1;
+	}
+	else //if(gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(toggleTB)) == TRUE)
+	{		
+		i = 0;		
+		//pos = ftell(fp);
+		
+		//g_print("Position in file before setting it for body read: %d\n", pos);
+		
+		fseek(fp, pos, SEEK_SET);
+			
+		//pos = ftell(fp);
+			
+		//g_print("Position in file after setting it for body read: %d\n", pos);			
+			
+		while((ch = fgetc(fp)) != EOF)
+		{
+			text[i++] = ch;			
+		}					
+		
+		fclose(fp);
+		
+		return i;
+	}
+}	
+/*---------------------------------------------------------------------------*/
+gint getLineCharCount(gchar line[][COLUMN_N], gint lineNum)
+{
+	gint charCount;
+	
+	charCount = strlen(line[lineNum]);
+	
+	return charCount;
+}
+/*---------------------------------------------------------------------------*/
+gint getTextForEachLine(gchar lines[][COLUMN_N], gint lineNum)
+{
+	//gchar lines[lineNum][charCount];	
+	gint i;
+	FILE *fp;	
+	
+	// This will read each line for 
+	// future text manipulation.
+	if((fp = fopen(songPath, "r")) == NULL)            
+	{														
+		g_print("Error\n");
+		
+		return -1;									 
+	}														 
+	else //if(gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(toggleTB)) == TRUE)													
+	{														 
+		for(i = 0; i < lineNum; i++)						
+		{													
+			fgets(lines[i], COLUMN_N, fp);							
+		}
+	
+		fclose(fp);													
+	}
+
+	return 0;
+}
+/*---------------------------------------------------------------------------*/
+gint getLineCount(gchar *filePath)
+{
+	gchar ch;	
+	gint lineCount;	
+	FILE *fp;
+	
+	if((fp = fopen(filePath, "r")) == NULL)				
+	{													 
+		g_print("Error\n");
+		
+		return -1;									
+	}                                                   
+	else //if(gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(toggleTB)) == TRUE) 											
+	{													
+		lineCount = 0;									
+		
+		while((ch = fgetc(fp)) != EOF)					 
+		{														
+			if(ch == '\n')										
+			{													
+				lineCount++;									
+			}													
+		}
+																	
+		//g_print("Line count is: %d\n", lineCount);
+		
+		fclose(fp);		
+	}
+
+	return lineCount;
+}
+/*---------------------------------------------------------------------------*/
 void save(GtkWidget *widget, gpointer data)
 {	
 	GtkTextIter start, end;	
@@ -47,11 +240,16 @@ void save(GtkWidget *widget, gpointer data)
 	
 	fclose(fp);
 	
-	gtk_list_store_clear(GTK_LIST_STORE(listStore));	
+	g_free(body);	
+	
+	gtk_tree_view_set_model(GTK_TREE_VIEW(treeView), NULL);
+	listStore = gtk_list_store_new(1, G_TYPE_STRING);
+	gtk_tree_view_set_model(GTK_TREE_VIEW(treeView), GTK_TREE_MODEL(listStore));
+	g_object_unref(listStore);	
 	
 	listFiles();	
 }
-//-----------------------------------------------------------------------------
+/*---------------------------------------------------------------------------*/
 void newSong(GtkWidget *widget, gpointer data)
 {
 	GtkTextIter start, end;	
@@ -82,7 +280,7 @@ void newSong(GtkWidget *widget, gpointer data)
 	
 	gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(toggleTB), TRUE);	
 }
-//-----------------------------------------------------------------------------
+/*---------------------------------------------------------------------------*/
 void editSong(GtkToggleToolButton *toggleTB, gpointer data)
 {
 	if(gtk_toggle_tool_button_get_active(toggleTB) == TRUE)
@@ -109,16 +307,16 @@ void editSong(GtkToggleToolButton *toggleTB, gpointer data)
 	
 		gtk_text_view_set_editable(GTK_TEXT_VIEW(tViewEditor), FALSE);
 		
-		g_signal_connect(selection, "changed", G_CALLBACK(songSelect), NULL);
+		//g_signal_connect(selection, "changed", G_CALLBACK(songSelect), NULL);
 	}
 }
-//-----------------------------------------------------------------------------
+/*---------------------------------------------------------------------------*/
 void editor(void)
 {
 	GtkWidget *label1, *label2, *label3, *label4, *button1, *button2, 
 			  *button3, *button4, *frame, *boxTop, *scrolledWindow,
 			    *boxBottom;
-		
+			    		
 	grid = gtk_grid_new();
 	entryTitle = gtk_entry_new();
 	entryArtist = gtk_entry_new();
@@ -191,7 +389,7 @@ void editor(void)
 	// Sets row & column spacing between widgets inside 'grid' widget.
 	gtk_grid_set_row_spacing(GTK_GRID(grid), 3);
 	gtk_grid_set_column_spacing(GTK_GRID(grid), 3);	
-//-----------------------------------------------------------------------------	
+//-----------------------------------------------------------------------------
 	g_signal_connect(toggleTB, "toggled", G_CALLBACK(editSong), NULL);	
 	g_signal_connect(button1, "clicked", G_CALLBACK(insertChord), NULL);
 	g_signal_connect(button4, "clicked", G_CALLBACK(save), NULL);

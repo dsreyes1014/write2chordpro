@@ -153,7 +153,7 @@ void display(GtkTextBuffer *buffer, GtkWidget *tView, gchar *view, gint number)
 	const gchar *songSection[] = {"Verse:", "Verse 1", "Verse 2:",
 								  "Verse 3:","Bridge:", "Bridge 1:",
 								  "Bridge 2:", "Bridge 3:", "Intro:",
-								  "End", "Pre"};
+								  "End", "PreChorus:"};
 //-----------------------------------------------------------------------------		
 	gtk_text_buffer_set_text(buffer, view, number);	
 	
@@ -280,9 +280,9 @@ void display(GtkTextBuffer *buffer, GtkWidget *tView, gchar *view, gint number)
 	
 	//g_print("Line number of chord: %d\n", lineNumC);	
 	
-	for(;setChordPosition(tView, buffer) == 0;)
+	for(i = 0; i == 0;)
 	{
-		setChordPosition(tView, buffer);	
+		i = setChordPosition(tView, buffer);	
 	}
 	//g_print("Function return: %d\n", setChordPosition(tView, buffer));
 	//g_print("Line number of chord: %d\n", lineNumC);
