@@ -242,10 +242,12 @@ void save(GtkWidget *widget, gpointer data)
 	
 	g_free(body);	
 	
-	gtk_tree_view_set_model(GTK_TREE_VIEW(treeView), NULL);
-	listStore = gtk_list_store_new(1, G_TYPE_STRING);
-	gtk_tree_view_set_model(GTK_TREE_VIEW(treeView), GTK_TREE_MODEL(listStore));
-	g_object_unref(listStore);
+	//gtk_tree_view_set_model(GTK_TREE_VIEW(treeView), NULL);
+	//listStore = gtk_list_store_new(1, G_TYPE_STRING);
+	//gtk_tree_view_set_model(GTK_TREE_VIEW(treeView), GTK_TREE_MODEL(listStore));
+	//g_object_unref(listStore);
+	
+	gtk_list_store_clear(listStore);
 	
 	listFiles();	
 	
