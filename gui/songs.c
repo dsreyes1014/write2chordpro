@@ -18,7 +18,8 @@ GtkTreeSelection *selection;
 GtkTreeModel *model;
 GtkWidget *tViewDisplay;
 GtkTextBuffer *tBufferDisplay;
-gchar directory[75], song[50], songPath[100], displayBody[999];
+GtkTreeIter iter;
+gchar directory[75], song[50], songPath[100], displayBody[2000];
 const gchar *titleDisplay;
 extern GtkWidget *entryTitle, *entryArtist, *entryKey, *entryGenre,
 				 *tViewEditor;
@@ -99,10 +100,10 @@ void activateRow(GtkTreeView *treeView, gpointer data)
 		
 		while((ch = fgetc(fp)) != EOF)
 		{
-			displayBody[i++] = ch;		
+			chars[i++] = ch;		
 		}		
 			
-		display(tBufferDisplay, tViewDisplay, displayBody, i);			
+		display(tBufferDisplay, tViewDisplay, chars, i);			
 			
 		
 		fclose(fp);		
@@ -111,7 +112,7 @@ void activateRow(GtkTreeView *treeView, gpointer data)
 /*---------------------------------------------------------------------------*/
 void songSelect(GtkTreeSelection *selection, gpointer data)
 {
-	GtkTreeIter iter;	
+	//GtkTreeIter iter;	
 	
 	gchar *getSong;	
 		                                           	
@@ -144,7 +145,7 @@ void listFiles(void)
 
 	while((pentry = readdir(pdir)) != NULL)
 	{
-		GtkTreeIter iter;		
+		//GtkTreeIter iter;		
 		gchar *files = pentry -> d_name;
 		gint length;
 		

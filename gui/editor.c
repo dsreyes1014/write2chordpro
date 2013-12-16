@@ -10,7 +10,7 @@
 #include "editor.h"
 
 GtkWidget *entryTitle, *entryArtist, *entryKey, *entryGenre, 
-		  *tViewEditor, *grid;
+		  *tViewEditor, *button5;
 GtkEntryBuffer *entryBuffer;
 GtkTextBuffer *tBufferEditor;
 GtkToolItem *toggleTB;
@@ -248,6 +248,8 @@ void save(GtkWidget *widget, gpointer data)
 	g_object_unref(listStore);
 	
 	listFiles();	
+	
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button5), FALSE);
 }
 /*---------------------------------------------------------------------------*/
 void newSong(GtkWidget *widget, gpointer button)
@@ -320,8 +322,7 @@ void editor(GtkWidget *grid)
 	GtkWidget *button1;
 	GtkWidget *button2; 
 	GtkWidget *button3;
-	GtkWidget *button4;
-	GtkWidget *button5;  
+	GtkWidget *button4;  
 	GtkWidget *boxBottom;
 	GtkWidget *scrolledWindow;
 			    		

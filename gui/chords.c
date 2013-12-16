@@ -8,14 +8,58 @@
 #include "chords.h"
 #include "editor.h"
 
-GtkWidget *chordDialog;
+GtkWidget *chordDialog, *treeView;
 GtkTreeModel *model;
 GtkTreeStore *treeStore;
+GtkTreeIter selChord;
 GtkTextMark *cursor;
+GtkTreePath *path;
+
+gchar *stringPath;
 extern GtkTextBuffer *tBufferEditor;
 extern GtkWidget *button5, *tViewEditor;
-extern GtkToolItem *toggleTB;
 
+/*---------------------------------------------------------------------------*/
+void activateChordRow(GtkTreeView *treeView, gpointer data)
+{
+	//GtkTreeIter selChord;
+	GtkTextIter iter;
+	gchar *getChord;
+	
+	if((strcmp(stringPath, "0") == 0) || (strcmp(stringPath, "0:0") == 0)
+		|| (strcmp(stringPath, "0:1") == 0) || (strcmp(stringPath, "1") == 0)
+		|| (strcmp(stringPath, "1:0") == 0) || (strcmp(stringPath, "2") == 0) || 
+		(strcmp(stringPath, "2:0") == 0) || (strcmp(stringPath, "3") == 0)
+		|| (strcmp(stringPath, "3:0") == 0) || (strcmp(stringPath, "3:1") == 0)
+		|| (strcmp(stringPath, "4") == 0) || (strcmp(stringPath, "4:0") == 0)
+		|| (strcmp(stringPath, "5") == 0) || (strcmp(stringPath, "5:0") == 0)
+		|| (strcmp(stringPath, "6") ==0) || (strcmp(stringPath, "6:0") == 0)
+		|| (strcmp(stringPath, "6:1") == 0))
+	{
+	}
+	else if(gtk_text_view_get_editable(GTK_TEXT_VIEW(tViewEditor)) == TRUE)
+	{
+		gtk_tree_model_get(model, &selChord, 0, &getChord, -1);		
+
+		g_print("%s\n", getChord);		
+	
+		gtk_text_buffer_insert_at_cursor(GTK_TEXT_BUFFER(tBufferEditor), getChord, -1);
+		
+		g_free(getChord);
+		
+		gtk_text_buffer_get_iter_at_mark(GTK_TEXT_BUFFER(tBufferEditor), &iter, cursor);
+		
+		// Move cursor forward one space out of brackets.
+		gtk_text_iter_forward_chars(&iter, 1);
+		gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(tBufferEditor), &iter);	
+		
+		// Hides dialog window from screen.
+		gtk_widget_hide(chordDialog);
+		
+		gtk_widget_grab_focus(tViewEditor);
+	}
+}
+/*---------------------------------------------------------------------------*/
 void listChords(void)
 {
 	GtkTreeIter parent, child1, child2;
@@ -321,59 +365,28 @@ void listChords(void)
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "Gsus4", -1);
 }
 
-void chordSelect(GtkWidget *widget, gpointer data)
+void chordSelect(GtkTreeSelection *selection, gpointer data)
 {
-	GtkTreeIter selChord;
-	GtkTextIter iter; 
-	GtkTreePath *path;
-	gchar *getChord;
+	//GtkTreeIter selChord;
+	//GtkTextIter iter; 
+	//GtkTreePath *path;
+	//gchar *getChord;
 	
-	if(gtk_tree_selection_get_selected(GTK_TREE_SELECTION(widget), &model, &selChord))
+	if(gtk_tree_selection_get_selected(selection, &model, &selChord))
 	{		
 		path = gtk_tree_model_get_path(GTK_TREE_MODEL(model), &selChord);
 
-		gchar *stringPath = gtk_tree_path_to_string(path);
+		stringPath = gtk_tree_path_to_string(path);
 		
-		g_print("%s\n", stringPath);
+		//g_print("%s\n", stringPath);
 		
-		if((strcmp(stringPath, "0") == 0) || (strcmp(stringPath, "0:0") == 0)
-			|| (strcmp(stringPath, "0:1") == 0) || (strcmp(stringPath, "1") == 0)
-			|| (strcmp(stringPath, "1:0") == 0) || (strcmp(stringPath, "2") == 0) || 
-			(strcmp(stringPath, "2:0") == 0) || (strcmp(stringPath, "3") == 0)
-			|| (strcmp(stringPath, "3:0") == 0) || (strcmp(stringPath, "3:1") == 0)
-			|| (strcmp(stringPath, "4") == 0) || (strcmp(stringPath, "4:0") == 0)
-			|| (strcmp(stringPath, "5") == 0) || (strcmp(stringPath, "5:0") == 0)
-			|| (strcmp(stringPath, "6") ==0) || (strcmp(stringPath, "6:0") == 0)
-			|| (strcmp(stringPath, "6:1") == 0))
-		{
-		}
-		else if(gtk_text_view_get_editable(GTK_TEXT_VIEW(tViewEditor)) == TRUE)
-		{
-			gtk_tree_model_get(model, &selChord, 0, &getChord, -1);		
-
-			g_print("%s\n", getChord);		
 		
-			gtk_text_buffer_insert_at_cursor(GTK_TEXT_BUFFER(tBufferEditor), getChord, -1);
-		
-			g_free(getChord);
-		
-			gtk_text_buffer_get_iter_at_mark(GTK_TEXT_BUFFER(tBufferEditor), &iter, cursor);
-		
-		// Move cursor forward one space out of brackets.
-		gtk_text_iter_forward_chars(&iter, 1);
-		gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(tBufferEditor), &iter);	
-		
-		// Hides dialog window from screen.
-		gtk_widget_hide(chordDialog);
-		
-		gtk_widget_grab_focus(tViewEditor);
-		}
 	}	
 }
 
 void insertChord(GtkWidget *widget, gpointer data)
 {	
-	GtkWidget *scrolledWindow, *treeView;
+	GtkWidget *scrolledWindow;
 	GtkWidget *frame, *topHalf, *bottomHalf, *label;
 	GtkTreeViewColumn *column;
 	GtkCellRenderer *cell; 
@@ -417,7 +430,7 @@ void insertChord(GtkWidget *widget, gpointer data)
 	gtk_container_add(GTK_CONTAINER(topHalf), label);
 	gtk_container_add(GTK_CONTAINER(bottomHalf), frame);	
 	
-	gtk_tree_view_set_activate_on_single_click(GTK_TREE_VIEW(treeView), TRUE);	
+	gtk_tree_view_set_activate_on_single_click(GTK_TREE_VIEW(treeView), FALSE);	
 	
 	gtk_widget_show_all(chordDialog);	
 	
@@ -427,6 +440,8 @@ void insertChord(GtkWidget *widget, gpointer data)
 		
 	// Adds column to treeView.
 	gtk_tree_view_append_column(GTK_TREE_VIEW(treeView), column);
+	
+	gtk_tree_view_set_hover_expand(GTK_TREE_VIEW(treeView), TRUE);
 		
 	// Sets properties for chordDialog widget.	
 	gtk_window_set_modal(GTK_WINDOW(chordDialog), TRUE);
@@ -435,5 +450,6 @@ void insertChord(GtkWidget *widget, gpointer data)
 	
 	gtk_tree_selection_set_mode(GTK_TREE_SELECTION(selection), GTK_SELECTION_BROWSE);
 	
-	g_signal_connect(selection, "changed", G_CALLBACK(chordSelect), NULL);			
+	g_signal_connect(selection, "changed", G_CALLBACK(chordSelect), NULL);	
+	g_signal_connect(treeView, "row-activated", G_CALLBACK(activateChordRow), NULL);		
 }

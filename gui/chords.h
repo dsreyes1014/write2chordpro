@@ -6,7 +6,8 @@
 
 // Prototypes.
 void listChords(void);
-void chordSelect(GtkWidget *widget, gpointer data);
+void activateChordRow(GtkTreeView *treeView, gpointer data);
+void chordSelect(GtkTreeSelection *selection, gpointer data);
 void insertChord(GtkWidget *widget, gpointer data);
 
 #endif
