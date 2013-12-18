@@ -2,6 +2,7 @@
 // Date Last Modified: 11-26-2013.
 
 #include <gtk/gtk.h>
+#include <gdk/gdkkeysyms.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -313,7 +314,7 @@ void editSong(GtkToggleButton *button, gpointer data)
 	}
 }
 /*---------------------------------------------------------------------------*/
-void editor(GtkWidget *grid)
+void editor(GtkWidget *grid, GtkWidget *window)
 {
 	GtkWidget *frame;
 	GtkWidget *boxTop;
@@ -327,7 +328,9 @@ void editor(GtkWidget *grid)
 	GtkWidget *button4;  
 	GtkWidget *boxBottom;
 	GtkWidget *scrolledWindow;
+	GtkAccelGroup *accelChord;
 			    		
+	frame = gtk_frame_new(NULL);	
 	entryTitle = gtk_entry_new();
 	entryArtist = gtk_entry_new();
 	entryKey = gtk_entry_new();
@@ -337,16 +340,15 @@ void editor(GtkWidget *grid)
 	label3 = gtk_label_new("Genre:");	
 	label4 = gtk_label_new("Key:");
 	tViewEditor = gtk_text_view_new();
+	accelChord = gtk_accel_group_new();	
 	button1 = gtk_button_new_with_label("Insert Chord");
 	button2 = gtk_button_new_with_label("Transpose");
 	button3 = gtk_button_new_with_label("Add New");
 	button4 = gtk_button_new_with_label("Save");
 	button5 = gtk_toggle_button_new_with_label("Edit");
-	frame = gtk_frame_new(NULL);
 	boxTop = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
 	boxBottom = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
 	scrolledWindow = gtk_scrolled_window_new(NULL, NULL);
-	toggleTB = gtk_toggle_tool_button_new();
 	tBufferEditor = gtk_text_view_get_buffer(GTK_TEXT_VIEW(tViewEditor));
 	
 	gtk_entry_set_placeholder_text(GTK_ENTRY(entryTitle), 
@@ -377,6 +379,12 @@ void editor(GtkWidget *grid)
 	
 	// Packs 'scrolledWindow' widget into 'frame2' widget.
 	gtk_container_add(GTK_CONTAINER(frame), scrolledWindow);
+	
+	// Adds accelChord to toplevel window.
+	gtk_window_add_accel_group(GTK_WINDOW(window), accelChord);
+	
+	gtk_widget_add_accelerator(button1, "clicked", accelChord, GDK_KEY_i, 
+	                           GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
 //-----------------------------------------------------------------------------    
     // Attaches widgets to widget grid.	
 	gtk_grid_attach(GTK_GRID(grid), label1, 3, 1, 1, 1);
