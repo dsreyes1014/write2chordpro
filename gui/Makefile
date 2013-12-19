@@ -2,8 +2,8 @@ CC = gcc
 INSTALL_DIR = /usr/local/bin/
 CFLAGS = -Wall -c -std=c99
 PROGRAM = w2c-gui
-OBJECTS = main.o menu.o chords.o songs.o editor.o display.o
-HEADERS = menu.h chords.h songs.h editor.h display.h
+OBJECTS = main.o menu.o chords.o songs.o editor.o display.o transpose.o
+HEADERS = menu.h chords.h songs.h editor.h display.h transpose.h
 GTK+3 = `pkg-config --cflags gtk+-3.0 --libs gtk+-3.0`
 
 all: $(PROGRAM)
@@ -19,11 +19,13 @@ chords.o: chords.c editor.h
 	$(CC) $(CFLAGS) chords.c $(GTK+3)
 songs.o: songs.c
 	$(CC) $(CFLAGS) songs.c $(GTK+3)
-editor.o: editor.c chords.h
+editor.o: editor.c chords.h transpose.h
 	$(CC) $(CFLAGS) editor.c $(GTK+3)
+transpose.o: transpose.c editor.h
+	$(CC) $(CFLAGS) transpose.c $(GTK+3)
 
 clean: 
-	rm -rfv $(OBJECTS) w2c-gui
+	rm -rfv $(OBJECTS) w2c-gui *~
 install:
 	cp -v $(PROGRAM) $(INSTALL_DIR)
 uninstall: $(INSTALL_DIR)$(PROGRAM)

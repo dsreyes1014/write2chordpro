@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
 	gtk_container_add(GTK_CONTAINER(scrolledWindow1), treeView);	
 	gtk_container_add(GTK_CONTAINER(frame1), scrolledWindow1);	
 	
-	editor(grid);		
+	editor(grid, window);		
 	
 	gtk_container_add(GTK_CONTAINER(scrolledWindow2), tViewDisplay);
 	gtk_box_pack_start(GTK_BOX(box2), scrolledWindow2, TRUE, TRUE, 2);

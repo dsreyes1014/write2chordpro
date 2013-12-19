@@ -7,7 +7,9 @@
 // Prototypes.
 #define COLUMN_N 130
 
-gint setEditorView(gchar *text, gchar *filePath, gint pos);
+
+gint getChars(gchar *text, gchar *filePath, gint pos); // arg1 = out, arg2 = input filepath,
+                                                       // arg3 = position in file;
 gint setKey(gchar *text, gchar *filePath, gint pos);
 gint setGenre(gchar *text, gchar *filePath, gint pos);
 gint setArtist(gchar *text, gchar *filePath, gint pos);
@@ -18,7 +20,7 @@ gint getLineCount(gchar *filePath);
 void save(GtkWidget *widget, gpointer data);
 void newSong(GtkWidget *widget, gpointer button);
 void editSong(GtkToggleButton *button, gpointer data);
-void editor(GtkWidget *grid);
+void editor(GtkWidget *grid, GtkWidget *window);
 
 #endif
 

@@ -168,7 +168,7 @@ void display(GtkTextBuffer *buffer, GtkWidget *tView, gchar *view, gint number)
 	const gchar *songSection[] = {"Verse:", "Verse 1", "Verse 2:",
 								  "Verse 3:","Bridge:", "Bridge 1:",
 								  "Bridge 2:", "Bridge 3:", "Intro:",
-								  "End", "PreChorus:"};
+								  "End", "PreChorus:", "Verso:"};
 //-----------------------------------------------------------------------------		
 	gtk_text_buffer_set_text(buffer, view, number);	
 	
@@ -252,9 +252,9 @@ void display(GtkTextBuffer *buffer, GtkWidget *tView, gchar *view, gint number)
 	// 'Verse:', 'Chorus:'etc...			
 	gtk_text_buffer_get_start_iter(buffer, &startOfLine);
 	
-	for(i = 0; i < 11; i++)
+	for(i = 0; i < 12; i++)
 	{
-		if(gtk_text_iter_forward_search(&startOfLine, songSection[i], 1,
+		if(gtk_text_iter_forward_search(&startOfLine, songSection[i], 2,
 										&matchStart, &matchEnd, NULL))
 		{
 			tag = gtk_text_buffer_create_tag(buffer, NULL, 
@@ -266,7 +266,7 @@ void display(GtkTextBuffer *buffer, GtkWidget *tView, gchar *view, gint number)
 	}		
 	
 	if(gtk_text_iter_forward_search(&startOfLine, "Chorus:", 
-	   								1, &matchStart, &matchEnd, NULL))
+	   								2, &matchStart, &matchEnd, NULL))
 	{
 		tag = gtk_text_buffer_create_tag(buffer, NULL, 
 										 "font", "italic 12", 
@@ -275,7 +275,7 @@ void display(GtkTextBuffer *buffer, GtkWidget *tView, gchar *view, gint number)
 		gtk_text_buffer_apply_tag(buffer, tag, &matchStart, &matchEnd);			
 	
 		gtk_text_iter_forward_search(&matchEnd, "Chorus:",
-									 1, &matchStart, &matchEnd,
+									 2, &matchStart, &matchEnd,
 									 NULL);
 									 
 		tag = gtk_text_buffer_create_tag(buffer, NULL, 

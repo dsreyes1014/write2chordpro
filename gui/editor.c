@@ -9,6 +9,7 @@
 #include "chords.h"
 #include "songs.h"
 #include "editor.h"
+#include "transpose.h"
 
 GtkWidget *entryTitle, *entryArtist, *entryKey, *entryGenre, 
 		  *tViewEditor, *button5;
@@ -108,7 +109,7 @@ gint setKey(gchar *text, gchar *filePath, gint pos)
 /*---------------------------------------------------------------------------*/
 // Grabs text starting from 'pos' to 'EOF' and outputs text to 'text'.
 // Returns char count through to 'i'. 
-gint setEditorView(gchar *text, gchar *filePath, gint pos)
+gint getChars(gchar *text, gchar *filePath, gint pos)
 {
 	gint i;
 	gchar ch;	
@@ -116,7 +117,7 @@ gint setEditorView(gchar *text, gchar *filePath, gint pos)
 	
 	if((fp = fopen(filePath, "r")) == NULL)
 	{
-		g_print("Error\n");
+		g_print("No such file or directory\n");
 		
 		return -1;
 	}
@@ -155,7 +156,6 @@ gint getLineCharCount(gchar line[][COLUMN_N], gint lineNum)
 /*---------------------------------------------------------------------------*/
 gint getTextForEachLine(gchar lines[][COLUMN_N], gint lineNum)
 {
-	//gchar lines[lineNum][charCount];	
 	gint i;
 	FILE *fp;	
 	
@@ -321,11 +321,14 @@ void editor(GtkWidget *grid, GtkWidget *window)
 	GtkWidget *label1;
 	GtkWidget *label2;
 	GtkWidget *label3;
-	GtkWidget *label4;	
+	GtkWidget *label4;
+	GtkWidget *label5;	
 	GtkWidget *button1;
 	GtkWidget *button2; 
 	GtkWidget *button3;
 	GtkWidget *button4;  
+	GtkWidget *button6;
+	GtkWidget *boxMiddle;
 	GtkWidget *boxBottom;
 	GtkWidget *scrolledWindow;
 	GtkAccelGroup *accelChord;
@@ -339,15 +342,18 @@ void editor(GtkWidget *grid, GtkWidget *window)
 	label2 = gtk_label_new("Artist:");
 	label3 = gtk_label_new("Genre:");	
 	label4 = gtk_label_new("Key:");
+	label5 = gtk_label_new("Transpose");
 	tViewEditor = gtk_text_view_new();
 	accelChord = gtk_accel_group_new();	
 	button1 = gtk_button_new_with_label("Insert Chord");
-	button2 = gtk_button_new_with_label("Transpose");
+	button2 = gtk_button_new_with_label("Up");
+	button6 = gtk_button_new_with_label("Down");
 	button3 = gtk_button_new_with_label("Add New");
 	button4 = gtk_button_new_with_label("Save");
 	button5 = gtk_toggle_button_new_with_label("Edit");
 	boxTop = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
-	boxBottom = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
+	boxMiddle = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
+	boxBottom = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
 	scrolledWindow = gtk_scrolled_window_new(NULL, NULL);
 	tBufferEditor = gtk_text_view_get_buffer(GTK_TEXT_VIEW(tViewEditor));
 	
@@ -370,10 +376,14 @@ void editor(GtkWidget *grid, GtkWidget *window)
 	gtk_box_pack_start(GTK_BOX(boxTop), button5, FALSE, TRUE, 2);
 	gtk_box_pack_start(GTK_BOX(boxTop), button4, FALSE, TRUE, 2); 
 	
+	gtk_box_pack_start(GTK_BOX(boxBottom), button6, FALSE, TRUE, 2);
+	gtk_box_pack_start(GTK_BOX(boxBottom), button2, FALSE, TRUE, 2);	
+	
 	// Packs 'button1' & 'button2' widgets into 'boxBottom' widget.
-	gtk_box_pack_start(GTK_BOX(boxBottom), button1, FALSE, TRUE, 2);
-	gtk_box_pack_start(GTK_BOX(boxBottom), button2, FALSE, TRUE, 2);    
-
+	gtk_box_pack_start(GTK_BOX(boxMiddle), label5, FALSE, TRUE, 2); 
+	gtk_box_pack_start(GTK_BOX(boxMiddle), boxBottom, FALSE, TRUE, 2);
+	gtk_box_pack_start(GTK_BOX(boxMiddle), button1, FALSE, TRUE, 2);
+	
 	// Packs 'textView' widget inside of 'scrolledWindow' widget.	
 	gtk_container_add(GTK_CONTAINER(scrolledWindow), tViewEditor);
 	
@@ -397,7 +407,7 @@ void editor(GtkWidget *grid, GtkWidget *window)
 	gtk_grid_attach_next_to(GTK_GRID(grid), entryKey, label4, GTK_POS_RIGHT, 1, 1);
 	gtk_grid_attach(GTK_GRID(grid), frame, 0, 3, 150, 175);
 	gtk_grid_attach_next_to(GTK_GRID(grid), boxTop, frame, GTK_POS_RIGHT, 1, 50);
-	gtk_grid_attach_next_to(GTK_GRID(grid), boxBottom, boxTop, GTK_POS_BOTTOM, 1, 1);
+	gtk_grid_attach_next_to(GTK_GRID(grid), boxMiddle, boxTop, GTK_POS_BOTTOM, 1, 1);
 	
 	// Sets row & column spacing between widgets inside 'grid' widget.
 	gtk_grid_set_row_spacing(GTK_GRID(grid), 3);
@@ -407,4 +417,6 @@ void editor(GtkWidget *grid, GtkWidget *window)
 	g_signal_connect(button1, "clicked", G_CALLBACK(insertChord), NULL);
 	g_signal_connect(button4, "clicked", G_CALLBACK(save), NULL);
 	g_signal_connect(button3, "clicked", G_CALLBACK(newSong), button5);	
+	g_signal_connect(button2, "clicked", G_CALLBACK(transposeUp), button5);
+	g_signal_connect(button6, "clicked", G_CALLBACK(transposeDown), button5);
 }
