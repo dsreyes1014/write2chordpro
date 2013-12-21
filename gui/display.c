@@ -192,7 +192,7 @@ void display(GtkTextBuffer *buffer, GtkWidget *tView)
 	// Inserts text 'by:' before artist with attributes.
 	tag = gtk_text_buffer_create_tag(buffer, NULL, "font", 
 	                                 "monospace italic 12", 
-		    						 "weight", "850", NULL);
+		    						 "weight", "100", NULL);
 		    						 
 	gtk_text_buffer_get_iter_at_line(buffer, &start, 0);
 	
@@ -240,7 +240,7 @@ void display(GtkTextBuffer *buffer, GtkWidget *tView)
 //-----------------------------------------------------------------------------	
 	tag = gtk_text_buffer_create_tag(buffer, NULL, "font", 
 	                                 "monospace italic 12", 
-		    						 "weight", "850", NULL);
+		    						 "weight", "100", NULL);
 	
 	gtk_text_buffer_get_iter_at_line(buffer, &start, 1);
 	
@@ -333,7 +333,8 @@ void display(GtkTextBuffer *buffer, GtkWidget *tView)
 	
 	for(i = 0; i < 12; i++)
 	{
-		if(gtk_text_iter_forward_search(&start, songSection[i], 2,
+		if(gtk_text_iter_forward_search(&start, songSection[i],
+		                                GTK_TEXT_SEARCH_CASE_INSENSITIVE,
 										&matchStart, &matchEnd, NULL))
 		{
 			tag = gtk_text_buffer_create_tag(buffer, NULL, 
@@ -345,7 +346,8 @@ void display(GtkTextBuffer *buffer, GtkWidget *tView)
 	}		
 	
 	if(gtk_text_iter_forward_search(&start, "Chorus:", 
-	   								2, &matchStart, &matchEnd, NULL))
+	   								GTK_TEXT_SEARCH_CASE_INSENSITIVE,
+	   								&matchStart, &matchEnd, NULL))
 	{
 		tag = gtk_text_buffer_create_tag(buffer, NULL, 
 										 "font", "italic 12", 

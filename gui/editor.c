@@ -332,6 +332,8 @@ void editor(GtkWidget *grid, GtkWidget *window)
 	GtkWidget *boxMiddle;
 	GtkWidget *boxBottom;
 	GtkWidget *separator;
+	GtkWidget *arrowLeft;
+	GtkWidget *arrowRight;
 	GtkWidget *scrolledWindow;
 	GtkAccelGroup *accelChord;
 			    		
@@ -339,7 +341,9 @@ void editor(GtkWidget *grid, GtkWidget *window)
 	entryKey = gtk_entry_new();
 	entryTitle = gtk_entry_new();
 	entryGenre = gtk_entry_new();
-	entryArtist = gtk_entry_new();	
+	entryArtist = gtk_entry_new();
+	arrowLeft = gtk_arrow_new(GTK_ARROW_LEFT, GTK_SHADOW_ETCHED_IN);
+	arrowRight = gtk_arrow_new(GTK_ARROW_RIGHT, GTK_SHADOW_ETCHED_IN);	
 	label1 = gtk_label_new("Title:");
 	label2 = gtk_label_new("Artist:");
 	label3 = gtk_label_new("Genre:");	
@@ -348,8 +352,8 @@ void editor(GtkWidget *grid, GtkWidget *window)
 	tViewEditor = gtk_text_view_new();
 	accelChord = gtk_accel_group_new();	
 	button1 = gtk_button_new_with_label("Insert Chord");
-	button2 = gtk_button_new_with_label("Up");
-	button6 = gtk_button_new_with_label("Down");
+	button2 = gtk_button_new();
+	button6 = gtk_button_new();
 	button3 = gtk_button_new_with_label("Add New");
 	button4 = gtk_button_new_with_label("Save");
 	button5 = gtk_toggle_button_new_with_label("Edit");
@@ -360,6 +364,9 @@ void editor(GtkWidget *grid, GtkWidget *window)
 	separator = gtk_separator_new(GTK_ORIENTATION_VERTICAL);	
 	tBufferEditor = gtk_text_view_get_buffer(GTK_TEXT_VIEW(tViewEditor));
 		
+	
+	gtk_container_add(GTK_CONTAINER(button2), arrowRight);
+	gtk_container_add(GTK_CONTAINER(button6), arrowLeft);	
 		
 	gtk_entry_set_placeholder_text(GTK_ENTRY(entryTitle), 
 	                               "Enter name of title here");
