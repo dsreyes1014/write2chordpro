@@ -13,9 +13,12 @@
 #include "display.h"
 //-----------------------------------------------------------------------------
 GtkWidget *treeView;
+GtkTextBuffer *tBufferDisplay;
+GtkWidget *tViewDisplay;
 GtkListStore *listStore;
 GtkTreeSelection *selection;
 GtkTreeModel *model;
+GtkTreeViewColumn *column;
 GtkWidget *tViewDisplay;
 GtkTextBuffer *tBufferDisplay;
 GtkTreeIter iter;
@@ -47,16 +50,28 @@ void createDir(void)
 	mkdir(directory, S_IRWXU);
 }
 /*---------------------------------------------------------------------------*/
+void modifiedEntry(GtkEditable *editable, gpointer data)
+{
+	display(tBufferDisplay, tViewDisplay);
+}
+/*---------------------------------------------------------------------------*/
+void modifiedBuffer(GtkTextBuffer *buffer, gpointer data)
+{
+	display(tBufferDisplay, tViewDisplay);
+}
+/*---------------------------------------------------------------------------*/
 void activateRow(GtkTreeView *treeView, gpointer data)
 {
 	gint i, n,  line1, line2, line3, line4;
-	gchar chars[2000], ch;
-	FILE *fp;	
+	
+	//gchar ch;
+	gchar chars[2000];
+	
+	//FILE *fp;	
 	
 	n = 0;
 	
 	n = getLineCount(songPath);
-	//g_print("Line count is: %d\n", n);
 		
 	gchar text[n][COLUMN_N];
 	
@@ -86,9 +101,16 @@ void activateRow(GtkTreeView *treeView, gpointer data)
 	
 	g_print("Variable i: %d\n", i);
 	
+	display(tBufferDisplay, tViewDisplay);
+	
+	g_signal_connect(GTK_EDITABLE(entryKey), "changed", G_CALLBACK(modifiedEntry), NULL);	
+	g_signal_connect(GTK_EDITABLE(entryTitle), "changed", G_CALLBACK(modifiedEntry), NULL);
+	g_signal_connect(GTK_EDITABLE(entryArtist), "changed", G_CALLBACK(modifiedEntry), NULL);
+	g_signal_connect(tBufferEditor, "modified-changed", G_CALLBACK(modifiedBuffer), NULL);
+	
 	// This grabs everything from file and 
 	// puts it in notebook tab display.
-	if((fp = fopen(songPath, "r")) == NULL)
+	/*if((fp = fopen(songPath, "r")) == NULL)
 	{
 		g_print("Error");
 	}
@@ -107,7 +129,7 @@ void activateRow(GtkTreeView *treeView, gpointer data)
 			
 		
 		fclose(fp);		
-	}	
+	}*/	
 }
 /*---------------------------------------------------------------------------*/
 void songSelect(GtkTreeSelection *selection, gpointer data)
@@ -171,16 +193,15 @@ void listFiles(void)
 void songList(void)
 {
 	GtkCellRenderer *cell;
-	GtkTreeViewColumn *column;
 		
 	listStore = gtk_list_store_new(1, G_TYPE_STRING);		
 	treeView = gtk_tree_view_new_with_model(GTK_TREE_MODEL(listStore));
-		
-	g_object_unref(listStore);	
-		
+	
 	tViewDisplay = gtk_text_view_new();
 	tBufferDisplay = gtk_text_view_get_buffer(GTK_TEXT_VIEW(tViewDisplay));
 		
+	g_object_unref(listStore);	
+				
 	cell = gtk_cell_renderer_text_new();	
 	column = gtk_tree_view_column_new_with_attributes("Songs", cell, "text", NULL);
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(treeView));
@@ -196,6 +217,8 @@ void songList(void)
 	
 	/* Add column to treeView1 */	
 	gtk_tree_view_append_column(GTK_TREE_VIEW(treeView), column);
+	
+	gtk_tree_view_column_clicked(column);
 	
 	g_signal_connect(selection, "changed", G_CALLBACK(songSelect), NULL);
 	g_signal_connect(treeView, "row-activated", G_CALLBACK(activateRow), NULL);

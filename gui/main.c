@@ -80,6 +80,8 @@ int main(int argc, char *argv[])
 	tabLabel = gtk_label_new("Song Editor");	
 	gtk_notebook_set_tab_label(GTK_NOTEBOOK(notebook), grid, tabLabel);
 	
+	gtk_notebook_set_tab_detachable(GTK_NOTEBOOK(notebook), window, TRUE);
+	
 	// Packs 'frame' & 'notebook' widgets inside pane 1 & 2 respectively.
 	gtk_paned_pack1(GTK_PANED(paned), frame1, TRUE, FALSE);
 	gtk_paned_pack2(GTK_PANED(paned), notebook, TRUE, FALSE);

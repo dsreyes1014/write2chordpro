@@ -10,6 +10,7 @@
 #include "songs.h"
 #include "editor.h"
 #include "transpose.h"
+#include "display.h"
 
 GtkWidget *entryTitle, *entryArtist, *entryKey, *entryGenre, 
 		  *tViewEditor, *button5;
@@ -330,14 +331,15 @@ void editor(GtkWidget *grid, GtkWidget *window)
 	GtkWidget *button6;
 	GtkWidget *boxMiddle;
 	GtkWidget *boxBottom;
+	GtkWidget *separator;
 	GtkWidget *scrolledWindow;
 	GtkAccelGroup *accelChord;
 			    		
 	frame = gtk_frame_new(NULL);	
-	entryTitle = gtk_entry_new();
-	entryArtist = gtk_entry_new();
 	entryKey = gtk_entry_new();
+	entryTitle = gtk_entry_new();
 	entryGenre = gtk_entry_new();
+	entryArtist = gtk_entry_new();	
 	label1 = gtk_label_new("Title:");
 	label2 = gtk_label_new("Artist:");
 	label3 = gtk_label_new("Genre:");	
@@ -355,8 +357,10 @@ void editor(GtkWidget *grid, GtkWidget *window)
 	boxMiddle = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
 	boxBottom = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
 	scrolledWindow = gtk_scrolled_window_new(NULL, NULL);
+	separator = gtk_separator_new(GTK_ORIENTATION_VERTICAL);	
 	tBufferEditor = gtk_text_view_get_buffer(GTK_TEXT_VIEW(tViewEditor));
-	
+		
+		
 	gtk_entry_set_placeholder_text(GTK_ENTRY(entryTitle), 
 	                               "Enter name of title here");
 	gtk_entry_set_placeholder_text(GTK_ENTRY(entryArtist), 
@@ -377,6 +381,7 @@ void editor(GtkWidget *grid, GtkWidget *window)
 	gtk_box_pack_start(GTK_BOX(boxTop), button4, FALSE, TRUE, 2); 
 	
 	gtk_box_pack_start(GTK_BOX(boxBottom), button6, FALSE, TRUE, 2);
+	gtk_box_pack_start(GTK_BOX(boxBottom), separator, FALSE, TRUE, 2);
 	gtk_box_pack_start(GTK_BOX(boxBottom), button2, FALSE, TRUE, 2);	
 	
 	// Packs 'button1' & 'button2' widgets into 'boxBottom' widget.
@@ -418,5 +423,5 @@ void editor(GtkWidget *grid, GtkWidget *window)
 	g_signal_connect(button4, "clicked", G_CALLBACK(save), NULL);
 	g_signal_connect(button3, "clicked", G_CALLBACK(newSong), button5);	
 	g_signal_connect(button2, "clicked", G_CALLBACK(transposeUp), button5);
-	g_signal_connect(button6, "clicked", G_CALLBACK(transposeDown), button5);
+	g_signal_connect(button6, "clicked", G_CALLBACK(transposeDown), button5);	
 }
