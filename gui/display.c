@@ -94,7 +94,7 @@ gint setChordPosition(GtkWidget *tView, GtkTextBuffer *buffer)
 		lineCountC = lineCountV;
 	}
 	
-	// Copy and cut the section between the marks.
+	// Copy, cut, and add tags to the section between the marks.
 	gtk_text_buffer_select_range(buffer, &chordS, &chordE);
 	tag = gtk_text_buffer_create_tag(buffer, NULL, "background", "gold",
 									 "weight", "500", 
