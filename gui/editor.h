@@ -10,10 +10,8 @@
 
 gint getChars(gchar *text, gchar *filePath, gint pos); // arg1 = out, arg2 = input filepath,
                                                        // arg3 = position in file;
-gint setKey(gchar *text, gchar *filePath, gint pos);
-gint setGenre(gchar *text, gchar *filePath, gint pos);
-gint setArtist(gchar *text, gchar *filePath, gint pos);
-gint setTitle(gchar *text, gchar *filePath, gint lineNum);
+
+gint setText(gchar *text, gchar *filePath, gint pos);
 gint getLineCharCount(gchar line[][COLUMN_N], gint lineNum);
 gint getTextForEachLine(gchar lines[][COLUMN_N], gint lineNum);
 gint getLineCount(gchar *filePath);

@@ -10,7 +10,7 @@ void activateRow(GtkTreeView *treeView, gpointer data);
 void songSelect(GtkTreeSelection *selection, gpointer data);
 void listFiles(void);
 void songList(void);
-void modified(GtkEditable *editable, gpointer data);
+void modifiedEntry(void);
 void modifiedBuffer(GtkTextBuffer *buffer, gpointer data);
 
 #endif

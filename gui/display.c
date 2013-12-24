@@ -53,7 +53,7 @@ gint setChordPosition(GtkWidget *tView, GtkTextBuffer *buffer)
 	}
 	else 
 	{
-		return -1;
+		return 1;
 	}
 	
 	if(gtk_text_iter_forward_search(&startOfLine, "]", 1, 
@@ -65,7 +65,7 @@ gint setChordPosition(GtkWidget *tView, GtkTextBuffer *buffer)
 	}	
 	else 
 	{
-		return -1;	
+		return 1;	
 	}
 	// Initializes iters at mark.
 	gtk_text_buffer_get_iter_at_mark(buffer, &chordS, startChord);
@@ -157,15 +157,15 @@ void display(GtkTextBuffer *buffer, GtkWidget *tView)
 	const gchar *songSection[] = {"Verse:", "Verse 1", "Verse 2:",
 								  "Verse 3:","Bridge:", "Bridge 1:",
 								  "Bridge 2:", "Bridge 3:", "Intro:",
-								  "End", "PreChorus:", "Verso:"};
+								  "End:", "PreChorus:", "Verso:"};
 								  
 //-----------------------------------------------------------------------------				
-	gtk_text_view_set_editable(GTK_TEXT_VIEW(tView), FALSE);
-	
 	gtk_text_buffer_get_start_iter(buffer, &start);
 	gtk_text_buffer_get_end_iter(buffer, &end);	
 	
-	gtk_text_buffer_delete(buffer, &start, &end);
+	gtk_text_buffer_delete(buffer, &start, &end);	
+	
+	gtk_text_view_set_editable(GTK_TEXT_VIEW(tView), FALSE);
 //-----------------------------------------------------------------------------	
 	// Sets attributes for Title (line 0).	
 	title = gtk_editable_get_chars(GTK_EDITABLE(entryTitle), 0, -1);
@@ -175,6 +175,8 @@ void display(GtkTextBuffer *buffer, GtkWidget *tView)
 	gtk_text_buffer_place_cursor(buffer, &start);	
 	
 	gtk_text_buffer_insert_at_cursor(buffer, title, -1);
+	
+	g_free(title);
 			
 	gtk_text_buffer_get_iter_at_line(buffer, &start, 0);
 	
@@ -182,9 +184,9 @@ void display(GtkTextBuffer *buffer, GtkWidget *tView)
 	
 	gtk_text_iter_forward_to_line_end(&end);			
 			
-	tag = gtk_text_buffer_create_tag(buffer, NULL, "weight", "1000",
+	tag = gtk_text_buffer_create_tag(buffer, NULL, "weight", 1000,
 									 "font", "monospace 30", 
-									 "underline", PANGO_UNDERLINE_SINGLE, 
+									  "underline", PANGO_UNDERLINE_SINGLE, 
 									 NULL);
 												  
 	gtk_text_buffer_apply_tag(buffer, tag, &start, &end);
@@ -192,7 +194,8 @@ void display(GtkTextBuffer *buffer, GtkWidget *tView)
 	// Inserts text 'by:' before artist with attributes.
 	tag = gtk_text_buffer_create_tag(buffer, NULL, "font", 
 	                                 "monospace italic 12", 
-		    						 "weight", "100", NULL);
+		    						 "weight-set", TRUE, 
+		    						 "weight", 550, NULL);
 		    						 
 	gtk_text_buffer_get_iter_at_line(buffer, &start, 0);
 	
@@ -225,6 +228,8 @@ void display(GtkTextBuffer *buffer, GtkWidget *tView)
 	
 	gtk_text_buffer_insert_at_cursor(buffer, artist, -1);
 	
+	g_free(artist);	
+	
 	// Sets attributes for Artist (line 1).
 	gtk_text_buffer_get_iter_at_line_offset(buffer, &start, 1, 8);
 	
@@ -232,7 +237,7 @@ void display(GtkTextBuffer *buffer, GtkWidget *tView)
 	
 	gtk_text_iter_forward_to_line_end(&end);			
 	
-	tag = gtk_text_buffer_create_tag(buffer, NULL, "weight", "600",
+	tag = gtk_text_buffer_create_tag(buffer, NULL, "weight", 600,
 									 "weight-set", TRUE, 
 									 "font", "monospace 18", NULL);
 												  
@@ -240,7 +245,7 @@ void display(GtkTextBuffer *buffer, GtkWidget *tView)
 //-----------------------------------------------------------------------------	
 	tag = gtk_text_buffer_create_tag(buffer, NULL, "font", 
 	                                 "monospace italic 12", 
-		    						 "weight", "100", NULL);
+		    						 "weight", 550, NULL);
 	
 	gtk_text_buffer_get_iter_at_line(buffer, &start, 1);
 	
@@ -273,13 +278,15 @@ void display(GtkTextBuffer *buffer, GtkWidget *tView)
 	
 	gtk_text_buffer_insert_at_cursor(buffer, key, -1);
 	
+	g_free(key);	
+	
 	gtk_text_buffer_get_iter_at_line_offset(buffer, &start, 2, 5);
 	
 	gtk_text_buffer_get_iter_at_line(buffer, &end, 2);
 	
 	gtk_text_iter_forward_to_line_end(&end);			
 	
-	tag = gtk_text_buffer_create_tag(buffer, NULL, "weight", "600",
+	tag = gtk_text_buffer_create_tag(buffer, NULL, "weight", 600,
 									 "weight-set", TRUE, 
 									 "font", "monospace 14", NULL);
 												  
@@ -317,11 +324,12 @@ void display(GtkTextBuffer *buffer, GtkWidget *tView)
 	
 	gtk_text_buffer_get_start_iter(buffer, &start);	
 	
-	gtk_text_iter_forward_search(&start, "[", 1, 
-								 &matchStart, &matchEnd, NULL);
-								 
- 	lineNumC = gtk_text_iter_get_line(&matchStart);
-	
+	if(gtk_text_iter_forward_search(&start, "[", 1, 
+								 &matchStart, &matchEnd, NULL))
+	{								 
+ 		lineNumC = gtk_text_iter_get_line(&matchStart);
+	}
+
 	for(i = 0; i == 0;)
 	{
 		i = setChordPosition(tView, buffer);	

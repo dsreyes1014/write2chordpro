@@ -21,31 +21,11 @@ const gchar *getTitle, *getArtist, *getKey, *getGenre;
 extern char directory[];
 extern GtkListStore *listStore;
 extern GtkTreeSelection *selection;
-extern GtkWidget *treeView;
+extern GtkWidget *treeView, tViewDisplay;
+extern GtkTextBuffer *tBufferDisplay;
 extern gchar songPath[];
 /*---------------------------------------------------------------------------*/
-gint setTitle(gchar *text, gchar *filePath, gint lineNum)
-{
-	FILE *fp;
-	
-	if((fp = fopen(filePath, "r")) == NULL)
-	{
-		g_print("Error. No such file exists.\n");
-		
-		return -1;
-	}
-	else 
-	{
-		fseek(fp, 8, SEEK_SET);
-		fgets(text, COLUMN_N, fp);
-		
-		text[strlen(text) -2] = '\0';	
-		
-		return 0;
-	}
-}
-/*---------------------------------------------------------------------------*/
-gint setArtist(gchar *text, gchar *filePath, gint pos)
+gint setText(gchar *text, gchar *filePath, gint pos)
 {
 	FILE *fp;
 	
@@ -61,52 +41,11 @@ gint setArtist(gchar *text, gchar *filePath, gint pos)
 		fgets(text, COLUMN_N, fp);
 		
 		text[strlen(text) -2] = '\0';	
-		
-		return 0;
 	}
-}
-/*---------------------------------------------------------------------------*/
-gint setGenre(gchar *text, gchar *filePath, gint pos)
-{
-	FILE *fp;
 	
-	if((fp = fopen(filePath, "r")) == NULL)
-	{
-		g_print("Error. No such file exists.\n");
-		
-		return -1;
-	}
-	else 
-	{
-		fseek(fp, pos, SEEK_SET);
-		fgets(text, COLUMN_N, fp);
-		
-		text[strlen(text) -2] = '\0';	
-		
-		return 0;
-	}
+	return 0;
 }
-/*---------------------------------------------------------------------------*/
-gint setKey(gchar *text, gchar *filePath, gint pos)
-{
-	FILE *fp;
-	
-	if((fp = fopen(filePath, "r")) == NULL)
-	{
-		g_print("Error. No such file exists.\n");
-		
-		return -1;
-	}
-	else 
-	{
-		fseek(fp, pos, SEEK_SET);
-		fgets(text, COLUMN_N, fp);
-		
-		text[strlen(text) -2] = '\0';	
-		
-		return 0;
-	}
-}
+
 /*---------------------------------------------------------------------------*/
 // Grabs text starting from 'pos' to 'EOF' and outputs text to 'text'.
 // Returns char count through to 'i'. 

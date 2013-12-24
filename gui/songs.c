@@ -50,13 +50,13 @@ void createDir(void)
 	mkdir(directory, S_IRWXU);
 }
 /*---------------------------------------------------------------------------*/
-void modifiedEntry(GtkEditable *editable, gpointer data)
-{
+void modifiedEntry(void)
+{	
 	display(tBufferDisplay, tViewDisplay);
 }
 /*---------------------------------------------------------------------------*/
 void modifiedBuffer(GtkTextBuffer *buffer, gpointer data)
-{
+{	
 	display(tBufferDisplay, tViewDisplay);
 }
 /*---------------------------------------------------------------------------*/
@@ -81,19 +81,28 @@ void activateRow(GtkTreeView *treeView, gpointer data)
 	line2 = getLineCharCount(text, 1);
 	line3 = getLineCharCount(text, 2);
 	line4 = getLineCharCount(text, 3);
-		
-	setTitle(chars, songPath, 0);
+	
+	// Sets title entry.	
+	setText(chars, songPath, 8);
 	gtk_entry_set_text(GTK_ENTRY(entryTitle), chars);
 	gtk_editable_set_editable(GTK_EDITABLE(entryTitle), FALSE);
-	setArtist(chars, songPath, line1 + 11);
+	
+	// Sets artist entry.	
+	setText(chars, songPath, line1 + 11);
 	gtk_entry_set_text(GTK_ENTRY(entryArtist), chars);
 	gtk_editable_set_editable(GTK_EDITABLE(entryArtist), FALSE);
-	setGenre(chars, songPath, line1 + line2 + 7);
+	
+	// Sets genre entry.	
+	setText(chars, songPath, line1 + line2 + 7);
 	gtk_entry_set_text(GTK_ENTRY(entryGenre), chars);
 	gtk_editable_set_editable(GTK_EDITABLE(entryGenre), FALSE);
-	setGenre(chars, songPath, line1 + line2 + line3 + 6);
+	
+	// Sets key entry.	
+	setText(chars, songPath, line1 + line2 + line3 + 6);
 	gtk_entry_set_text(GTK_ENTRY(entryKey), chars);
 	gtk_editable_set_editable(GTK_EDITABLE(entryKey), FALSE);
+	
+	
 	i = getChars(chars, songPath, line1 + line2
     			      + line3 + line4 + 1);
 	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(tBufferEditor), chars, i);
@@ -103,10 +112,10 @@ void activateRow(GtkTreeView *treeView, gpointer data)
 	
 	display(tBufferDisplay, tViewDisplay);
 	
-	g_signal_connect(GTK_EDITABLE(entryKey), "changed", G_CALLBACK(modifiedEntry), NULL);	
-	g_signal_connect(GTK_EDITABLE(entryTitle), "changed", G_CALLBACK(modifiedEntry), NULL);
-	g_signal_connect(GTK_EDITABLE(entryArtist), "changed", G_CALLBACK(modifiedEntry), NULL);
-	g_signal_connect(tBufferEditor, "modified-changed", G_CALLBACK(modifiedBuffer), NULL);
+	//g_signal_connect(GTK_EDITABLE(entryKey), "inserted-text", G_CALLBACK(modifiedEntry), NULL);	
+	//g_signal_connect(GTK_EDITABLE(entryTitle), "changed", G_CALLBACK(modifiedEntry), NULL);
+	//g_signal_connect(GTK_EDITABLE(entryArtist), "changed", G_CALLBACK(modifiedEntry), NULL);
+	//g_signal_connect(tBufferEditor, "modified-changed", G_CALLBACK(modifiedBuffer), NULL);
 	
 	// This grabs everything from file and 
 	// puts it in notebook tab display.
@@ -166,8 +175,7 @@ void listFiles(void)
 	}
 
 	while((pentry = readdir(pdir)) != NULL)
-	{
-		//GtkTreeIter iter;		
+	{		
 		gchar *files = pentry -> d_name;
 		gint length;
 		
