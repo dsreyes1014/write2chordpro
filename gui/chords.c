@@ -82,9 +82,11 @@ void listChords(void)
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "A#m7", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
-	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "A#sus2", -1);	
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "A#2", -1);	
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "A#sus4", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "A#5", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "Ab", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
@@ -98,9 +100,11 @@ void listChords(void)
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Abm7", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
-	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Absus2", -1);	
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Ab2", -1);	
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
-	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Absus4", -1);	
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Absus4", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Ab5", -1);	
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "A", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
@@ -112,9 +116,11 @@ void listChords(void)
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "Am7", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
-	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "Asus2", -1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "A2", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "Asus4", -1);	
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "A5", -1);
 	
 	// Adds toplevel row 'B' to 'treeStore'.
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &parent, NULL);
@@ -134,9 +140,11 @@ void listChords(void)
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Bbm7", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
-	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Bbsus2", -1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Bb2", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Bbsus4", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Bb5", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "B", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
@@ -148,9 +156,11 @@ void listChords(void)
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "Bm7", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
-	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "Bsus2", -1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "B2", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "Bsus4", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "B5", -1);
 
 	// Adds toplevel row 'C' to 'treeStore'.
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &parent, NULL);
@@ -170,9 +180,11 @@ void listChords(void)
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "C#m7", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
-	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "C#sus2", -1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "C#2", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "C#sus4", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "C#5", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "C", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
@@ -184,9 +196,11 @@ void listChords(void)
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "Cm7", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
-	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "Csus2", -1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "C2", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "Csus4", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "C5", -1);
 	
 	// Adds toplevel row 'D' to the 'treeStore'. 	
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &parent, NULL);
@@ -206,9 +220,11 @@ void listChords(void)
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "D#m7", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
-	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "D#sus2", -1);	
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "D#2", -1);	
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "D#sus4", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "D#5", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "Db", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
@@ -222,9 +238,11 @@ void listChords(void)
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Dbm7", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
-	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Dbsus2", -1);	
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Db2", -1);	
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
-	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Dbsus4", -1);	
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Dbsus4", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Db5", -1);	
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "D", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
@@ -236,9 +254,11 @@ void listChords(void)
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "Dm7", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
-	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "Dsus2", -1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "D2", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "Dsus4", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "D5", -1);
 	
 	// Adds toplevel row 'E' to 'treeStore'.
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &parent, NULL);
@@ -258,9 +278,11 @@ void listChords(void)
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Ebm7", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
-	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Ebsus2", -1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Eb2", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Ebsus4", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Eb5", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "E", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
@@ -272,9 +294,11 @@ void listChords(void)
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "Em7", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
-	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "Esus2", -1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "E2", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "Esus4", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "E5", -1);
 	
 	// Adds toplevel row 'F' to 'treeStore'.
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &parent, NULL);
@@ -294,9 +318,11 @@ void listChords(void)
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "F#m7", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
-	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "F#sus2", -1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "F#2", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "F#sus4", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "F#5", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "F", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
@@ -308,9 +334,11 @@ void listChords(void)
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "Fm7", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
-	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "Fsus2", -1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "F2", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "Fsus4", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "F5", -1);
 	
 	// Adds toplevel row 'G' to the 'treeStore'. 	
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &parent, NULL);
@@ -330,9 +358,11 @@ void listChords(void)
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "G#m7", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
-	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "G#sus2", -1);	
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "G#2", -1);	
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "G#sus4", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "G#5", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "Gb", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
@@ -346,9 +376,11 @@ void listChords(void)
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Gbm7", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
-	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Gbsus2", -1);	
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Gb2", -1);	
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
-	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Gbsus4", -1);	
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Gbsus4", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child2, &child1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child2, 0, "Gb5", -1);	
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "G", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
@@ -360,9 +392,11 @@ void listChords(void)
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "Gm7", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
-	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "Gsus2", -1);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "G2", -1);
 	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
 	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "Gsus4", -1);
+	gtk_tree_store_append(GTK_TREE_STORE(treeStore), &child1, &parent);
+	gtk_tree_store_set(GTK_TREE_STORE(treeStore), &child1, 0, "G5", -1);
 }
 
 void chordSelect(GtkTreeSelection *selection, gpointer data)
