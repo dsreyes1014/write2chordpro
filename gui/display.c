@@ -53,7 +53,7 @@ gint setChordPosition(GtkWidget *tView, GtkTextBuffer *buffer)
 	}
 	else 
 	{
-		return 1;
+		return -1;
 	}
 	
 	if(gtk_text_iter_forward_search(&startOfLine, "]", 1, 
@@ -65,7 +65,7 @@ gint setChordPosition(GtkWidget *tView, GtkTextBuffer *buffer)
 	}	
 	else 
 	{
-		return 1;	
+		return -1;	
 	}
 	// Initializes iters at mark.
 	gtk_text_buffer_get_iter_at_mark(buffer, &chordS, startChord);
@@ -76,6 +76,13 @@ gint setChordPosition(GtkWidget *tView, GtkTextBuffer *buffer)
 	lineOffset1 = gtk_text_iter_get_line_index(&chordS);	
 	lineNum2 = gtk_text_iter_get_line(&chordE);
 	lineOffset2 = gtk_text_iter_get_line_index(&chordE);
+	
+	// This returns with error if end bracket does not have a 
+	// matching start bracket.
+	if(lineOffset1 > lineOffset2)
+	{
+		return -1;	
+	}
 	
 	//g_print("Lineoffset of start:end bracket:\n%d\n%d\n", lineOffset1, lineOffset2);
 		
