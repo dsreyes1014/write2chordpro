@@ -410,11 +410,7 @@ void chordSelect(GtkTreeSelection *selection, gpointer data)
 	{		
 		path = gtk_tree_model_get_path(GTK_TREE_MODEL(model), &selChord);
 
-		stringPath = gtk_tree_path_to_string(path);
-		
-		//g_print("%s\n", stringPath);
-		
-		
+		stringPath = gtk_tree_path_to_string(path);		
 	}	
 }
 
