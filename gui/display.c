@@ -15,6 +15,7 @@ gint lineNumC, lineCountC;
 extern GtkWidget *entryKey;
 extern GtkWidget *entryTitle;
 extern GtkWidget *entryArtist;
+
 extern GtkTextBuffer *tBufferEditor;
 //-----------------------------------------------------------------------------
 gint setChordPosition(GtkWidget *tView, GtkTextBuffer *buffer)
@@ -67,11 +68,13 @@ gint setChordPosition(GtkWidget *tView, GtkTextBuffer *buffer)
 	{
 		return -1;	
 	}
+
 	// Initializes iters at mark.
 	gtk_text_buffer_get_iter_at_mark(buffer, &chordS, startChord);
 	gtk_text_buffer_get_iter_at_mark(buffer, &chordE, endChord);
 	
-	// Get line offset of iter.	
+	// Get line and line offset of iter. If we just obtain the offset 
+	// within buffer then chords will not format as desired.
 	lineNum1 = gtk_text_iter_get_line(&chordS);
 	lineOffset1 = gtk_text_iter_get_line_index(&chordS);	
 	lineNum2 = gtk_text_iter_get_line(&chordE);
@@ -108,6 +111,7 @@ gint setChordPosition(GtkWidget *tView, GtkTextBuffer *buffer)
 		gtk_text_buffer_get_iter_at_line(buffer, &startOfLine, lineNum1);
 		gtk_text_buffer_insert(buffer, &startOfLine, "\n", -1);
 	}
+
 	// This finds the rest of the chords on the same line as the first. 
 	if(lineNum1 == (lineNumC + 1))
 	{
@@ -117,9 +121,10 @@ gint setChordPosition(GtkWidget *tView, GtkTextBuffer *buffer)
 
 	gtk_text_buffer_get_iter_at_line(buffer, &ch, lineNum1);
 	
-	// Insert 30 blank spaces so we can insert chords at higher offsets than 0.
+	// Insert 110 blank spaces so we can insert chords at higher offsets than 0.
 	// GtkTextBuffer does not allow us to insert past a newline character
-	// so we move it with spaces to allow us to place chords at higher offsets.
+	// so we move it with spaces to allow us to place chords at offsets 
+	// past a newline character.
 	if(gtk_text_iter_get_char(&ch) == '\n')
 	{	
 		gtk_text_buffer_insert(buffer, &ch, 
@@ -127,7 +132,7 @@ gint setChordPosition(GtkWidget *tView, GtkTextBuffer *buffer)
 							    -1);		
 	}
 	
-	// Place iter at the same offset one line back.
+	// Place iter at the same offset one line above.
 	gtk_text_buffer_get_iter_at_line_index(buffer, &ch, lineNum1, lineOffset1);
 	
 	//g_print("Position after cut: %d\n", lineOffset1);
