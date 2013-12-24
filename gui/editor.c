@@ -12,12 +12,19 @@
 #include "transpose.h"
 #include "display.h"
 
-GtkWidget *entryTitle, *entryArtist, *entryKey, *entryGenre, 
-		  *tViewEditor, *button5;
+GtkWidget *button5;
+GtkWidget *entryKey;
+GtkWidget *entryGenre;
+GtkWidget *entryTitle;
+GtkWidget *entryArtist; 
+GtkWidget *tViewEditor;
+ 
 GtkEntryBuffer *entryBuffer;
+
 GtkTextBuffer *tBufferEditor;
-GtkToolItem *toggleTB;
+
 const gchar *getTitle, *getArtist, *getKey, *getGenre;
+
 extern char directory[];
 extern GtkListStore *listStore;
 extern GtkTreeSelection *selection;
@@ -45,7 +52,6 @@ gint setText(gchar *text, gchar *filePath, gint pos)
 	
 	return 0;
 }
-
 /*---------------------------------------------------------------------------*/
 // Grabs text starting from 'pos' to 'EOF' and outputs text to 'text'.
 // Returns char count through to 'i'. 
@@ -64,15 +70,8 @@ gint getChars(gchar *text, gchar *filePath, gint pos)
 	else 
 	{		
 		i = 0;		
-		//pos = ftell(fp);
 		
-		//g_print("Position in file before setting it for body read: %d\n", pos);
-		
-		fseek(fp, pos, SEEK_SET);
-			
-		//pos = ftell(fp);
-			
-		//g_print("Position in file after setting it for body read: %d\n", pos);			
+		fseek(fp, pos, SEEK_SET);			
 			
 		while((ch = fgetc(fp)) != EOF)
 		{
@@ -143,9 +142,7 @@ gint getLineCount(gchar *filePath)
 				lineCount++;									
 			}													
 		}
-																	
-		//g_print("Line count is: %d\n", lineCount);
-		
+																		
 		fclose(fp);		
 	}
 
@@ -200,30 +197,33 @@ void newSong(GtkWidget *widget, gpointer button)
 	GtkTextIter start, end;	
 	
 	// Unselects all in 'songList' so it will not appear in song editor.	
-	gtk_tree_selection_unselect_all(GTK_TREE_SELECTION(selection));	
+	//gtk_tree_selection_unselect_all(GTK_TREE_SELECTION(selection));	
 	
-	entryBuffer = gtk_entry_get_buffer(GTK_ENTRY(entryTitle));
+	if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button5)) == TRUE)
+	{
+		entryBuffer = gtk_entry_get_buffer(GTK_ENTRY(entryTitle));
 	
-	gtk_entry_buffer_delete_text(GTK_ENTRY_BUFFER(entryBuffer), 0, -1);
+		gtk_entry_buffer_delete_text(GTK_ENTRY_BUFFER(entryBuffer), 0, -1);
 
-	entryBuffer = gtk_entry_get_buffer(GTK_ENTRY(entryArtist));
+		entryBuffer = gtk_entry_get_buffer(GTK_ENTRY(entryArtist));
 	
-	gtk_entry_buffer_delete_text(GTK_ENTRY_BUFFER(entryBuffer), 0, -1);
+		gtk_entry_buffer_delete_text(GTK_ENTRY_BUFFER(entryBuffer), 0, -1);
 	
-	entryBuffer = gtk_entry_get_buffer(GTK_ENTRY(entryGenre));
+		entryBuffer = gtk_entry_get_buffer(GTK_ENTRY(entryGenre));
 	
-	gtk_entry_buffer_delete_text(GTK_ENTRY_BUFFER(entryBuffer), 0, -1);
+		gtk_entry_buffer_delete_text(GTK_ENTRY_BUFFER(entryBuffer), 0, -1);
 	
-	entryBuffer = gtk_entry_get_buffer(GTK_ENTRY(entryKey));
+		entryBuffer = gtk_entry_get_buffer(GTK_ENTRY(entryKey));
 	
-	gtk_entry_buffer_delete_text(GTK_ENTRY_BUFFER(entryBuffer), 0, -1);
+		gtk_entry_buffer_delete_text(GTK_ENTRY_BUFFER(entryBuffer), 0, -1);
 	
-	gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(tBufferEditor), &start);
-	gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(tBufferEditor), &end);
+		gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(tBufferEditor), &start);
+		gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(tBufferEditor), &end);
 	
-	gtk_text_buffer_delete(GTK_TEXT_BUFFER(tBufferEditor), &start, &end);
+		gtk_text_buffer_delete(GTK_TEXT_BUFFER(tBufferEditor), &start, &end);
 	
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);	
+		//gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
+	}	
 }
 /*---------------------------------------------------------------------------*/
 void editSong(GtkToggleButton *button, gpointer data)
@@ -270,27 +270,24 @@ void editor(GtkWidget *grid, GtkWidget *window)
 	GtkWidget *button6;
 	GtkWidget *boxMiddle;
 	GtkWidget *boxBottom;
-	GtkWidget *separator;
 	GtkWidget *arrowLeft;
 	GtkWidget *arrowRight;
 	GtkWidget *scrolledWindow;
-	GtkAccelGroup *accelChord;
+	//GtkAccelGroup *accelChord;
 			    		
 	frame = gtk_frame_new(NULL);	
 	entryKey = gtk_entry_new();
 	entryTitle = gtk_entry_new();
 	entryGenre = gtk_entry_new();
-	entryArtist = gtk_entry_new();
-	arrowLeft = gtk_arrow_new(GTK_ARROW_LEFT, GTK_SHADOW_ETCHED_IN);
-	arrowRight = gtk_arrow_new(GTK_ARROW_RIGHT, GTK_SHADOW_ETCHED_IN);	
+	entryArtist = gtk_entry_new();		
 	label1 = gtk_label_new("Title:");
 	label2 = gtk_label_new("Artist:");
 	label3 = gtk_label_new("Genre:");	
 	label4 = gtk_label_new("Key:");
 	label5 = gtk_label_new("Transpose");
 	tViewEditor = gtk_text_view_new();
-	accelChord = gtk_accel_group_new();	
-	button1 = gtk_button_new_with_label("Insert Chord");
+	//accelChord = gtk_accel_group_new();	
+	button1 = gtk_button_new_with_mnemonic("_Insert Chord");
 	button2 = gtk_button_new();
 	button6 = gtk_button_new();
 	button3 = gtk_button_new_with_label("Add New");
@@ -298,38 +295,58 @@ void editor(GtkWidget *grid, GtkWidget *window)
 	button5 = gtk_toggle_button_new_with_label("Edit");
 	boxTop = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
 	boxMiddle = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
-	boxBottom = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
+	boxBottom = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
 	scrolledWindow = gtk_scrolled_window_new(NULL, NULL);
-	separator = gtk_separator_new(GTK_ORIENTATION_VERTICAL);	
+	arrowLeft = gtk_arrow_new(GTK_ARROW_LEFT, GTK_SHADOW_ETCHED_IN);
+	arrowRight = gtk_arrow_new(GTK_ARROW_RIGHT, GTK_SHADOW_ETCHED_IN);	
 	tBufferEditor = gtk_text_view_get_buffer(GTK_TEXT_VIEW(tViewEditor));
-		
 	
-	gtk_container_add(GTK_CONTAINER(button2), arrowRight);
-	gtk_container_add(GTK_CONTAINER(button6), arrowLeft);	
-		
+	gtk_editable_set_editable(GTK_EDITABLE(entryKey), FALSE);
+	gtk_editable_set_editable(GTK_EDITABLE(entryGenre), FALSE);
+	gtk_editable_set_editable(GTK_EDITABLE(entryTitle), FALSE);
+	gtk_editable_set_editable(GTK_EDITABLE(entryArtist), FALSE);
+	gtk_text_view_set_editable(GTK_TEXT_VIEW(tViewEditor), FALSE);		
+	
+	
+	gtk_entry_set_placeholder_text(GTK_ENTRY(entryKey), 
+	                               "Key");
+	gtk_entry_set_placeholder_text(GTK_ENTRY(entryGenre), 
+	                               "Enter genre");
 	gtk_entry_set_placeholder_text(GTK_ENTRY(entryTitle), 
-	                               "Enter name of title here");
+	                               "Enter title");
 	gtk_entry_set_placeholder_text(GTK_ENTRY(entryArtist), 
-	                               "Enter name of artist here");
+	                               "Enter artist");
 //-----------------------------------------------------------------------------	
 	// Sets cursor to visible. I think it's set by default 
 	// but adding it to make sure.
 	gtk_text_view_set_cursor_visible(GTK_TEXT_VIEW(tViewEditor), TRUE);
 //-----------------------------------------------------------------------------
 	// Properties for 'frame' widget.	
-	gtk_frame_set_shadow_type(GTK_FRAME(frame), GTK_SHADOW_ETCHED_IN);	
-	//gtk_widget_set_size_request(GTK_WIDGET(frame), 200, 200);
-	
+	gtk_frame_set_shadow_type(GTK_FRAME(frame), GTK_SHADOW_ETCHED_IN);		
 //-----------------------------------------------------------------------------	
 	// Packs 'button3' & 'button4' into 'boxTop'.
 	gtk_box_pack_start(GTK_BOX(boxTop), button3, FALSE, TRUE, 2);
 	gtk_box_pack_start(GTK_BOX(boxTop), button5, FALSE, TRUE, 2);
 	gtk_box_pack_start(GTK_BOX(boxTop), button4, FALSE, TRUE, 2); 
+//-----------------------------------------------------------------------------	
+	// Buttonbox setup and packing.	
+	gtk_container_add(GTK_CONTAINER(button2), arrowRight);
+	gtk_container_add(GTK_CONTAINER(button6), arrowLeft);	
+		                          
+	gtk_widget_set_tooltip_text(GTK_WIDGET(button6), "-1/2 step");
+	gtk_widget_set_tooltip_text(GTK_WIDGET(button2), "+1/2 step");	
 	
-	gtk_box_pack_start(GTK_BOX(boxBottom), button6, FALSE, TRUE, 2);
-	gtk_box_pack_start(GTK_BOX(boxBottom), separator, FALSE, TRUE, 2);
-	gtk_box_pack_start(GTK_BOX(boxBottom), button2, FALSE, TRUE, 2);	
+	gtk_button_box_set_layout(GTK_BUTTON_BOX(boxBottom), 
+	                          GTK_BUTTONBOX_CENTER);	
 	
+	gtk_container_add(GTK_CONTAINER(boxBottom), button6);
+	gtk_container_add(GTK_CONTAINER(boxBottom), button2);	
+
+	gtk_button_box_set_child_non_homogeneous(GTK_BUTTON_BOX(boxBottom),
+	                                         GTK_WIDGET(button6), TRUE);
+	gtk_button_box_set_child_non_homogeneous(GTK_BUTTON_BOX(boxBottom),
+	                                         GTK_WIDGET(button2), TRUE);
+//-----------------------------------------------------------------------------
 	// Packs 'button1' & 'button2' widgets into 'boxBottom' widget.
 	gtk_box_pack_start(GTK_BOX(boxMiddle), label5, FALSE, TRUE, 2); 
 	gtk_box_pack_start(GTK_BOX(boxMiddle), boxBottom, FALSE, TRUE, 2);
@@ -342,10 +359,10 @@ void editor(GtkWidget *grid, GtkWidget *window)
 	gtk_container_add(GTK_CONTAINER(frame), scrolledWindow);
 	
 	// Adds accelChord to toplevel window.
-	gtk_window_add_accel_group(GTK_WINDOW(window), accelChord);
+	//gtk_window_add_accel_group(GTK_WINDOW(window), accelChord);
 	
-	gtk_widget_add_accelerator(button1, "clicked", accelChord, GDK_KEY_i, 
-	                           GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+	//gtk_widget_add_accelerator(button1, "clicked", accelChord, GDK_KEY_i, 
+	                           //GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
 //-----------------------------------------------------------------------------    
     // Attaches widgets to widget grid.	
 	gtk_grid_attach(GTK_GRID(grid), label1, 3, 1, 1, 1);

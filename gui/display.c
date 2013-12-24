@@ -7,9 +7,6 @@
 #include "display.h"
 #include "editor.h"
 
-
-//GtkTextBuffer *tBufferDisplay;
-//GtkWidget *tViewDisplay;
 gint lineNumC, lineCountC;
 
 extern GtkWidget *entryKey;
@@ -169,7 +166,8 @@ void display(GtkTextBuffer *buffer, GtkWidget *tView)
 	const gchar *songSection[] = {"Verse:", "Verse 1", "Verse 2:",
 								  "Verse 3:","Bridge:", "Bridge 1:",
 								  "Bridge 2:", "Bridge 3:", "Intro:",
-								  "End:", "PreChorus:", "Verso:"};
+								  "End:", "PreChorus:", "Verso:"
+								  "Coro:"};
 								  
 //-----------------------------------------------------------------------------				
 	gtk_text_buffer_get_start_iter(buffer, &start);
@@ -351,7 +349,7 @@ void display(GtkTextBuffer *buffer, GtkWidget *tView)
 	// 'Verse:', 'Chorus:'etc...			
 	gtk_text_buffer_get_start_iter(buffer, &start);
 	
-	for(i = 0; i < 12; i++)
+	for(i = 0; i < 13; i++)
 	{
 		if(gtk_text_iter_forward_search(&start, songSection[i],
 		                                GTK_TEXT_SEARCH_CASE_INSENSITIVE,
@@ -359,7 +357,7 @@ void display(GtkTextBuffer *buffer, GtkWidget *tView)
 		{
 			tag = gtk_text_buffer_create_tag(buffer, NULL, 
 										     "font", "italic 12", 
-										     "weight", "650", NULL);
+										     "weight", 650, NULL);
 
 			gtk_text_buffer_apply_tag(buffer, tag, &matchStart, &matchEnd);
 		}	
@@ -371,17 +369,18 @@ void display(GtkTextBuffer *buffer, GtkWidget *tView)
 	{
 		tag = gtk_text_buffer_create_tag(buffer, NULL, 
 										 "font", "italic 12", 
-										 "weight", "650", NULL);
+										 "weight", 650, NULL);
 
 		gtk_text_buffer_apply_tag(buffer, tag, &matchStart, &matchEnd);			
 	
 		gtk_text_iter_forward_search(&matchEnd, "Chorus:",
-									 2, &matchStart, &matchEnd,
+									 GTK_TEXT_SEARCH_CASE_INSENSITIVE,
+									 &matchStart, &matchEnd,
 									 NULL);
 									 
 		tag = gtk_text_buffer_create_tag(buffer, NULL, 
 									     "font", "italic 12", 
-									     "weight", "650", NULL);
+									     "weight", 650, NULL);
 
 		gtk_text_buffer_apply_tag(buffer, tag, &matchStart, &matchEnd);			
 	}

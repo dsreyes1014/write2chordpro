@@ -64,20 +64,32 @@ gint slashChordDown(void)
 		
 		accidental = gtk_text_iter_get_slice(&ch1, &ch2);
 		 
-		if((strcmp(accidental, "#")) == 0) //|| (strcmp(accidental, "b")) == 0)
+		if(((strcmp(accidental, "b")) == 0) ||
+		   ((strcmp(accidental, "#")) == 0)) 
 		{
 			gtk_text_iter_backward_chars(&ch1, 1);
 			
 			chord = gtk_text_iter_get_slice(&ch1, &ch2);
 			
-			//g_print("Before chord: %s\n", chord);	
-			
-			for(i = 0; i <= 11; i++)
-			{				
-				if((strcmp(chord, noteSharps[i])) == 0)
-				{
-					break;				
+			if((strcmp(accidental, "b")) == 0)
+			{	
+				for(i = 0; i <= 11; i++)
+				{				
+					if((strcmp(chord, noteFlats[i])) == 0)
+					{
+						break;				
+					}
 				}
+			}
+			else if((strcmp(accidental, "#")) == 0)
+			{
+				for(i = 0; i <= 11; i++)
+				{				
+					if((strcmp(chord, noteSharps[i])) == 0)
+					{
+						break;				
+					}
+				}			
 			}
 		
 			gtk_text_buffer_place_cursor(tBufferEditor, &ch1);	
@@ -86,7 +98,7 @@ gint slashChordDown(void)
 			
 			gtk_text_buffer_delete_selection(tBufferEditor, FALSE, TRUE);
 			
-			gtk_text_buffer_insert_at_cursor(tBufferEditor, noteSharps[i - 1], -1);	
+			gtk_text_buffer_insert_at_cursor(tBufferEditor, noteFlats[i - 1], -1);	
 			
 			g_free(chord);	
 			g_free(accidental);
@@ -103,7 +115,7 @@ gint slashChordDown(void)
 			
 			for(i = 0; i <= 11; i++)
 			{				
-				if((strcmp(chord, noteSharps[i])) == 0)
+				if((strcmp(chord, noteFlats[i])) == 0)
 				{
 					break;				
 				}
@@ -117,11 +129,11 @@ gint slashChordDown(void)
 			
 			if((strcmp(noteSharps[i], "A")) != 0)
 			{			
-				gtk_text_buffer_insert_at_cursor(tBufferEditor, noteSharps[i - 1], -1);
+				gtk_text_buffer_insert_at_cursor(tBufferEditor, noteFlats[i - 1], -1);
 			}
 			else 
 			{
-				gtk_text_buffer_insert_at_cursor(tBufferEditor, noteSharps[11], -1);
+				gtk_text_buffer_insert_at_cursor(tBufferEditor, noteFlats[11], -1);
 			}
 			
 			g_free(chord);
@@ -143,18 +155,18 @@ gint slashChordUp(void)
 {
 	GtkTextIter ch1;
 	GtkTextIter ch2;
+	GtkTextIter start;	
 	GtkTextIter matchEnd;
 	GtkTextIter matchStart;		
-	GtkTextIter start;
 	
-	GtkTextMark *startChord;
 	GtkTextMark *endChord;
+	GtkTextMark *startChord;
 	
 	gchar *chord;
 	gchar *accidental;
 	
 	gint i;
-	
+//-----------------------------------------------------------------------------	
 	gtk_text_buffer_get_iter_at_offset(tBufferEditor, &start, pos2);	
 	
 	// This will find any slash chord and transpose it as well.
@@ -163,8 +175,11 @@ gint slashChordUp(void)
 	{
 		pos2 = gtk_text_iter_get_offset(&matchEnd);	
 		
-		gtk_text_buffer_create_mark(tBufferEditor, "startChord", &matchStart, FALSE);
-		gtk_text_buffer_create_mark(tBufferEditor, "endChord", &matchEnd, FALSE);
+		gtk_text_buffer_create_mark(tBufferEditor, "startChord",
+		                            &matchStart, FALSE);
+		                            
+		gtk_text_buffer_create_mark(tBufferEditor, "endChord",
+		                            &matchEnd, FALSE);
 		
 		startChord = gtk_text_buffer_get_mark(tBufferEditor, "startChord");		
 		endChord = gtk_text_buffer_get_mark(tBufferEditor, "endChord");
@@ -177,18 +192,32 @@ gint slashChordUp(void)
 		
 		accidental = gtk_text_iter_get_slice(&ch1, &ch2);
 		 
-		if((strcmp(accidental, "#")) == 0)
+		if(((strcmp(accidental, "b")) == 0) ||
+		   ((strcmp(accidental, "#")) == 0)) 
 		{
 			gtk_text_iter_backward_chars(&ch1, 1);
 			
 			chord = gtk_text_iter_get_slice(&ch1, &ch2);
-						
-			for(i = 0; i <= 11; i++)
-			{				
-				if((strcmp(chord, noteSharps[i])) == 0)
-				{
-					break;				
+			
+			if((strcmp(accidental, "b")) == 0)
+			{	
+				for(i = 0; i <= 11; i++)
+				{				
+					if((strcmp(chord, noteFlats[i])) == 0)
+					{
+						break;				
+					}
 				}
+			}
+			else if((strcmp(accidental, "#")) == 0)
+			{
+				for(i = 0; i <= 11; i++)
+				{				
+					if((strcmp(chord, noteSharps[i])) == 0)
+					{
+						break;				
+					}
+				}			
 			}
 		
 			gtk_text_buffer_place_cursor(tBufferEditor, &ch1);	
@@ -287,20 +316,32 @@ gint chordUp(void)
 		
 		accidental = gtk_text_iter_get_slice(&ch1, &ch2);
 		 
-		if((strcmp(accidental, "#")) == 0)
+		if(((strcmp(accidental, "b")) == 0) ||
+		   ((strcmp(accidental, "#")) == 0)) 
 		{
 			gtk_text_iter_backward_chars(&ch1, 1);
 			
 			chord = gtk_text_iter_get_slice(&ch1, &ch2);
 			
-			//g_print("Before chord: %s\n", chord);	
-			
-			for(i = 0; i <= 11; i++)
-			{				
-				if((strcmp(chord, noteSharps[i])) == 0)
-				{
-					break;				
+			if((strcmp(accidental, "b")) == 0)
+			{	
+				for(i = 0; i <= 11; i++)
+				{				
+					if((strcmp(chord, noteFlats[i])) == 0)
+					{
+						break;				
+					}
 				}
+			}
+			else if((strcmp(accidental, "#")) == 0)
+			{
+				for(i = 0; i <= 11; i++)
+				{				
+					if((strcmp(chord, noteSharps[i])) == 0)
+					{
+						break;				
+					}
+				}			
 			}
 		
 			gtk_text_buffer_place_cursor(tBufferEditor, &ch1);	
@@ -401,18 +442,32 @@ gint chordDown(void)
 		
 		accidental = gtk_text_iter_get_slice(&ch1, &ch2);
 		 
-		if((strcmp(accidental, "#")) == 0)
+		if(((strcmp(accidental, "b")) == 0) ||
+		   ((strcmp(accidental, "#")) == 0)) 
 		{
 			gtk_text_iter_backward_chars(&ch1, 1);
 			
 			chord = gtk_text_iter_get_slice(&ch1, &ch2);
-						
-			for(i = 0; i <= 11; i++)
-			{				
-				if((strcmp(chord, noteSharps[i])) == 0)
-				{
-					break;				
+			
+			if((strcmp(accidental, "b")) == 0)
+			{	
+				for(i = 0; i <= 11; i++)
+				{				
+					if((strcmp(chord, noteFlats[i])) == 0)
+					{
+						break;				
+					}
 				}
+			}
+			else if((strcmp(accidental, "#")) == 0)
+			{
+				for(i = 0; i <= 11; i++)
+				{				
+					if((strcmp(chord, noteSharps[i])) == 0)
+					{
+						break;				
+					}
+				}			
 			}
 		
 			gtk_text_buffer_place_cursor(tBufferEditor, &ch1);	
@@ -421,7 +476,7 @@ gint chordDown(void)
 			
 			gtk_text_buffer_delete_selection(tBufferEditor, FALSE, TRUE);
 			
-			gtk_text_buffer_insert_at_cursor(tBufferEditor, noteSharps[i - 1], -1);	
+			gtk_text_buffer_insert_at_cursor(tBufferEditor, noteFlats[i - 1], -1);	
 			
 			g_free(chord);	
 			g_free(accidental);
@@ -438,7 +493,7 @@ gint chordDown(void)
 						
 			for(i = 0; i <= 11; i++)
 			{				
-				if((strcmp(chord, noteSharps[i])) == 0)
+				if((strcmp(chord, noteFlats[i])) == 0)
 				{
 					break;				
 				}
@@ -452,11 +507,11 @@ gint chordDown(void)
 			
 			if((strcmp(noteSharps[i], "A")) != 0)
 			{			
-				gtk_text_buffer_insert_at_cursor(tBufferEditor, noteSharps[i - 1], -1);
+				gtk_text_buffer_insert_at_cursor(tBufferEditor, noteFlats[i - 1], -1);
 			}
 			else 
 			{
-				gtk_text_buffer_insert_at_cursor(tBufferEditor, noteSharps[11], -1);
+				gtk_text_buffer_insert_at_cursor(tBufferEditor, noteFlats[11], -1);
 			}
 						
 			g_free(chord);
@@ -508,6 +563,17 @@ void transposeUp(GtkWidget *button, gpointer data)
 			{
 				break;				
 			}
+		}
+
+		if(i > 11)
+		{
+			for(i = 0; i <= 11; i++)
+			{				
+				if((strcmp(chord, noteFlats[i])) == 0)
+				{
+					break;				
+				}
+			}		
 		}	
 	
 		if((strcmp(noteSharps[i], "G#")) != 0)
@@ -556,15 +622,26 @@ void transposeDown(GtkWidget *button, gpointer data)
 			{
 				break;				
 			}
+		}
+
+		if(i > 11)
+		{
+			for(i = 0; i <= 11; i++)
+			{				
+				if((strcmp(chord, noteFlats[i])) == 0)
+				{
+					break;				
+				}
+			}		
 		}	
 	
 		if((strcmp(noteSharps[i], "A")) != 0)
 		{			
-			gtk_entry_set_text(GTK_ENTRY(entryKey), noteSharps[i - 1]);
+			gtk_entry_set_text(GTK_ENTRY(entryKey), noteFlats[i - 1]);
 		}
 		else 
 		{
-			gtk_entry_set_text(GTK_ENTRY(entryKey), noteSharps[11]);
+			gtk_entry_set_text(GTK_ENTRY(entryKey), noteFlats[11]);
 		}
 	
 		g_free(chord);
