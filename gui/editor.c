@@ -273,6 +273,9 @@ void editor(GtkWidget *grid, GtkWidget *window)
 	GtkWidget *arrowLeft;
 	GtkWidget *arrowRight;
 	GtkWidget *scrolledWindow;
+	
+	GtkTextIter end;
+	GtkTextIter start;
 	//GtkAccelGroup *accelChord;
 			    		
 	frame = gtk_frame_new(NULL);	

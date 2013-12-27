@@ -166,7 +166,7 @@ void display(GtkTextBuffer *buffer, GtkWidget *tView)
 	const gchar *songSection[] = {"Verse:", "Verse 1", "Verse 2:",
 								  "Verse 3:","Bridge:", "Bridge 1:",
 								  "Bridge 2:", "Bridge 3:", "Intro:",
-								  "End:", "PreChorus:", "Verso:"
+								  "End:", "PreChorus:", "Verso:",
 								  "Coro:"};
 								  
 //-----------------------------------------------------------------------------				
