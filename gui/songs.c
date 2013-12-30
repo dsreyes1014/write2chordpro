@@ -22,12 +22,54 @@ GtkTreeViewColumn *column;
 GtkWidget *tViewDisplay;
 GtkTextBuffer *tBufferDisplay;
 GtkTreeIter iter;
-gchar directory[75], song[50], songPath[100], displayBody[2000];
+gchar directory[75], 
+      song[50], 
+      songPath[100], 
+      displayBody[2000];
+      
 const gchar *titleDisplay;
-extern GtkWidget *entryTitle, *entryArtist, *entryKey, *entryGenre,
-				 *tViewEditor;
+
+extern GtkWidget *entryTitle, 
+                 *entryArtist, 
+                 *entryKey, 
+                 *entryGenre,
+				 *tViewEditor, 
+				 *button5,
+				 *window;
+				 
 extern GtkTextBuffer *tBufferEditor;
-//-----------------------------------------------------------------------------
+/*---------------------------------------------------------------------------*/
+void saveDialog(void)
+{
+	GtkWidget *messageWindow;
+	
+	gint run;
+	
+	messageWindow = gtk_message_dialog_new(NULL,
+	                                       GTK_DIALOG_MODAL, 
+	                                       GTK_MESSAGE_QUESTION,
+	                                       GTK_BUTTONS_NONE,
+	                                       "Do you want to save changes?"
+	                                       );
+	
+	gtk_dialog_add_button(GTK_DIALOG(messageWindow), "No", 1);	
+	
+	gtk_dialog_add_button(GTK_DIALOG(messageWindow), "Yes", 2);
+	
+	run = gtk_dialog_run(GTK_DIALOG(messageWindow));
+	
+	if(run == 2)
+	{
+		save(messageWindow, NULL);	
+		
+		gtk_widget_destroy(messageWindow);
+	}
+	else 
+	{                            
+		gtk_widget_destroy(messageWindow);	                     
+	}
+}
+/*---------------------------------------------------------------------------*/
 void createDir(void)
 {
 	gchar user[30];
@@ -62,12 +104,26 @@ void modifiedBuffer(GtkTextBuffer *buffer, gpointer data)
 /*---------------------------------------------------------------------------*/
 void activateRow(GtkTreeView *treeView, gpointer data)
 {
+	GtkEntryBuffer *buffer;	
+		
+	gint title;
+	
+	gboolean check1,
+	         check2;
+	
+	buffer = gtk_entry_get_buffer(GTK_ENTRY(entryTitle));	
+	check1 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button5));
+	check2 = gtk_text_buffer_get_modified(tBufferEditor);
+	title = gtk_entry_buffer_get_length(buffer);
+	
+	if((check1 == TRUE) && (title != 0) && (check2 == TRUE))
+	{
+		saveDialog();	
+	}
+
 	gint i, n,  line1, line2, line3, line4;
 	
-	//gchar ch;
-	gchar chars[2000];
-	
-	//FILE *fp;	
+	gchar chars[2000];	
 	
 	n = 0;
 	
@@ -112,33 +168,9 @@ void activateRow(GtkTreeView *treeView, gpointer data)
 	
 	display(tBufferDisplay, tViewDisplay);
 	
-	//g_signal_connect(GTK_EDITABLE(entryKey), "inserted-text", G_CALLBACK(modifiedEntry), NULL);	
-	//g_signal_connect(GTK_EDITABLE(entryTitle), "changed", G_CALLBACK(modifiedEntry), NULL);
-	//g_signal_connect(GTK_EDITABLE(entryArtist), "changed", G_CALLBACK(modifiedEntry), NULL);
-	//g_signal_connect(tBufferEditor, "modified-changed", G_CALLBACK(modifiedBuffer), NULL);
+	gtk_text_buffer_set_modified(tBufferEditor, FALSE);	
 	
-	// This grabs everything from file and 
-	// puts it in notebook tab display.
-	/*if((fp = fopen(songPath, "r")) == NULL)
-	{
-		g_print("Error");
-	}
-	else //if(gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(toggleTB)) == TRUE)
-	{								
-		i = 0;
-					
-		fseek(fp, 0, SEEK_SET);
-		
-		while((ch = fgetc(fp)) != EOF)
-		{
-			chars[i++] = ch;		
-		}		
-			
-		display(tBufferDisplay, tViewDisplay, chars, i);			
-			
-		
-		fclose(fp);		
-	}*/	
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button5), FALSE);
 }
 /*---------------------------------------------------------------------------*/
 void songSelect(GtkTreeSelection *selection, gpointer data)

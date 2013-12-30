@@ -6,6 +6,7 @@
 
 // Prototypes.
 void createDir(void);
+void saveDialog(void);
 void activateRow(GtkTreeView *treeView, gpointer data);
 void songSelect(GtkTreeSelection *selection, gpointer data);
 void listFiles(void);

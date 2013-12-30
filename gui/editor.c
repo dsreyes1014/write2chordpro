@@ -12,12 +12,12 @@
 #include "transpose.h"
 #include "display.h"
 
-GtkWidget *button5;
-GtkWidget *entryKey;
-GtkWidget *entryGenre;
-GtkWidget *entryTitle;
-GtkWidget *entryArtist; 
-GtkWidget *tViewEditor;
+GtkWidget *button5,
+          *entryKey,
+          *entryGenre,
+          *entryTitle,
+          *entryArtist, 
+          *tViewEditor;
  
 GtkEntryBuffer *entryBuffer;
 
@@ -153,7 +153,7 @@ void save(GtkWidget *widget, gpointer data)
 {	
 	GtkTextIter start, end;	
 	gchar *body;
-	char newFile[25];
+	char newFile[45];
 	
 	FILE *fp;		
 	
@@ -188,6 +188,8 @@ void save(GtkWidget *widget, gpointer data)
 	gtk_list_store_clear(listStore);
 	
 	listFiles();	
+	
+	gtk_text_buffer_set_modified(tBufferEditor, FALSE);
 	
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button5), FALSE);
 }
@@ -256,27 +258,26 @@ void editSong(GtkToggleButton *button, gpointer data)
 /*---------------------------------------------------------------------------*/
 void editor(GtkWidget *grid, GtkWidget *window)
 {
-	GtkWidget *frame;
-	GtkWidget *boxTop;
-	GtkWidget *label1;
-	GtkWidget *label2;
-	GtkWidget *label3;
-	GtkWidget *label4;
-	GtkWidget *label5;	
-	GtkWidget *button1;
-	GtkWidget *button2; 
-	GtkWidget *button3;
-	GtkWidget *button4;  
-	GtkWidget *button6;
-	GtkWidget *boxMiddle;
-	GtkWidget *boxBottom;
-	GtkWidget *arrowLeft;
-	GtkWidget *arrowRight;
-	GtkWidget *scrolledWindow;
+	GtkWidget *frame,
+	          *boxTop,
+	          *label1,
+	          *label2,
+	          *label3,
+	          *label4,
+	          *label5,	
+	          *button1,
+	          *button2, 
+	          *button3,
+	          *button4,  
+	          *button6,
+	          *boxMiddle,
+	          *boxBottom,
+	          *arrowLeft,
+	          *arrowRight,
+	          *scrolledWindow;
 	
-	GtkTextIter end;
-	GtkTextIter start;
-	//GtkAccelGroup *accelChord;
+	GtkTextIter end,
+	            start;
 			    		
 	frame = gtk_frame_new(NULL);	
 	entryKey = gtk_entry_new();
