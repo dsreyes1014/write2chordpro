@@ -1,0 +1,40 @@
+# GTK+ Input Method Modules file
+# Automatically generated file, do not edit
+# Created by /home/drewshei/Programs/w2c/gtk+-3.10.6/gtk/.libs/lt-gtk-query-immodules-3.0 from gtk+-3.10.6
+#
+# ModulesPath = /opt/Write2chordpro/lib/gtk-3.0/3.0.0/x86_64-unknown-linux-gnu/immodules:/opt/Write2chordpro/lib/gtk-3.0/3.0.0/immodules:/opt/Write2chordpro/lib/gtk-3.0/x86_64-unknown-linux-gnu/immodules:/opt/Write2chordpro/lib/gtk-3.0/immodules
+#
+"/opt/Write2chordpro/lib/gtk-3.0/3.0.0/immodules/im-inuktitut.so" 
+"inuktitut" "Inuktitut (Transliterated)" "gtk30" "/opt/Write2chordpro/share/locale" "iu" 
+
+"/opt/Write2chordpro/lib/gtk-3.0/3.0.0/immodules/im-ti-et.so" 
+"ti_et" "Tigrigna-Ethiopian (EZ+)" "gtk30" "/opt/Write2chordpro/share/locale" "ti" 
+
+"/opt/Write2chordpro/lib/gtk-3.0/3.0.0/immodules/im-ti-er.so" 
+"ti_er" "Tigrigna-Eritrean (EZ+)" "gtk30" "/opt/Write2chordpro/share/locale" "ti" 
+
+"/opt/Write2chordpro/lib/gtk-3.0/3.0.0/immodules/im-multipress.so" 
+"multipress" "Multipress" "gtk30" "" "" 
+
+"/opt/Write2chordpro/lib/gtk-3.0/3.0.0/immodules/im-thai.so" 
+"thai" "Thai-Lao" "gtk30" "/opt/Write2chordpro/share/locale" "lo:th" 
+
+"/opt/Write2chordpro/lib/gtk-3.0/3.0.0/immodules/im-xim.so" 
+"xim" "X Input Method" "gtk30" "/opt/Write2chordpro/share/locale" "ko:ja:th:zh" 
+
+"/opt/Write2chordpro/lib/gtk-3.0/3.0.0/immodules/im-ipa.so" 
+"ipa" "IPA" "gtk30" "/opt/Write2chordpro/share/locale" "" 
+
+"/opt/Write2chordpro/lib/gtk-3.0/3.0.0/immodules/im-am-et.so" 
+"am_et" "Amharic (EZ+)" "gtk30" "/opt/Write2chordpro/share/locale" "am" 
+
+"/opt/Write2chordpro/lib/gtk-3.0/3.0.0/immodules/im-cyrillic-translit.so" 
+"cyrillic_translit" "Cyrillic (Transliterated)" "gtk30" "/opt/Write2chordpro/share/locale" "" 
+
+"/opt/Write2chordpro/lib/gtk-3.0/3.0.0/immodules/im-viqr.so" 
+"viqr" "Vietnamese (VIQR)" "gtk30" "/opt/Write2chordpro/share/locale" "vi" 
+
+"/opt/Write2chordpro/lib/gtk-3.0/3.0.0/immodules/im-cedilla.so" 
+"cedilla" "Cedilla" "gtk30" "/opt/Write2chordpro/share/locale" "az:ca:co:fr:gv:oc:pt:sq:tr:wa" 
+
+

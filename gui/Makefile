@@ -1,10 +1,13 @@
 CC = gcc
-INSTALL_DIR = /usr/local/bin/
-CFLAGS = -Wall -c -std=c99
+PROG_DIR = /opt/Write2chordpro
+INSTALL_DIR = $(PROG_DIR)/bin
+CFLAGS = -Wall -c -std=c99 -I../include -L../lib
 PROGRAM = w2c-gui
 OBJECTS = main.o menu.o chords.o songs.o editor.o display.o transpose.o
 HEADERS = menu.h chords.h songs.h editor.h display.h transpose.h
 GTK+3 = `pkg-config --cflags gtk+-3.0 --libs gtk+-3.0`
+UNINSTALL = uninstallW2C
+DEPS = lib include etc bin
 
 all: $(PROGRAM)
 $(PROGRAM): $(OBJECTS)
@@ -26,9 +29,17 @@ transpose.o: transpose.c editor.h
 
 clean: 
 	rm -rfv $(OBJECTS) w2c-gui *~
-install:
-	cp -v $(PROGRAM) $(INSTALL_DIR)
-uninstall: $(INSTALL_DIR)$(PROGRAM)
-	rm -v $(INSTALL_DIR)$(PROGRAM)
-$(INSTALL_DIR)$(PROGRAM):
-	ls $(INSTALL_DIR)$(PROGRAM)
+install: makedirectory
+	cp -Rv ../bin $(PROG_DIR)/
+	cp -Rv ../lib $(PROG_DIR)/
+	cp -Rv ../etc $(PROG_DIR)/
+	cp -v $(PROGRAM) $(INSTALL_DIR)/
+	cp -v ../$(UNINSTALL) /opt
+	cp -v $(INSTALL_DIR)/$(PROGRAM) /usr/local/bin
+makedirectory:
+	mkdir -v $(PROG_DIR)
+uninstall: check
+	/opt/$(UNINSTALL)
+	rm -v /opt/$(UNINSTALL) 
+check:
+	ls /opt/$(UNINSTALL)

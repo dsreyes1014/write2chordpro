@@ -1,0 +1,11 @@
+prefix=/opt/Write2chordpro
+exec_prefix=/opt/Write2chordpro
+libdir=/opt/Write2chordpro/lib
+includedir=/opt/Write2chordpro/include
+
+Name: harfbuzz
+Description: HarfBuzz text shaping library
+Version: 0.9.25
+
+Libs: -L${libdir} -lharfbuzz
+Cflags: -I${includedir}/harfbuzz

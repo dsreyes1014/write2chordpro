@@ -1,0 +1,12 @@
+prefix=/opt/Write2chordpro
+exec_prefix=/opt/Write2chordpro
+libdir=/opt/Write2chordpro/lib
+includedir=/opt/Write2chordpro/include
+
+Name: harfbuzz
+Description: HarfBuzz text shaping library GObject integration
+Version: 0.9.25
+
+Requires: harfbuzz gobject-2.0 glib-2.0
+Libs: -L${libdir} -lharfbuzz-gobject
+Cflags: -I${includedir}/harfbuzz

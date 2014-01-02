@@ -1,0 +1,19 @@
+# Pango Modules file
+# Automatically generated file, do not edit
+#
+# ModulesPath = /opt/Write2chordpro/lib/pango/1.8.0/modules
+#
+/opt/Write2chordpro/lib/pango/1.8.0/modules/pango-basic-fc.so BasicScriptEngineFc PangoEngineShape PangoRenderFc common:
+/opt/Write2chordpro/lib/pango/1.8.0/modules/pango-thai-lang.so ThaiScriptEngineLang PangoEngineLang PangoRenderNone thai:*
+/opt/Write2chordpro/lib/pango/1.8.0/modules/pango-indic-lang.so devaIndicScriptEngineLang PangoEngineLang PangoRenderNone devanagari:*
+/opt/Write2chordpro/lib/pango/1.8.0/modules/pango-indic-lang.so bengIndicScriptEngineLang PangoEngineLang PangoRenderNone bengali:*
+/opt/Write2chordpro/lib/pango/1.8.0/modules/pango-indic-lang.so guruIndicScriptEngineLang PangoEngineLang PangoRenderNone gurmukhi:*
+/opt/Write2chordpro/lib/pango/1.8.0/modules/pango-indic-lang.so gujrIndicScriptEngineLang PangoEngineLang PangoRenderNone gujarati:*
+/opt/Write2chordpro/lib/pango/1.8.0/modules/pango-indic-lang.so oryaIndicScriptEngineLang PangoEngineLang PangoRenderNone oriya:*
+/opt/Write2chordpro/lib/pango/1.8.0/modules/pango-indic-lang.so tamlIndicScriptEngineLang PangoEngineLang PangoRenderNone tamil:*
+/opt/Write2chordpro/lib/pango/1.8.0/modules/pango-indic-lang.so teluIndicScriptEngineLang PangoEngineLang PangoRenderNone telugu:*
+/opt/Write2chordpro/lib/pango/1.8.0/modules/pango-indic-lang.so kndaIndicScriptEngineLang PangoEngineLang PangoRenderNone kannada:*
+/opt/Write2chordpro/lib/pango/1.8.0/modules/pango-indic-lang.so mlymIndicScriptEngineLang PangoEngineLang PangoRenderNone malayalam:*
+/opt/Write2chordpro/lib/pango/1.8.0/modules/pango-indic-lang.so sinhIndicScriptEngineLang PangoEngineLang PangoRenderNone sinhala:*
+/opt/Write2chordpro/lib/pango/1.8.0/modules/pango-arabic-lang.so ArabicScriptEngineLang PangoEngineLang PangoRenderNone arabic:*
+
