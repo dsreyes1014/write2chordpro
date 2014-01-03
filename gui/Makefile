@@ -4,6 +4,7 @@ INSTALL_DIR = $(PROG_DIR)/bin
 INCLUDE = $(PWD)/../include
 CFLAGS = -Wall -c -std=c99 
 CPPFLAGS = -I$(INCLUDE)/atk-1.0 -I$(INCLUDE)/cairo -I$(INCLUDE)/gtk-3.0 -I$(INCLUDE)/pango-1.0 -I$(INCLUDE)/gdk-pixbuf-2.0 
+LDFLAGS = -L$(PWD)/../lib
 PROGRAM = w2c-gui
 OBJECTS = main.o menu.o chords.o songs.o editor.o display.o transpose.o
 HEADERS = menu.h chords.h songs.h editor.h display.h transpose.h
@@ -13,7 +14,7 @@ DEPS = lib include etc bin
 
 all: $(PROGRAM)
 $(PROGRAM): $(OBJECTS)
-	$(CC) $(OBJECTS) $(GTK+3) -o $(PROGRAM)
+	$(CC) $(OBJECTS) $(LDFLAGS) $(GTK+3) -o $(PROGRAM)
 main.o: main.c $(HEADERS)
 	$(CC) $(CFLAGS) $(CPPFLAGS) main.c $(GTK+3)
 display.o: display.c editor.h songs.h
