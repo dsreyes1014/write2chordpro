@@ -1,0 +1,4 @@
+#!/bin/bash
+
+sudo rm -rfv /opt/Write2chordpro
+sudo rm -v /usr/local/bin/w2c-gui
