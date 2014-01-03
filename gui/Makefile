@@ -2,8 +2,11 @@ CC = gcc
 PROG_DIR = /opt/Write2chordpro
 INSTALL_DIR = $(PROG_DIR)/bin
 INCLUDE = $(PWD)/../include
+LIBDIR = $(PWD)/../lib
 CFLAGS = -Wall -c -std=c99 
-CPPFLAGS = -I$(INCLUDE)/atk-1.0 -I$(INCLUDE)/cairo -I$(INCLUDE)/gtk-3.0 -I$(INCLUDE)/pango-1.0 -I$(INCLUDE)/gdk-pixbuf-2.0 
+CPPFLAGS = -I$(INCLUDE)/atk-1.0 -I$(INCLUDE)/cairo -I$(INCLUDE)/gtk-3.0 \
+           -I$(INCLUDE)/pango-1.0 -I$(INCLUDE)/gdk-pixbuf-2.0 \
+           -I$(LIBDIR)/glib-2.0/include -I$(INCLUDE)/glib-2.0
 LDFLAGS = -L$(PWD)/../lib
 PROGRAM = w2c-gui
 OBJECTS = main.o menu.o chords.o songs.o editor.o display.o transpose.o
@@ -16,19 +19,19 @@ all: $(PROGRAM)
 $(PROGRAM): $(OBJECTS)
 	$(CC) $(OBJECTS) $(LDFLAGS) $(GTK+3) -o $(PROGRAM)
 main.o: main.c $(HEADERS)
-	$(CC) $(CFLAGS) $(CPPFLAGS) main.c $(GTK+3)
+	$(CC) $(CFLAGS) $(CPPFLAGS) main.c 
 display.o: display.c editor.h songs.h
-	$(CC) $(CFLAGS) $(CPPFLAGS) display.c $(GTK+3)
+	$(CC) $(CFLAGS) $(CPPFLAGS) display.c 
 menu.o: menu.c
-	$(CC) $(CFLAGS) $(CPPFLAGS) menu.c $(GTK+3)
+	$(CC) $(CFLAGS) $(CPPFLAGS) menu.c 
 chords.o: chords.c editor.h
-	$(CC) $(CFLAGS) $(CPPFLAGS) chords.c $(GTK+3)
+	$(CC) $(CFLAGS) $(CPPFLAGS) chords.c 
 songs.o: songs.c
-	$(CC) $(CFLAGS) $(CPPFLAGS) songs.c $(GTK+3)
+	$(CC) $(CFLAGS) $(CPPFLAGS) songs.c 
 editor.o: editor.c chords.h transpose.h
-	$(CC) $(CFLAGS) $(CPPFLAGS) editor.c $(GTK+3)
+	$(CC) $(CFLAGS) $(CPPFLAGS) editor.c 
 transpose.o: transpose.c editor.h
-	$(CC) $(CFLAGS) $(CPPFLAGS) transpose.c $(GTK+3)
+	$(CC) $(CFLAGS) $(CPPFLAGS) transpose.c 
 
 clean: 
 	rm -rfv $(OBJECTS) w2c-gui *~

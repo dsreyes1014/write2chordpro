@@ -458,9 +458,7 @@ void insertChord(GtkWidget *widget, gpointer data)
 	gtk_container_add(GTK_CONTAINER(scrolledWindow), treeView);
 	gtk_container_add(GTK_CONTAINER(frame), scrolledWindow);
 	gtk_container_add(GTK_CONTAINER(topHalf), label);
-	gtk_container_add(GTK_CONTAINER(bottomHalf), frame);	
-	
-	gtk_tree_view_set_activate_on_single_click(GTK_TREE_VIEW(treeView), FALSE);	
+	gtk_container_add(GTK_CONTAINER(bottomHalf), frame);		
 	
 	gtk_widget_show_all(chordDialog);	
 	
