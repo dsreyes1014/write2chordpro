@@ -1,0 +1,247 @@
+#!/bin/bash
+
+export INSTALL_DIR="$(pwd)"
+#--------------------------------------
+sudo mkdir -pv ${INSTALL_DIR}
+sudo mkdir -pv ${INSTALL_DIR}/lib
+sudo mkdir -pv ${INSTALL_DIR}/share
+sudo mkdir -pv ${INSTALL_DIR}/bin
+sudo mkdir -pv ${INSTALL_DIR}/etc
+sudo mkdir -pv ${INSTALL_DIR}/include
+#######################################
+# Setting up the environment          #
+#######################################
+cat > w2c.conf << EOF
+/opt/Write2chordpro/lib
+EOF
+
+cat > w2c.sh << EOF
+export PATH=/opt/Write2chordpro/bin:$PATH
+EOF
+
+sudo mv -v w2c.conf /etc/ld.so.conf.d/
+
+sudo mv -v w2c.sh /etc/profile.d/
+
+sudo ldconfig
+
+export LD_LIBRARY_PATH="${INSTALL_DIR}/lib:LD_LIBRARY_PATH"
+export CPPFLAGS="-I${INSTALL_DIR}/include"
+export LDFLAGS="-L${INSTALL_DIR}/lib"
+export PKG_CONFIG_PATH="${INSTALL_DIR}/lib/pkgconfig"
+#export PKG_CONFIG_PATH LDFLAGS CPPFLAGS 
+#######################################
+# Build NASM which is required by     #
+# libjpegturbo                        #
+#######################################
+tar -Jxf nasm-2.10.09.tar.xz
+cd nasm-2.10.09
+./configure --prefix=${INSTALL_DIR} 
+make
+sudo make install
+cd .. 
+sudo rm -rf nasm-2.10.09
+#######################################
+# Build libjpegturbo                  #
+#######################################
+tar -zxf libjpeg-turbo-1.3.0.tar.gz
+cd libjpeg-turbo-1.3.0
+./configure --prefix=${INSTALL_DIR} \
+	--mandir=${INSTALL_DIR}/share/man \
+	--with-jpeg8 \
+	--disable-static
+sed -i -e '/^docdir/ s/$/\/libjpeg-turbo-1.3.0/' \
+       -e '/^exampledir/ s/$/\/libjpeg-turbo-1.3.0/' Makefile
+${LDFLAGS} ${CPPFLAGS} make
+sudo make install
+cd ..
+sudo rm -rf libjpeg-turbo-1.3.0
+#######################################
+# Build TIFF                          #
+#######################################
+tar -zxf tiff-4.0.3.tar.gz
+cd tiff-4.0.3
+sed -i '/glDrawPixels/a glFlush();' tools/tiffgt.c
+./configure --prefix=${INSTALL_DIR} \
+	--disable-static
+${LDFLAGS} ${CPPFLAGS} make
+sudo make install
+cd ..
+sudo rm -rf tiff-4.0.3
+#######################################
+# Build libpng                        #
+#######################################
+tar -Jxf libpng-1.6.8.tar.xz
+cd libpng-1.6.8
+gzip -cd ../libpng-1.6.8-apng.patch.gz | patch -p1
+./configure --prefix=${INSTALL_DIR} \
+	--disable-static
+${LDFLAGS} ${CPPFLAGS} make 
+sudo make install
+cd .. 
+sudo rm -rf libpng-1.6.8
+#######################################
+# Build which                         #
+#######################################
+tar -zxf which-2.20.tar.gz
+cd which-2.20
+./configure --prefix=${INSTALL_DIR} 
+${LDFLAGS} ${CPPFLAGS} make
+sudo make install
+cd ..
+sudo rm -rf which-2.20
+#######################################
+# Build freetype                      #
+#######################################
+tar -jxf freetype-2.5.2.tar.bz2
+cd freetype-2.5.2
+sed -i  -e "/AUX.*.gxvalid/s@^# @@" \
+        -e "/AUX.*.otvalid/s@^# @@" \
+        modules.cfg    
+sed -ri -e 's:.*(#.*SUBPIXEL.*) .*:\1:' \
+        include/config/ftoption.h
+./configure --prefix=${INSTALL_DIR} \
+	--disable-static
+${LDFLAGS} ${CPPFLAGS} make
+sudo make install
+cd ..
+sudo rm -rf freetype-2.5.2
+####################################### 
+# Build expat                         #
+#######################################
+tar -zxf expat-2.1.0.tar.gz
+cd expat-2.1.0
+./configure --prefix=${INSTALL_DIR} \
+	--disable-static
+make
+sudo make install
+cd ..
+sudo rm -rf expat-2.1.0
+#######################################
+# Build fontconfig                    #
+#######################################
+tar -jxf fontconfig-2.11.0.tar.bz2
+cd fontconfig-2.11.0
+./configure --prefix=${INSTALL_DIR} \
+	--sysconfdir=${INSTALL_DIR}/etc \
+	--localstatedir=/var \
+	--docdir=${INSTALL_DIR}/share/doc/fontconfig-2.11.0 \
+	--disable-static \
+	--disable-docs
+${LDFLAGS} ${CPPFLAGS} make
+sudo make install
+cd ..
+sudo rm -rf fontconfig-2.11.0
+#######################################
+# Build pixman                        #
+#######################################
+tar -zxf pixman-0.32.4.tar.gz
+cd pixman-0.32.4
+./configure --prefix=${INSTALL_DIR} \
+	--disable-static
+${LDFLAGS} ${CPPFLAGS} make
+sudo make install
+cd ..
+sudo rm -rf pixman-0.32.4
+#######################################
+# Build libffi                        #
+#######################################
+tar -zxf libffi-3.0.13.tar.gz
+cd libffi-3.0.13
+patch -Np1 -i ../libffi-3.0.13-includedir-1.patch
+./configure --prefix=${INSTALL_DIR} \
+	--disable-static
+${LDFLAGS} ${CPPFLAGS} make
+sudo make install
+cd ..
+sudo rm -rf libffi-3.0.13
+#######################################
+# Build Glib                          #
+#######################################
+tar -Jxf glib-2.39.2.tar.xz
+cd glib-2.39.2
+./configure --prefix=${INSTALL_DIR} \
+	--with-pcre-system
+${LDFLAGS} ${CPPFLAGS} make
+sudo make install
+cd ..
+sudo rm -rf glib-2.39.2
+#######################################
+# Build cairo                         #
+#######################################
+tar -Jxf cairo-1.12.16.tar.xz
+cd cairo-1.12.16
+./configure --prefix=${INSTALL_DIR} \
+	--disable-static
+${LDFLAGS} ${CPPFLAGS} make
+sudo make install
+cd ..
+sudo rm -rf cairo-1.12.16
+#######################################
+# Build ICU                           #
+#######################################
+tar -zxf icu4c-52_1-src.tgz
+cd icu/source
+CXX=g++ ./configure --prefix=${INSTALL_DIR}
+make
+sudo make install
+cd ../..
+sudo rm -rf icu
+#######################################
+# Build harfbuzz                      #
+#######################################
+tar -jxf harfbuzz-0.9.25.tar.bz2
+cd harfbuzz-0.9.25
+./configure --prefix=${INSTALL_DIR} \
+	--with-gobject
+${LDFLAGS} ${CPPFLAGS} make
+sudo make install
+cd ..
+sudo rm -rf harfbuzz-0.9.25
+#######################################
+# Build pango                         #
+#######################################
+tar -Jxf pango-1.36.1.tar.xz
+cd pango-1.36.1
+./configure --prefix=${INSTALL_DIR} \
+	--sysconfdir=${INSTALL_DIR}/etc
+${LDFLAGS} ${CPPFLAGS} make
+sudo make install
+cd ..
+sudo rm -rf pango-1.36.1
+#######################################
+# Build ATK                           #
+#######################################
+tar -Jxf atk-2.11.4.tar.xz
+cd atk-2.11.4
+./configure --prefix=${INSTALL_DIR}
+${LDFLAGS} ${CPPFLAGS} make
+sudo make install
+cd ..
+sudo rm -rf atk-2.11.4
+#######################################
+# Build gdk-pixbuf                    #
+#######################################
+tar -Jxf gdk-pixbuf-2.30.2.tar.xz
+cd gdk-pixbuf-2.30.2
+./configure --prefix=${INSTALL_DIR} \
+	--with-x11
+${LDFLAGS} ${CPPFLAGS} make
+sudo make install
+cd ..
+sudo rm -rf gdk-pixbuf-2.30.2
+#######################################
+# Build GTK+3                         #
+#######################################
+tar -Jxf gtk+-3.10.6.tar.xz
+cd gtk+-3.10.6
+./configure --prefix=${INSTALL_DIR} \
+	--sysconfdir=${INSTALL_DIR}/etc \
+	--enable-broadway-backend \
+	--enable-x11-backend \
+	--disable-wayland-backend
+${LDFLAGS} ${CPPFLAGS} make
+sudo make install
+cd ..
+sudo rm -rf gtk+-3.10.6
+#######################################	
