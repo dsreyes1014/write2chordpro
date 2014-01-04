@@ -159,8 +159,7 @@ void activateRow(GtkTreeView *treeView, gpointer data)
 	gtk_editable_set_editable(GTK_EDITABLE(entryKey), FALSE);
 	
 	
-	i = getChars(chars, songPath, line1 + line2
-    			      + line3 + line4 + 1);
+	i = getChars(chars, songPath, line1 + line2 + line3 + line4 + 1);
 	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(tBufferEditor), chars, i);
 	gtk_text_view_set_editable(GTK_TEXT_VIEW(tViewEditor), FALSE);
 	

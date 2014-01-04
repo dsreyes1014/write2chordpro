@@ -470,6 +470,8 @@ void insertChord(GtkWidget *widget, gpointer data)
 	gtk_tree_view_append_column(GTK_TREE_VIEW(treeView), column);
 	
 	gtk_tree_view_set_hover_expand(GTK_TREE_VIEW(treeView), TRUE);
+	
+	gtk_tree_view_set_activate_on_single_click(GTK_TREE_VIEW(treeView), TRUE);
 		
 	// Sets properties for chordDialog widget.	
 	gtk_window_set_modal(GTK_WINDOW(chordDialog), TRUE);

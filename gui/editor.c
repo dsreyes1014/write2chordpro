@@ -192,6 +192,8 @@ void save(GtkWidget *widget, gpointer data)
 	gtk_text_buffer_set_modified(tBufferEditor, FALSE);
 	
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button5), FALSE);
+	
+	
 }
 /*---------------------------------------------------------------------------*/
 void newSong(GtkWidget *widget, gpointer button)
