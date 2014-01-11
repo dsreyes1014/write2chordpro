@@ -54,7 +54,6 @@ transpose.o: transpose.c editor.h
 
 clean: 
 	rm -rfv $(OBJECTS) w2c-gui *~
-
 install: $(PROG_DIR)
 	cp -Rv ../bin $(PROG_DIR)/
 	cp -Rv ../lib $(PROG_DIR)/
@@ -62,13 +61,10 @@ install: $(PROG_DIR)
 	cp -v $(PROGRAM) $(INSTALL_DIR)/
 	cp -v ../$(UNINSTALL) /opt/
 	cp -v $(INSTALL_DIR)/$(PROGRAM) /usr/local/bin/
-
 $(PROG_DIR): 
-	./progDir # program directory script to make sure directory exists before install.
-	
+	./progDir
 uninstall: check
 	/opt/$(UNINSTALL)
 	rm -v /opt/$(UNINSTALL) 
-
 check:
 	ls /opt/$(UNINSTALL)
