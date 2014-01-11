@@ -23,15 +23,24 @@ GtkEntryBuffer *entryBuffer;
 
 GtkTextBuffer *tBufferEditor;
 
-const gchar *getTitle, *getArtist, *getKey, *getGenre;
-
+const gchar *getKey,
+            *getTitle, 
+            *getGenre,
+            *getArtist;
+            
 extern char directory[];
+
 extern GtkListStore *listStore;
+
 extern GtkTreeSelection *selection;
-extern GtkWidget *treeView, tViewDisplay;
+
+extern GtkWidget *treeView, 
+                 *tViewDisplay;
+                 
 extern GtkTextBuffer *tBufferDisplay;
+
 extern gchar songPath[];
-/*---------------------------------------------------------------------------*/
+/*****************************************************************************/
 gint setText(gchar *text, gchar *filePath, gint pos)
 {
 	FILE *fp;
@@ -52,13 +61,15 @@ gint setText(gchar *text, gchar *filePath, gint pos)
 	
 	return 0;
 }
-/*---------------------------------------------------------------------------*/
+/*****************************************************************************/
 // Grabs text starting from 'pos' to 'EOF' and outputs text to 'text'.
 // Returns char count through to 'i'. 
 gint getChars(gchar *text, gchar *filePath, gint pos)
 {
 	gint i;
-	gchar ch;	
+	
+	gchar ch;
+		
 	FILE *fp;	
 	
 	if((fp = fopen(filePath, "r")) == NULL)
@@ -83,7 +94,7 @@ gint getChars(gchar *text, gchar *filePath, gint pos)
 		return i;
 	}
 }	
-/*---------------------------------------------------------------------------*/
+/*****************************************************************************/
 gint getLineCharCount(gchar line[][COLUMN_N], gint lineNum)
 {
 	gint charCount;
@@ -92,10 +103,11 @@ gint getLineCharCount(gchar line[][COLUMN_N], gint lineNum)
 	
 	return charCount;
 }
-/*---------------------------------------------------------------------------*/
+/*****************************************************************************/
 gint getTextForEachLine(gchar lines[][COLUMN_N], gint lineNum)
 {
 	gint i;
+	
 	FILE *fp;	
 	
 	// This will read each line for 
@@ -118,7 +130,7 @@ gint getTextForEachLine(gchar lines[][COLUMN_N], gint lineNum)
 
 	return 0;
 }
-/*---------------------------------------------------------------------------*/
+/*****************************************************************************/
 gint getLineCount(gchar *filePath)
 {
 	gchar ch;	
@@ -148,11 +160,14 @@ gint getLineCount(gchar *filePath)
 
 	return lineCount;
 }
-/*---------------------------------------------------------------------------*/
+/*****************************************************************************/
 void save(GtkWidget *widget, gpointer data)
 {	
-	GtkTextIter start, end;	
+	GtkTextIter end,
+	            start;
+	            	
 	gchar *body;
+	
 	char newFile[45];
 	
 	FILE *fp;		
@@ -185,6 +200,7 @@ void save(GtkWidget *widget, gpointer data)
 	//gtk_tree_view_set_model(GTK_TREE_VIEW(treeView), GTK_TREE_MODEL(listStore));
 	//g_object_unref(listStore);
 	
+	// Have to clear 'listStore' to show newly added songs.
 	gtk_list_store_clear(listStore);
 	
 	listFiles();	
@@ -195,7 +211,7 @@ void save(GtkWidget *widget, gpointer data)
 	
 	
 }
-/*---------------------------------------------------------------------------*/
+/*****************************************************************************/
 void newSong(GtkWidget *widget, gpointer button)
 {
 	GtkTextIter start, end;	
@@ -229,7 +245,7 @@ void newSong(GtkWidget *widget, gpointer button)
 		//gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
 	}	
 }
-/*---------------------------------------------------------------------------*/
+/*****************************************************************************/
 void editSong(GtkToggleButton *button, gpointer data)
 {
 	if(gtk_toggle_button_get_active(button) == TRUE)
@@ -257,7 +273,7 @@ void editSong(GtkToggleButton *button, gpointer data)
 		gtk_text_view_set_editable(GTK_TEXT_VIEW(tViewEditor), FALSE);
 	}
 }
-/*---------------------------------------------------------------------------*/
+/*****************************************************************************/
 void editor(GtkWidget *grid, GtkWidget *window)
 {
 	GtkWidget *frame,

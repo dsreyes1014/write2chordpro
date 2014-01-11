@@ -19,7 +19,7 @@ GTK+3 = `pkg-config --cflags gtk+-3.0 --libs gtk+-3.0`
 UNINSTALL = uninstallW2C
 DEPS = lib include etc bin
 
-all: $(PROGRAM) $(PROG_DIR)
+all: $(PROGRAM)
 $(PROGRAM): $(OBJECTS)
 	$(CC) $(OBJECTS) $(LDFLAGS) $(LIBS) -o $(PROGRAM)
 main.o: main.c $(HEADERS)
@@ -39,15 +39,15 @@ transpose.o: transpose.c editor.h
 
 clean: 
 	rm -rfv $(OBJECTS) w2c-gui *~
-install: makedirectory
+install: $(PROG_DIR)
 	cp -Rv ../bin $(PROG_DIR)/
 	cp -Rv ../lib $(PROG_DIR)/
 	cp -Rv ../etc $(PROG_DIR)/
 	cp -v $(PROGRAM) $(INSTALL_DIR)/
-	cp -v ../$(UNINSTALL) /opt
-	cp -v $(INSTALL_DIR)/$(PROGRAM) /usr/local/bin
-makedirectory:
-	mkdir -v $(PROG_DIR)
+	cp -v ../$(UNINSTALL) /opt/
+	cp -v $(INSTALL_DIR)/$(PROGRAM) /usr/local/bin/
+$(PROG_DIR): 
+	./progDir
 uninstall: check
 	/opt/$(UNINSTALL)
 	rm -v /opt/$(UNINSTALL) 

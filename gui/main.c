@@ -12,23 +12,55 @@
 #include "display.h"
 
 GtkWidget *window;
-GtkTreeSelection *selection;
-GtkTreeViewColumn *column;
-gchar *filename;
-extern GtkWidget *treeView, *menuBar, *tViewDisplay, *button5;
 
+GtkTreeSelection *selection;
+
+GtkTreeViewColumn *column;
+
+gchar *filename;
+
+extern GtkWidget *menuBar,
+                 *button5,                 
+                 *treeView, 
+                 *entryTitle,                
+                 *tViewDisplay;
+                 
+extern GtkTextBuffer *tBufferEditor;                
+/*****************************************************************************/
+void closeWindow(GtkWidget *widget, gpointer data) 
+{
+	GtkEntryBuffer *buffer;	
+	
+	gint title;
+	
+	gboolean check1,
+	         check2;	
+	         
+	buffer = gtk_entry_get_buffer(GTK_ENTRY(entryTitle));	
+	check1 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button5));
+	check2 = gtk_text_buffer_get_modified(tBufferEditor);
+	title = gtk_entry_buffer_get_length(buffer);
+	
+	if((check1 == TRUE) && (title != 0) && (check2 == TRUE))
+	{
+		saveDialog();	
+	}
+
+	gtk_main_quit();
+}
+/*****************************************************************************/
 int main(int argc, char *argv[])
 {
-	GtkWidget *grid;
-	GtkWidget *box1;
-	GtkWidget *box2;
-	GtkWidget *paned;
-	GtkWidget *frame1; 
-	GtkWidget *frame2;
-	GtkWidget *notebook;
-	GtkWidget *tabLabel;
-	GtkWidget *scrolledWindow1;
-	GtkWidget *scrolledWindow2;	
+	GtkWidget *grid,
+	          *box1,
+	          *box2,
+	          *paned,
+	          *frame1, 
+	          *frame2,
+	          *notebook,
+	          *tabLabel,
+	          *scrolledWindow1,
+	          *scrolledWindow2;	
 	
 	gtk_init(&argc, &argv);
 	
@@ -92,7 +124,7 @@ int main(int argc, char *argv[])
 	//gtk_widget_set_size_request(window, 750, 800);
 	
 	// This signal terminates main window when the close button is clicked.	
-	g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+	g_signal_connect(window, "destroy", G_CALLBACK(closeWindow), NULL);
 	
 	// Adds the 'paned' widget contained in 'box1' widget to toplevel 'window' widget.	
 	gtk_container_add(GTK_CONTAINER(window), box1);

@@ -11,19 +11,26 @@
 #include "songs.h"
 #include "editor.h"
 #include "display.h"
-//-----------------------------------------------------------------------------
-GtkWidget *treeView;
+/*****************************************************************************/
+GtkWidget *treeView,
+          *tViewDisplay;
+          
 GtkTextBuffer *tBufferDisplay;
-GtkWidget *tViewDisplay;
+
 GtkListStore *listStore;
+
 GtkTreeSelection *selection;
+
 GtkTreeModel *model;
+
 GtkTreeViewColumn *column;
-GtkWidget *tViewDisplay;
+
 GtkTextBuffer *tBufferDisplay;
+
 GtkTreeIter iter;
-gchar directory[75], 
-      song[50], 
+
+gchar song[50],
+      directory[75], 
       songPath[100], 
       displayBody[2000];
       
@@ -38,7 +45,7 @@ extern GtkWidget *entryTitle,
 				 *window;
 				 
 extern GtkTextBuffer *tBufferEditor;
-/*---------------------------------------------------------------------------*/
+/*****************************************************************************/
 void saveDialog(void)
 {
 	GtkWidget *messageWindow;
@@ -69,7 +76,7 @@ void saveDialog(void)
 		gtk_widget_destroy(messageWindow);	                     
 	}
 }
-/*---------------------------------------------------------------------------*/
+/*****************************************************************************/
 void createDir(void)
 {
 	gchar user[30];
@@ -91,17 +98,17 @@ void createDir(void)
 	// Creates directory.
 	mkdir(directory, S_IRWXU);
 }
-/*---------------------------------------------------------------------------*/
+/*****************************************************************************/
 void modifiedEntry(void)
 {	
 	display(tBufferDisplay, tViewDisplay);
 }
-/*---------------------------------------------------------------------------*/
+/*****************************************************************************/
 void modifiedBuffer(GtkTextBuffer *buffer, gpointer data)
 {	
 	display(tBufferDisplay, tViewDisplay);
 }
-/*---------------------------------------------------------------------------*/
+/*****************************************************************************/
 void activateRow(GtkTreeView *treeView, gpointer data)
 {
 	GtkEntryBuffer *buffer;	
@@ -171,7 +178,7 @@ void activateRow(GtkTreeView *treeView, gpointer data)
 	
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button5), FALSE);
 }
-/*---------------------------------------------------------------------------*/
+/*****************************************************************************/
 void songSelect(GtkTreeSelection *selection, gpointer data)
 {
 	//GtkTreeIter iter;	
@@ -189,7 +196,7 @@ void songSelect(GtkTreeSelection *selection, gpointer data)
 		g_free(getSong);		                                               
 	}
 }
-/*---------------------------------------------------------------------------*/
+/*****************************************************************************/
 void listFiles(void)
 {		
 	DIR *pdir;
@@ -228,7 +235,7 @@ void listFiles(void)
 
 	closedir(pdir);
 }
-//-----------------------------------------------------------------------------
+/*****************************************************************************/
 void songList(void)
 {
 	GtkCellRenderer *cell;
