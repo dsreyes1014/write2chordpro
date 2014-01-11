@@ -278,8 +278,8 @@ void editor(GtkWidget *grid, GtkWidget *window)
 	          *arrowRight,
 	          *scrolledWindow;
 	
-	GtkTextIter end,
-	            start;
+	//GtkTextIter end,
+	            //start;
 			    		
 	frame = gtk_frame_new(NULL);	
 	entryKey = gtk_entry_new();

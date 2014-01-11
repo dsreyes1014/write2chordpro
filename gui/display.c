@@ -167,7 +167,7 @@ void display(GtkTextBuffer *buffer, GtkWidget *tView)
 								  "Verse 3:","Bridge:", "Bridge 1:",
 								  "Bridge 2:", "Bridge 3:", "Intro:",
 								  "End:", "PreChorus:", "Verso:",
-								  "Coro:"};
+								  "Coro:", "Puente:"};
 								  
 //-----------------------------------------------------------------------------				
 	gtk_text_buffer_get_start_iter(buffer, &start);
@@ -349,7 +349,7 @@ void display(GtkTextBuffer *buffer, GtkWidget *tView)
 	// 'Verse:', 'Chorus:'etc...			
 	gtk_text_buffer_get_start_iter(buffer, &start);
 	
-	for(i = 0; i < 13; i++)
+	for(i = 0; i < 14; i++)
 	{
 		if(gtk_text_iter_forward_search(&start, songSection[i],
 		                                GTK_TEXT_SEARCH_CASE_INSENSITIVE,
