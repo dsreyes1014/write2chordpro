@@ -1,6 +1,6 @@
 #!/bin/sh
 
-prefix=/opt/Write2chordpro
+prefix=/home/drewshei/Programs/w2c
 exec_prefix=${prefix}
 
 nofile=

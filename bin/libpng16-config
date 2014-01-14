@@ -12,7 +12,7 @@
 # Modeled after libxml-config.
 
 version="1.6.8"
-prefix="/opt/Write2chordpro"
+prefix="/home/drewshei/Programs/w2c"
 exec_prefix="${prefix}"
 libdir="${exec_prefix}/lib"
 includedir="${prefix}/include/libpng16"

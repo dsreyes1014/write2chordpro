@@ -25,7 +25,7 @@
 # etc.  If ICU is not installed in this directory, you must change the
 # following line.  There should exist $(prefix)/include/unicode/utypes.h
 # for example.
-prefix = /opt/Write2chordpro
+prefix = /home/drewshei/Programs/w2c
 exec_prefix = ${prefix}
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
@@ -188,7 +188,7 @@ AR = ar
 CC = gcc
 CFLAGS =  -O2 -std=c99 -Wall -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings $(THREADSCFLAGS)  
 CPP = gcc -E
-CPPFLAGS = -I/opt/Write2chordpro/include $(THREADSCPPFLAGS)  -DU_HAVE_ELF_H=1 -DU_HAVE_ATOMIC=1  $(LIBCPPFLAGS) -I$(prefix)/include
+CPPFLAGS = -I/home/drewshei/Programs/w2c/include $(THREADSCPPFLAGS)  -DU_HAVE_ELF_H=1 -DU_HAVE_ATOMIC=1  $(LIBCPPFLAGS) -I$(prefix)/include
 CXX = g++
 CXXFLAGS =  -O2 -W -Wall -pedantic -Wpointer-arith -Wwrite-strings -Wno-long-long --std=c++0x $(THREADSCXXFLAGS)  
 DEFAULT_MODE = dll
@@ -201,7 +201,7 @@ INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM  =  ${INSTALL}
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
-LDFLAGS = -L/opt/Write2chordpro/lib $(RPATHLDFLAGS)
+LDFLAGS = -L/home/drewshei/Programs/w2c/lib $(RPATHLDFLAGS)
 LIBS = -lpthread -ldl -lm  
 LIB_M = 
 LIB_VERSION = 52.1

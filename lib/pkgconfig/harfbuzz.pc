@@ -1,7 +1,7 @@
-prefix=/opt/Write2chordpro
-exec_prefix=/opt/Write2chordpro
-libdir=/opt/Write2chordpro/lib
-includedir=/opt/Write2chordpro/include
+prefix=/home/drewshei/Programs/w2c
+exec_prefix=/home/drewshei/Programs/w2c
+libdir=/home/drewshei/Programs/w2c/lib
+includedir=/home/drewshei/Programs/w2c/include
 
 Name: harfbuzz
 Description: HarfBuzz text shaping library

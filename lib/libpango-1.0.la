@@ -17,7 +17,7 @@ old_library=''
 inherited_linker_flags=' -pthread'
 
 # Libraries that this one depends upon.
-dependency_libs=' -L/opt/Write2chordpro/lib /opt/Write2chordpro/lib/libgobject-2.0.la /opt/Write2chordpro/lib/../lib/libffi.la /opt/Write2chordpro/lib/libgmodule-2.0.la -ldl /opt/Write2chordpro/lib/libgthread-2.0.la /opt/Write2chordpro/lib/libglib-2.0.la -lpthread -lm'
+dependency_libs=' -L/home/drewshei/Programs/w2c/lib /home/drewshei/Programs/w2c/lib/libgobject-2.0.la /home/drewshei/Programs/w2c/lib/../lib/libffi.la /home/drewshei/Programs/w2c/lib/libgmodule-2.0.la -ldl /home/drewshei/Programs/w2c/lib/libgthread-2.0.la /home/drewshei/Programs/w2c/lib/libglib-2.0.la -lpthread -lm'
 
 # Names of additional weak libraries provided by this library
 weak_library_names=''
@@ -38,4 +38,4 @@ dlopen=''
 dlpreopen=''
 
 # Directory that this library needs to be installed in:
-libdir='/opt/Write2chordpro/lib'
+libdir='/home/drewshei/Programs/w2c/lib'

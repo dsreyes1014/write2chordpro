@@ -4,9 +4,9 @@ SOBJ=so
 A=a
 LIBPREFIX=lib
 LIB_EXT_ORDER=.52.1
-COMPILE=gcc -I/opt/Write2chordpro/include -D_REENTRANT  -DU_HAVE_ELF_H=1 -DU_HAVE_ATOMIC=1  -DU_ATTRIBUTE_DEPRECATED= -O2 -std=c99 -Wall -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings   -c
-LIBFLAGS=-I/opt/Write2chordpro/include -DPIC -fPIC
-GENLIB=gcc -O2 -std=c99 -Wall -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings   -L/opt/Write2chordpro/lib  -shared -Wl,-Bsymbolic
+COMPILE=gcc -I/home/drewshei/Programs/w2c/include -D_REENTRANT  -DU_HAVE_ELF_H=1 -DU_HAVE_ATOMIC=1  -DU_ATTRIBUTE_DEPRECATED= -O2 -std=c99 -Wall -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings   -c
+LIBFLAGS=-I/home/drewshei/Programs/w2c/include -DPIC -fPIC
+GENLIB=gcc -O2 -std=c99 -Wall -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings   -L/home/drewshei/Programs/w2c/lib  -shared -Wl,-Bsymbolic
 LDICUDTFLAGS=-nodefaultlibs -nostdlib
 LD_SONAME=-Wl,-soname -Wl,
 RPATH_FLAGS=

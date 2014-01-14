@@ -1,8 +1,8 @@
-prefix=/opt/Write2chordpro
+prefix=/home/drewshei/Programs/w2c
 exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
 includedir=${prefix}/include
-sysconfdir=/opt/Write2chordpro/etc
+sysconfdir=/home/drewshei/Programs/w2c/etc
 localstatedir=/var
 PACKAGE=fontconfig
 confdir=@baseconfigdir@
@@ -14,5 +14,5 @@ Version: 2.11.0
 Requires:  freetype2
 Requires.private:  expat
 Libs: -L${libdir} -lfontconfig
-Libs.private: -L/opt/Write2chordpro/lib -lexpat  -lfreetype   
-Cflags: -I${includedir} -I/opt/Write2chordpro/include  -I/usr/include/freetype2   
+Libs.private: -L/home/drewshei/Programs/w2c/lib -lexpat  -lfreetype   
+Cflags: -I${includedir} -I/home/drewshei/Programs/w2c/include  -I/usr/include/freetype2   

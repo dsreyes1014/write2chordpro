@@ -17,7 +17,7 @@ old_library=''
 inherited_linker_flags=' -pthread'
 
 # Libraries that this one depends upon.
-dependency_libs=' -L/opt/Write2chordpro/lib /opt/Write2chordpro/lib/libtiff.la -llzma /opt/Write2chordpro/lib/libjpeg.la /opt/Write2chordpro/lib/libgdk_pixbuf-2.0.la -L/usr/lib /opt/Write2chordpro/lib/libgio-2.0.la /opt/Write2chordpro/lib/libgmodule-2.0.la -ldl -lresolv /opt/Write2chordpro/lib/libgobject-2.0.la /opt/Write2chordpro/lib/../lib/libffi.la /opt/Write2chordpro/lib/libglib-2.0.la -lpthread /opt/Write2chordpro/lib/libpng16.la -lz -lm'
+dependency_libs=' -L/home/drewshei/Programs/w2c/lib /home/drewshei/Programs/w2c/lib/libtiff.la -llzma /home/drewshei/Programs/w2c/lib/libjpeg.la /home/drewshei/Programs/w2c/lib/libgdk_pixbuf-2.0.la -L/usr/lib /home/drewshei/Programs/w2c/lib/libgio-2.0.la /home/drewshei/Programs/w2c/lib/libgmodule-2.0.la -ldl -lresolv /home/drewshei/Programs/w2c/lib/libgobject-2.0.la /home/drewshei/Programs/w2c/lib/../lib/libffi.la /home/drewshei/Programs/w2c/lib/libglib-2.0.la -lpthread /home/drewshei/Programs/w2c/lib/libpng16.la -lz -lm'
 
 # Names of additional weak libraries provided by this library
 weak_library_names=''
@@ -38,4 +38,4 @@ dlopen=''
 dlpreopen=''
 
 # Directory that this library needs to be installed in:
-libdir='/opt/Write2chordpro/lib/gdk-pixbuf-2.0/2.10.0/loaders'
+libdir='/home/drewshei/Programs/w2c/lib/gdk-pixbuf-2.0/2.10.0/loaders'

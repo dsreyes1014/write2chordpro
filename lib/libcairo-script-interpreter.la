@@ -17,7 +17,7 @@ old_library=''
 inherited_linker_flags=' -pthread'
 
 # Libraries that this one depends upon.
-dependency_libs=' -L/opt/Write2chordpro/lib /opt/Write2chordpro/lib/libcairo.la -L/usr/lib -lpthread /opt/Write2chordpro/lib/libpixman-1.la /opt/Write2chordpro/lib/libfontconfig.la /opt/Write2chordpro/lib/libexpat.la /opt/Write2chordpro/lib/libfreetype.la -lbz2 /opt/Write2chordpro/lib/libpng16.la -lxcb-shm -lxcb-render -lxcb -lXrender -lX11 -lXext -llzo2 -lz -lrt -lm'
+dependency_libs=' -L/home/drewshei/Programs/w2c/lib /home/drewshei/Programs/w2c/lib/libcairo.la -L/usr/lib -lpthread /home/drewshei/Programs/w2c/lib/libpixman-1.la /home/drewshei/Programs/w2c/lib/libfontconfig.la /home/drewshei/Programs/w2c/lib/libexpat.la /home/drewshei/Programs/w2c/lib/libfreetype.la -lbz2 /home/drewshei/Programs/w2c/lib/libpng16.la -lxcb-shm -lxcb-render -lxcb -lXrender -lX11 -lXext -llzo2 -lz -lrt -lm'
 
 # Names of additional weak libraries provided by this library
 weak_library_names=''
@@ -38,4 +38,4 @@ dlopen=''
 dlpreopen=''
 
 # Directory that this library needs to be installed in:
-libdir='/opt/Write2chordpro/lib'
+libdir='/home/drewshei/Programs/w2c/lib'
