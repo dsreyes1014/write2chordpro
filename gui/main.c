@@ -1,5 +1,5 @@
 // Author: Andrew Reyes.
-// Date Modified: 11-26-2013. 
+// Date Modified: 01/14/2014. 
 
 #include <gtk/gtk.h>
 #include <stdio.h>
@@ -11,6 +11,7 @@
 #include "editor.h"
 #include "display.h"
 
+/*********** Global Variables ************************************************/
 GtkWidget *window;
 
 GtkTreeSelection *selection;
@@ -25,8 +26,9 @@ extern GtkWidget *menu_bar,
                  *entry_title,                
                  *t_view_display;
                  
-extern GtkTextBuffer *t_buffer_editor;                
-/*****************************************************************************/
+extern GtkTextBuffer *t_buffer_editor;       
+         
+/******* 'close_window' function *********************************************/
 void close_window(GtkWidget *widget, gpointer data) 
 {
 	GtkEntryBuffer *buffer;	
@@ -48,7 +50,8 @@ void close_window(GtkWidget *widget, gpointer data)
 
 	gtk_main_quit();
 }
-/*****************************************************************************/
+
+/****** 'main' function ******************************************************/
 int main(int argc, char *argv[])
 {
 	GtkWidget *grid,
@@ -88,12 +91,12 @@ int main(int argc, char *argv[])
 	
 	song_list();	
 	
-	// Properties for 'frame1 & frame2' widgets.	
+	// Properties for 'frame_1 & frame_2' widgets.	
 	gtk_frame_set_shadow_type(GTK_FRAME(frame_1), GTK_SHADOW_ETCHED_IN);
 	gtk_frame_set_shadow_type(GTK_FRAME(frame_2), GTK_SHADOW_ETCHED_IN);
 	
-	// Packs 'treeView' widget into 'scrolledWindow' widget
-	// and 'scrolledWindow' widget  into 'frame' widget.
+	// Packs 'tree_view' widget into 'scrolled_window' widget
+	// and 'scrolled_window' widget  into 'frame' widget.
 	gtk_container_add(GTK_CONTAINER(scrolled_window_1), tree_view);	
 	gtk_container_add(GTK_CONTAINER(frame_1), scrolled_window_1);	
 	

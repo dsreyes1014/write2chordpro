@@ -10,6 +10,7 @@ void display(GtkTextBuffer *buffer, GtkWidget *t_view);
 //gint searchCharPos(gchar body[], gchar ch);
 //gint charCount(gchar body[], gchar ch);
 gint set_chord_position(GtkWidget *t_view, GtkTextBuffer *buffer);
+gint text_tags(GtkTextBuffer *buffer, const gchar *text);
 
 #endif
 
