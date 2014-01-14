@@ -7,59 +7,59 @@
 #include "display.h"
 #include "editor.h"
 
-gint lineNumC, lineCountC;
+gint line_num_C, line_count_C;
 
-extern GtkWidget *entryKey;
-extern GtkWidget *entryTitle;
-extern GtkWidget *entryArtist;
+extern GtkWidget *entry_key;
+extern GtkWidget *entry_title;
+extern GtkWidget *entry_artist;
 
-extern GtkTextBuffer *tBufferEditor;
+extern GtkTextBuffer *t_buffer_editor;
 //-----------------------------------------------------------------------------
-gint setChordPosition(GtkWidget *tView, GtkTextBuffer *buffer)
+gint set_chord_position(GtkWidget *t_view, GtkTextBuffer *buffer)
 {
 	GtkTextTag *tag;	
 
-	GtkTextMark *endChord;
-	GtkTextMark *startChord;	
+	GtkTextMark *end_chord;
+	GtkTextMark *start_chord;	
 
 	GtkTextIter ch;	
-	GtkTextIter chordS;
-	GtkTextIter chordE;
-	GtkTextIter matchEnd;
-	GtkTextIter matchStart;	
-	GtkTextIter startOfLine;
+	GtkTextIter chord_S;
+	GtkTextIter chord_E;
+	GtkTextIter match_end;
+	GtkTextIter match_start;	
+	GtkTextIter start_of_line;
 	
 	GtkClipboard *clipboard;
 		
-	gint lineNum1;
-	gint lineNum2;
-	gint lineCountV;	
-	gint lineOffset1;
-	gint lineOffset2;
+	gint line_num_1;
+	gint line_num_2;
+	gint line_count_V;	
+	gint line_offset_1;
+	gint line_offset_2;
 
-	lineCountV = gtk_text_buffer_get_line_count(buffer);
+	line_count_V = gtk_text_buffer_get_line_count(buffer);
 	clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);	
 	
-	gtk_text_buffer_get_start_iter(buffer, &startOfLine);
+	gtk_text_buffer_get_start_iter(buffer, &start_of_line);
 	
-	if(gtk_text_iter_forward_search(&startOfLine, "[", 1, 
-									&matchStart, &matchEnd, NULL))
+	if(gtk_text_iter_forward_search(&start_of_line, "[", 1, 
+									&match_start, &match_end, NULL))
 	{		
-		gtk_text_buffer_create_mark(buffer, "startChord", &matchStart, FALSE);
+		gtk_text_buffer_create_mark(buffer, "start_chord", &match_start, FALSE);
 		
-		startChord = gtk_text_buffer_get_mark(buffer, "startChord");
+		start_chord = gtk_text_buffer_get_mark(buffer, "start_chord");
 	}
 	else 
 	{
 		return -1;
 	}
 	
-	if(gtk_text_iter_forward_search(&startOfLine, "]", 1, 
-									&matchStart, &matchEnd, NULL))		
+	if(gtk_text_iter_forward_search(&start_of_line, "]", 1, 
+									&match_start, &match_end, NULL))		
 	{		
-		gtk_text_buffer_create_mark(buffer, "endChord", &matchEnd, FALSE);
+		gtk_text_buffer_create_mark(buffer, "end_chord", &match_end, FALSE);
 		
-		endChord = gtk_text_buffer_get_mark(buffer, "endChord");	
+		end_chord = gtk_text_buffer_get_mark(buffer, "end_chord");	
 	}	
 	else 
 	{
@@ -67,60 +67,60 @@ gint setChordPosition(GtkWidget *tView, GtkTextBuffer *buffer)
 	}
 
 	// Initializes iters at mark.
-	gtk_text_buffer_get_iter_at_mark(buffer, &chordS, startChord);
-	gtk_text_buffer_get_iter_at_mark(buffer, &chordE, endChord);
+	gtk_text_buffer_get_iter_at_mark(buffer, &chord_S, start_chord);
+	gtk_text_buffer_get_iter_at_mark(buffer, &chord_E, end_chord);
 	
 	// Get line and line offset of iter. If we just obtain the offset 
-	// within buffer then chords will not format as desired.
-	lineNum1 = gtk_text_iter_get_line(&chordS);
-	lineOffset1 = gtk_text_iter_get_line_index(&chordS);	
-	lineNum2 = gtk_text_iter_get_line(&chordE);
-	lineOffset2 = gtk_text_iter_get_line_index(&chordE);
+	// within buffer then chord_S will not format as desired.
+	line_num_1 = gtk_text_iter_get_line(&chord_S);
+	line_offset_1 = gtk_text_iter_get_line_index(&chord_S);	
+	line_num_2 = gtk_text_iter_get_line(&chord_E);
+	line_offset_2 = gtk_text_iter_get_line_index(&chord_E);
 	
 	// This returns with error if end bracket does not have a 
 	// matching start bracket.
-	if(lineOffset1 > lineOffset2)
+	if(line_offset_1 > line_offset_2)
 	{
 		return -1;	
 	}
 	
-	//g_print("Lineoffset of start:end bracket:\n%d\n%d\n", lineOffset1, lineOffset2);
+	//g_print("Lineoffset of start:end bracket:\n%d\n%d\n", line_offset_1, line_offset_2);
 		
 	// If chord found is found more than two lines down
-	// refresh global values of 'lineCountV' and lineNumC. 
-	if(lineNum1 > (lineNumC + 1))	
+	// refresh global values of 'line_count_V' and line_num_C. 
+	if(line_num_1 > (line_num_C + 1))	
 	{
-		lineNumC = lineNum1;
-		lineCountC = lineCountV;
+		line_num_C = line_num_1;
+		line_count_C = line_count_V;
 	}
 	
 	// Copy, cut, and add tags to the section between the marks.
-	gtk_text_buffer_select_range(buffer, &chordS, &chordE);
+	gtk_text_buffer_select_range(buffer, &chord_S, &chord_E);
 	tag = gtk_text_buffer_create_tag(buffer, NULL, "background", "gold",
 									 "weight", "500", 
 									 "foreground-gdk", "black3", NULL);
-	gtk_text_buffer_apply_tag(buffer, tag, &chordS, &chordE);
+	gtk_text_buffer_apply_tag(buffer, tag, &chord_S, &chord_E);
 	gtk_text_buffer_cut_clipboard(buffer, clipboard, TRUE);
 	
 	// This finds first chord of line.
-	if(lineCountV == lineCountC) 
+	if(line_count_V == line_count_C) 
 	{	
-		gtk_text_buffer_get_iter_at_line(buffer, &startOfLine, lineNum1);
-		gtk_text_buffer_insert(buffer, &startOfLine, "\n", -1);
+		gtk_text_buffer_get_iter_at_line(buffer, &start_of_line, line_num_1);
+		gtk_text_buffer_insert(buffer, &start_of_line, "\n", -1);
 	}
 
-	// This finds the rest of the chords on the same line as the first. 
-	if(lineNum1 == (lineNumC + 1))
+	// This finds the rest of the chord_S on the same line as the first. 
+	if(line_num_1 == (line_num_C + 1))
 	{
-		lineNum1 = lineNum1 - 1;		
-		lineNum2 = lineNum2 - 1;
+		line_num_1 = line_num_1 - 1;		
+		line_num_2 = line_num_2 - 1;
 	}
 
-	gtk_text_buffer_get_iter_at_line(buffer, &ch, lineNum1);
+	gtk_text_buffer_get_iter_at_line(buffer, &ch, line_num_1);
 	
-	// Insert 110 blank spaces so we can insert chords at higher offsets than 0.
+	// Insert 110 blank spaces so we can insert chord_S at higher offsets than 0.
 	// GtkTextBuffer does not allow us to insert past a newline character
-	// so we move it with spaces to allow us to place chords at offsets 
+	// so we move it with spaces to allow us to place chord_S at offsets 
 	// past a newline character.
 	if(gtk_text_iter_get_char(&ch) == '\n')
 	{	
@@ -130,31 +130,31 @@ gint setChordPosition(GtkWidget *tView, GtkTextBuffer *buffer)
 	}
 	
 	// Place iter at the same offset one line above.
-	gtk_text_buffer_get_iter_at_line_index(buffer, &ch, lineNum1, lineOffset1);
+	gtk_text_buffer_get_iter_at_line_index(buffer, &ch, line_num_1, line_offset_1);
 	
-	//g_print("Position after cut: %d\n", lineOffset1);
+	//g_print("Position after cut: %d\n", line_offset_1);
 	gtk_text_buffer_paste_clipboard(buffer, clipboard, &ch, TRUE);	
 	
-	gtk_text_buffer_get_iter_at_line_offset(buffer, &ch, lineNum1, lineOffset2);
+	gtk_text_buffer_get_iter_at_line_offset(buffer, &ch, line_num_1, line_offset_2);
 	// Deletes the end bracket.	
 	gtk_text_buffer_backspace(buffer, &ch, FALSE, TRUE);
-	gtk_text_buffer_get_iter_at_line_offset(buffer, &ch, lineNum1, lineOffset1 +1);
+	gtk_text_buffer_get_iter_at_line_offset(buffer, &ch, line_num_1, line_offset_1 +1);
 	// Deletes the start bracket. 	
 	gtk_text_buffer_backspace(buffer, &ch, FALSE, TRUE);
-	gtk_text_buffer_delete_mark_by_name(buffer, "startChord");
-	gtk_text_buffer_delete_mark_by_name(buffer, "endChord");
+	gtk_text_buffer_delete_mark_by_name(buffer, "start_chord");
+	gtk_text_buffer_delete_mark_by_name(buffer, "end_chord");
 	
 	return 0;
 }
 //-----------------------------------------------------------------------------
-void display(GtkTextBuffer *buffer, GtkWidget *tView)
+void display(GtkTextBuffer *buffer, GtkWidget *t_view)
 {		
 	GtkTextTag *tag;
 	
 	GtkTextIter end;
 	GtkTextIter start;
-	GtkTextIter matchEnd;
-	GtkTextIter matchStart;
+	GtkTextIter match_end;
+	GtkTextIter match_start;
 
 	gint i; 
 	
@@ -163,7 +163,7 @@ void display(GtkTextBuffer *buffer, GtkWidget *tView)
 	gchar *title;	
 	gchar *artist;
 	
-	const gchar *songSection[] = {"Verse:", "Verse 1", "Verse 2:",
+	const gchar *song_section[] = {"Verse:", "Verse 1", "Verse 2:",
 								  "Verse 3:","Bridge:", "Bridge 1:",
 								  "Bridge 2:", "Bridge 3:", "Intro:",
 								  "End:", "PreChorus:", "Verso:",
@@ -175,10 +175,10 @@ void display(GtkTextBuffer *buffer, GtkWidget *tView)
 	
 	gtk_text_buffer_delete(buffer, &start, &end);	
 	
-	gtk_text_view_set_editable(GTK_TEXT_VIEW(tView), FALSE);
+	gtk_text_view_set_editable(GTK_TEXT_VIEW(t_view), FALSE);
 //-----------------------------------------------------------------------------	
 	// Sets attributes for Title (line 0).	
-	title = gtk_editable_get_chars(GTK_EDITABLE(entryTitle), 0, -1);
+	title = gtk_editable_get_chars(GTK_EDITABLE(entry_title), 0, -1);
 	
 	gtk_text_buffer_get_iter_at_line(buffer, &start, 0);
 	
@@ -230,7 +230,7 @@ void display(GtkTextBuffer *buffer, GtkWidget *tView)
 	
 	gtk_text_buffer_apply_tag(buffer, tag, &start, &end);
 //-----------------------------------------------------------------------------			
-	artist = gtk_editable_get_chars(GTK_EDITABLE(entryArtist), 0, -1);	
+	artist = gtk_editable_get_chars(GTK_EDITABLE(entry_artist), 0, -1);	
 	
 	gtk_text_buffer_get_iter_at_line_offset(buffer, &start, 1, 8);
 	
@@ -280,7 +280,7 @@ void display(GtkTextBuffer *buffer, GtkWidget *tView)
 	
 	gtk_text_buffer_apply_tag(buffer, tag, &start, &end);
 //-----------------------------------------------------------------------------
-	key = gtk_editable_get_chars(GTK_EDITABLE(entryKey), 0, -1);
+	key = gtk_editable_get_chars(GTK_EDITABLE(entry_key), 0, -1);
 	
 	gtk_text_buffer_get_iter_at_line_offset(buffer, &start, 2, 5);
 	
@@ -311,10 +311,10 @@ void display(GtkTextBuffer *buffer, GtkWidget *tView)
 	// Have to insert '\n' to create next line
 	gtk_text_buffer_insert_at_cursor(buffer, "\n\n", -1);
 	
-	gtk_text_buffer_get_start_iter(tBufferEditor, &start);
-	gtk_text_buffer_get_end_iter(tBufferEditor, &end);	
+	gtk_text_buffer_get_start_iter(t_buffer_editor, &start);
+	gtk_text_buffer_get_end_iter(t_buffer_editor, &end);	
 	
-	body = gtk_text_buffer_get_text(tBufferEditor, &start, &end, FALSE);
+	body = gtk_text_buffer_get_text(t_buffer_editor, &start, &end, FALSE);
 	
 	gtk_text_buffer_get_iter_at_line(buffer, &start, 4);
 	
@@ -330,19 +330,19 @@ void display(GtkTextBuffer *buffer, GtkWidget *tView)
 	                                    
 	gtk_text_buffer_apply_tag(buffer, tag, &start, &end);	
 	
-	lineCountC = gtk_text_buffer_get_line_count(buffer);
+	line_count_C = gtk_text_buffer_get_line_count(buffer);
 	
 	gtk_text_buffer_get_start_iter(buffer, &start);	
 	
 	if(gtk_text_iter_forward_search(&start, "[", 1, 
-								 &matchStart, &matchEnd, NULL))
+								 &match_start, &match_end, NULL))
 	{								 
- 		lineNumC = gtk_text_iter_get_line(&matchStart);
+ 		line_num_C = gtk_text_iter_get_line(&match_start);
 	}
 
 	for(i = 0; i == 0;)
 	{
-		i = setChordPosition(tView, buffer);	
+		i = set_chord_position(t_view, buffer);	
 	}
 //-----------------------------------------------------------------------------			
 	// This section is for setting the attributes of the text
@@ -351,40 +351,40 @@ void display(GtkTextBuffer *buffer, GtkWidget *tView)
 	
 	for(i = 0; i < 14; i++)
 	{
-		if(gtk_text_iter_forward_search(&start, songSection[i],
+		if(gtk_text_iter_forward_search(&start, song_section[i],
 		                                GTK_TEXT_SEARCH_CASE_INSENSITIVE,
-										&matchStart, &matchEnd, NULL))
+										&match_start, &match_end, NULL))
 		{
 			tag = gtk_text_buffer_create_tag(buffer, NULL, 
 										     "font", "italic 12", 
 										     "weight", 650, NULL);
 
-			gtk_text_buffer_apply_tag(buffer, tag, &matchStart, &matchEnd);
+			gtk_text_buffer_apply_tag(buffer, tag, &match_start, &match_end);
 		}	
 	}		
 	
 	if(gtk_text_iter_forward_search(&start, "Chorus:", 
 	   								GTK_TEXT_SEARCH_CASE_INSENSITIVE,
-	   								&matchStart, &matchEnd, NULL))
+	   								&match_start, &match_end, NULL))
 	{
 		tag = gtk_text_buffer_create_tag(buffer, NULL, 
 										 "font", "italic 12", 
 										 "weight", 650, NULL);
 
-		gtk_text_buffer_apply_tag(buffer, tag, &matchStart, &matchEnd);			
+		gtk_text_buffer_apply_tag(buffer, tag, &match_start, &match_end);			
 	
-		gtk_text_iter_forward_search(&matchEnd, "Chorus:",
+		gtk_text_iter_forward_search(&match_end, "Chorus:",
 									 GTK_TEXT_SEARCH_CASE_INSENSITIVE,
-									 &matchStart, &matchEnd,
+									 &match_start, &match_end,
 									 NULL);
 									 
 		tag = gtk_text_buffer_create_tag(buffer, NULL, 
 									     "font", "italic 12", 
 									     "weight", 650, NULL);
 
-		gtk_text_buffer_apply_tag(buffer, tag, &matchStart, &matchEnd);			
+		gtk_text_buffer_apply_tag(buffer, tag, &match_start, &match_end);			
 	}
 //-----------------------------------------------------------------------------
-	//g_print("Function return: %d\n", setChordPosition(tView, buffer));
-	//g_print("Line number of chord: %d\n", lineNumC);*/	
+	//g_print("Function return: %d\n", set_chord_position(t_view, buffer));
+	//g_print("Line number of chord: %d\n", line_num_C);*/	
 }

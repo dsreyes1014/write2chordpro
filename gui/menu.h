@@ -5,8 +5,8 @@
 #define MENU_H
 
 // Prototypes.
-void fileMenuClicked(GtkMenuItem *item, gpointer data);
-void menuFunction(void);
+void file_menu_clicked(GtkMenuItem *item, gpointer data);
+void menu_function(void);
 
 #endif 
 

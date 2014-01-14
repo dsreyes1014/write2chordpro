@@ -12,40 +12,40 @@
 #include "transpose.h"
 #include "display.h"
 
-GtkWidget *button5,
-          *entryKey,
-          *entryGenre,
-          *entryTitle,
-          *entryArtist, 
-          *tViewEditor;
+GtkWidget *button_5,
+          *entry_key,
+          *entry_genre,
+          *entry_title,
+          *entry_artist, 
+          *t_view_editor;
  
-GtkEntryBuffer *entryBuffer;
+GtkEntryBuffer *entry_buffer;
 
-GtkTextBuffer *tBufferEditor;
+GtkTextBuffer *t_buffer_editor;
 
-const gchar *getKey,
-            *getTitle, 
-            *getGenre,
-            *getArtist;
+const gchar *get_key,
+            *get_title, 
+            *get_genre,
+            *get_artist;
             
 extern char directory[];
 
-extern GtkListStore *listStore;
+extern GtkListStore *list_store;
 
 extern GtkTreeSelection *selection;
 
-extern GtkWidget *treeView, 
-                 *tViewDisplay;
+extern GtkWidget *tree_view, 
+                 *t_view_display;
                  
-extern GtkTextBuffer *tBufferDisplay;
+extern GtkTextBuffer *t_buffer_display;
 
-extern gchar songPath[];
+extern gchar song_path[];
 /*****************************************************************************/
-gint setText(gchar *text, gchar *filePath, gint pos)
+gint set_text(gchar *text, gchar *file_path, gint pos)
 {
 	FILE *fp;
 	
-	if((fp = fopen(filePath, "r")) == NULL)
+	if((fp = fopen(file_path, "r")) == NULL)
 	{
 		g_print("Error. No such file exists.\n");
 		
@@ -64,7 +64,7 @@ gint setText(gchar *text, gchar *filePath, gint pos)
 /*****************************************************************************/
 // Grabs text starting from 'pos' to 'EOF' and outputs text to 'text'.
 // Returns char count through to 'i'. 
-gint getChars(gchar *text, gchar *filePath, gint pos)
+gint get_chars(gchar *text, gchar *file_path, gint pos)
 {
 	gint i;
 	
@@ -72,7 +72,7 @@ gint getChars(gchar *text, gchar *filePath, gint pos)
 		
 	FILE *fp;	
 	
-	if((fp = fopen(filePath, "r")) == NULL)
+	if((fp = fopen(file_path, "r")) == NULL)
 	{
 		g_print("No such file or directory\n");
 		
@@ -95,16 +95,16 @@ gint getChars(gchar *text, gchar *filePath, gint pos)
 	}
 }	
 /*****************************************************************************/
-gint getLineCharCount(gchar line[][COLUMN_N], gint lineNum)
+gint get_line_char_count(gchar line[][COLUMN_N], gint line_num)
 {
-	gint charCount;
+	gint char_count;
 	
-	charCount = strlen(line[lineNum]);
+	char_count = strlen(line[line_num]);
 	
-	return charCount;
+	return char_count;
 }
 /*****************************************************************************/
-gint getTextForEachLine(gchar lines[][COLUMN_N], gint lineNum)
+gint get_text_for_each_line(gchar lines[][COLUMN_N], gint line_num)
 {
 	gint i;
 	
@@ -112,7 +112,7 @@ gint getTextForEachLine(gchar lines[][COLUMN_N], gint lineNum)
 	
 	// This will read each line for 
 	// future text manipulation.
-	if((fp = fopen(songPath, "r")) == NULL)            
+	if((fp = fopen(song_path, "r")) == NULL)            
 	{														
 		g_print("Error\n");
 		
@@ -120,7 +120,7 @@ gint getTextForEachLine(gchar lines[][COLUMN_N], gint lineNum)
 	}														 
 	else 													
 	{														 
-		for(i = 0; i < lineNum; i++)						
+		for(i = 0; i < line_num; i++)						
 		{													
 			fgets(lines[i], COLUMN_N, fp);							
 		}
@@ -131,13 +131,13 @@ gint getTextForEachLine(gchar lines[][COLUMN_N], gint lineNum)
 	return 0;
 }
 /*****************************************************************************/
-gint getLineCount(gchar *filePath)
+gint get_line_count(gchar *file_path)
 {
 	gchar ch;	
-	gint lineCount;	
+	gint line_count;	
 	FILE *fp;
 	
-	if((fp = fopen(filePath, "r")) == NULL)				
+	if((fp = fopen(file_path, "r")) == NULL)				
 	{													 
 		g_print("Error\n");
 		
@@ -145,20 +145,20 @@ gint getLineCount(gchar *filePath)
 	}                                                   
 	else  											
 	{													
-		lineCount = 0;									
+		line_count = 0;									
 		
 		while((ch = fgetc(fp)) != EOF)					 
 		{														
 			if(ch == '\n')										
 			{													
-				lineCount++;									
+				line_count++;									
 			}													
 		}
 																		
 		fclose(fp);		
 	}
 
-	return lineCount;
+	return line_count;
 }
 /*****************************************************************************/
 void save(GtkWidget *widget, gpointer data)
@@ -168,245 +168,245 @@ void save(GtkWidget *widget, gpointer data)
 	            	
 	gchar *body;
 	
-	char newFile[45];
+	char new_file[45];
 	
 	FILE *fp;		
 	
-	gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(tBufferEditor), &start);
-	gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(tBufferEditor), &end);	
+	gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(t_buffer_editor), &start);
+	gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(t_buffer_editor), &end);	
 	
-	getTitle = gtk_entry_get_text(GTK_ENTRY(entryTitle));
-	getArtist = gtk_entry_get_text(GTK_ENTRY(entryArtist));
-	getGenre = gtk_entry_get_text(GTK_ENTRY(entryGenre));
-	getKey = gtk_entry_get_text(GTK_ENTRY(entryKey));	
-	body = gtk_text_buffer_get_text(GTK_TEXT_BUFFER(tBufferEditor), &start, &end, TRUE);
+	get_title = gtk_entry_get_text(GTK_ENTRY(entry_title));
+	get_artist = gtk_entry_get_text(GTK_ENTRY(entry_artist));
+	get_genre = gtk_entry_get_text(GTK_ENTRY(entry_genre));
+	get_key = gtk_entry_get_text(GTK_ENTRY(entry_key));	
+	body = gtk_text_buffer_get_text(GTK_TEXT_BUFFER(t_buffer_editor), &start, &end, TRUE);
 	
-	sprintf(newFile, "%s%s.chordpro", directory, getTitle);
+	sprintf(new_file, "%s%s.chordpro", directory, get_title);
 	
-	fp = fopen(newFile, "w+");
+	fp = fopen(new_file, "w+");
 		
-	fprintf(fp, "{title: %s}\n", getTitle);
-	fprintf(fp, "{subtitle: %s}\n", getArtist);
-	fprintf(fp, "{tags: %s}\n", getGenre);
-	fprintf(fp, "{key: %s}\n\n", getKey);
+	fprintf(fp, "{title: %s}\n", get_title);
+	fprintf(fp, "{subtitle: %s}\n", get_artist);
+	fprintf(fp, "{tags: %s}\n", get_genre);
+	fprintf(fp, "{key: %s}\n\n", get_key);
 	fprintf(fp, "%s", body);
 	
 	fclose(fp);
 	
 	g_free(body);	
 	
-	//gtk_tree_view_set_model(GTK_TREE_VIEW(treeView), NULL);
-	//listStore = gtk_list_store_new(1, G_TYPE_STRING);
-	//gtk_tree_view_set_model(GTK_TREE_VIEW(treeView), GTK_TREE_MODEL(listStore));
-	//g_object_unref(listStore);
+	//gtk_tree_view_set_model(GTK_TREE_VIEW(tree_view), NULL);
+	//list_store = gtk_list_store_new(1, G_TYPE_STRING);
+	//gtk_tree_view_set_model(GTK_TREE_VIEW(tree_view), GTK_TREE_MODEL(list_store));
+	//g_object_unref(list_store);
 	
-	// Have to clear 'listStore' to show newly added songs.
-	gtk_list_store_clear(listStore);
+	// Have to clear 'list_store' to show newly added songs.
+	gtk_list_store_clear(list_store);
 	
-	listFiles();	
+	list_files();	
 	
-	gtk_text_buffer_set_modified(tBufferEditor, FALSE);
+	gtk_text_buffer_set_modified(t_buffer_editor, FALSE);
 	
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button5), FALSE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button_5), FALSE);
 	
 	
 }
 /*****************************************************************************/
-void newSong(GtkWidget *widget, gpointer button)
+void new_song(GtkWidget *widget, gpointer button)
 {
 	GtkTextIter start, end;	
 	
 	// Unselects all in 'songList' so it will not appear in song editor.	
 	//gtk_tree_selection_unselect_all(GTK_TREE_SELECTION(selection));	
 	
-	if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button5)) == TRUE)
+	if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button_5)) == TRUE)
 	{
-		entryBuffer = gtk_entry_get_buffer(GTK_ENTRY(entryTitle));
+		entry_buffer = gtk_entry_get_buffer(GTK_ENTRY(entry_title));
 	
-		gtk_entry_buffer_delete_text(GTK_ENTRY_BUFFER(entryBuffer), 0, -1);
+		gtk_entry_buffer_delete_text(GTK_ENTRY_BUFFER(entry_buffer), 0, -1);
 
-		entryBuffer = gtk_entry_get_buffer(GTK_ENTRY(entryArtist));
+		entry_buffer = gtk_entry_get_buffer(GTK_ENTRY(entry_artist));
 	
-		gtk_entry_buffer_delete_text(GTK_ENTRY_BUFFER(entryBuffer), 0, -1);
+		gtk_entry_buffer_delete_text(GTK_ENTRY_BUFFER(entry_buffer), 0, -1);
 	
-		entryBuffer = gtk_entry_get_buffer(GTK_ENTRY(entryGenre));
+		entry_buffer = gtk_entry_get_buffer(GTK_ENTRY(entry_genre));
 	
-		gtk_entry_buffer_delete_text(GTK_ENTRY_BUFFER(entryBuffer), 0, -1);
+		gtk_entry_buffer_delete_text(GTK_ENTRY_BUFFER(entry_buffer), 0, -1);
 	
-		entryBuffer = gtk_entry_get_buffer(GTK_ENTRY(entryKey));
+		entry_buffer = gtk_entry_get_buffer(GTK_ENTRY(entry_key));
 	
-		gtk_entry_buffer_delete_text(GTK_ENTRY_BUFFER(entryBuffer), 0, -1);
+		gtk_entry_buffer_delete_text(GTK_ENTRY_BUFFER(entry_buffer), 0, -1);
 	
-		gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(tBufferEditor), &start);
-		gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(tBufferEditor), &end);
+		gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(t_buffer_editor), &start);
+		gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(t_buffer_editor), &end);
 	
-		gtk_text_buffer_delete(GTK_TEXT_BUFFER(tBufferEditor), &start, &end);
+		gtk_text_buffer_delete(GTK_TEXT_BUFFER(t_buffer_editor), &start, &end);
 	
 		//gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
 	}	
 }
 /*****************************************************************************/
-void editSong(GtkToggleButton *button, gpointer data)
+void edit_song(GtkToggleButton *button, gpointer data)
 {
 	if(gtk_toggle_button_get_active(button) == TRUE)
 	{
-		gtk_editable_set_editable(GTK_EDITABLE(entryTitle), TRUE);
+		gtk_editable_set_editable(GTK_EDITABLE(entry_title), TRUE);
 	
-		gtk_editable_set_editable(GTK_EDITABLE(entryArtist), TRUE);
+		gtk_editable_set_editable(GTK_EDITABLE(entry_artist), TRUE);
 		
-		gtk_editable_set_editable(GTK_EDITABLE(entryGenre), TRUE);
+		gtk_editable_set_editable(GTK_EDITABLE(entry_genre), TRUE);
 		
-		gtk_editable_set_editable(GTK_EDITABLE(entryKey), TRUE);
+		gtk_editable_set_editable(GTK_EDITABLE(entry_key), TRUE);
 	
-		gtk_text_view_set_editable(GTK_TEXT_VIEW(tViewEditor), TRUE);
+		gtk_text_view_set_editable(GTK_TEXT_VIEW(t_view_editor), TRUE);
 	}
 	else 
 	{
-		gtk_editable_set_editable(GTK_EDITABLE(entryTitle), FALSE);
+		gtk_editable_set_editable(GTK_EDITABLE(entry_title), FALSE);
 	
-		gtk_editable_set_editable(GTK_EDITABLE(entryArtist), FALSE);
+		gtk_editable_set_editable(GTK_EDITABLE(entry_artist), FALSE);
 		
-		gtk_editable_set_editable(GTK_EDITABLE(entryGenre), FALSE);
+		gtk_editable_set_editable(GTK_EDITABLE(entry_genre), FALSE);
 		
-		gtk_editable_set_editable(GTK_EDITABLE(entryKey), FALSE);
+		gtk_editable_set_editable(GTK_EDITABLE(entry_key), FALSE);
 	
-		gtk_text_view_set_editable(GTK_TEXT_VIEW(tViewEditor), FALSE);
+		gtk_text_view_set_editable(GTK_TEXT_VIEW(t_view_editor), FALSE);
 	}
 }
 /*****************************************************************************/
 void editor(GtkWidget *grid, GtkWidget *window)
 {
 	GtkWidget *frame,
-	          *boxTop,
-	          *label1,
-	          *label2,
-	          *label3,
-	          *label4,
-	          *label5,	
-	          *button1,
-	          *button2, 
-	          *button3,
-	          *button4,  
-	          *button6,
-	          *boxMiddle,
-	          *boxBottom,
-	          *arrowLeft,
-	          *arrowRight,
-	          *scrolledWindow;
+	          *box_top,
+	          *label_1,
+	          *label_2,
+	          *label_3,
+	          *label_4,
+	          *label_5,	
+	          *button_1,
+	          *button_2, 
+	          *button_3,
+	          *button_4,  
+	          *button_6,
+	          *box_middle,
+	          *box_bottom,
+	          *arrow_left,
+	          *arrow_right,
+	          *scrolled_window;
 	
 	//GtkTextIter end,
 	            //start;
 			    		
 	frame = gtk_frame_new(NULL);	
-	entryKey = gtk_entry_new();
-	entryTitle = gtk_entry_new();
-	entryGenre = gtk_entry_new();
-	entryArtist = gtk_entry_new();		
-	label1 = gtk_label_new("Title:");
-	label2 = gtk_label_new("Artist:");
-	label3 = gtk_label_new("Genre:");	
-	label4 = gtk_label_new("Key:");
-	label5 = gtk_label_new("Transpose");
-	tViewEditor = gtk_text_view_new();
+	entry_key = gtk_entry_new();
+	entry_title = gtk_entry_new();
+	entry_genre = gtk_entry_new();
+	entry_artist = gtk_entry_new();		
+	label_1 = gtk_label_new("Title:");
+	label_2 = gtk_label_new("Artist:");
+	label_3 = gtk_label_new("Genre:");	
+	label_4 = gtk_label_new("Key:");
+	label_5 = gtk_label_new("Transpose");
+	t_view_editor = gtk_text_view_new();
 	//accelChord = gtk_accel_group_new();	
-	button1 = gtk_button_new_with_mnemonic("_Insert Chord");
-	button2 = gtk_button_new();
-	button6 = gtk_button_new();
-	button3 = gtk_button_new_with_label("Add New");
-	button4 = gtk_button_new_with_label("Save");
-	button5 = gtk_toggle_button_new_with_label("Edit");
-	boxTop = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
-	boxMiddle = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
-	boxBottom = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
-	scrolledWindow = gtk_scrolled_window_new(NULL, NULL);
-	arrowLeft = gtk_arrow_new(GTK_ARROW_LEFT, GTK_SHADOW_ETCHED_IN);
-	arrowRight = gtk_arrow_new(GTK_ARROW_RIGHT, GTK_SHADOW_ETCHED_IN);	
-	tBufferEditor = gtk_text_view_get_buffer(GTK_TEXT_VIEW(tViewEditor));
+	button_1 = gtk_button_new_with_mnemonic("_Insert Chord");
+	button_2 = gtk_button_new();
+	button_6 = gtk_button_new();
+	button_3 = gtk_button_new_with_label("Add New");
+	button_4 = gtk_button_new_with_label("Save");
+	button_5 = gtk_toggle_button_new_with_label("Edit");
+	box_top = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
+	box_middle = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
+	box_bottom = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
+	scrolled_window = gtk_scrolled_window_new(NULL, NULL);
+	arrow_left = gtk_arrow_new(GTK_ARROW_LEFT, GTK_SHADOW_ETCHED_IN);
+	arrow_right = gtk_arrow_new(GTK_ARROW_RIGHT, GTK_SHADOW_ETCHED_IN);	
+	t_buffer_editor = gtk_text_view_get_buffer(GTK_TEXT_VIEW(t_view_editor));
 	
-	gtk_editable_set_editable(GTK_EDITABLE(entryKey), FALSE);
-	gtk_editable_set_editable(GTK_EDITABLE(entryGenre), FALSE);
-	gtk_editable_set_editable(GTK_EDITABLE(entryTitle), FALSE);
-	gtk_editable_set_editable(GTK_EDITABLE(entryArtist), FALSE);
-	gtk_text_view_set_editable(GTK_TEXT_VIEW(tViewEditor), FALSE);		
+	gtk_editable_set_editable(GTK_EDITABLE(entry_key), FALSE);
+	gtk_editable_set_editable(GTK_EDITABLE(entry_genre), FALSE);
+	gtk_editable_set_editable(GTK_EDITABLE(entry_title), FALSE);
+	gtk_editable_set_editable(GTK_EDITABLE(entry_artist), FALSE);
+	gtk_text_view_set_editable(GTK_TEXT_VIEW(t_view_editor), FALSE);		
 	
 	
-	gtk_entry_set_placeholder_text(GTK_ENTRY(entryKey), 
+	gtk_entry_set_placeholder_text(GTK_ENTRY(entry_key), 
 	                               "Key");
-	gtk_entry_set_placeholder_text(GTK_ENTRY(entryGenre), 
+	gtk_entry_set_placeholder_text(GTK_ENTRY(entry_genre), 
 	                               "Enter genre");
-	gtk_entry_set_placeholder_text(GTK_ENTRY(entryTitle), 
+	gtk_entry_set_placeholder_text(GTK_ENTRY(entry_title), 
 	                               "Enter title");
-	gtk_entry_set_placeholder_text(GTK_ENTRY(entryArtist), 
+	gtk_entry_set_placeholder_text(GTK_ENTRY(entry_artist), 
 	                               "Enter artist");
 //-----------------------------------------------------------------------------	
 	// Sets cursor to visible. I think it's set by default 
 	// but adding it to make sure.
-	gtk_text_view_set_cursor_visible(GTK_TEXT_VIEW(tViewEditor), TRUE);
+	gtk_text_view_set_cursor_visible(GTK_TEXT_VIEW(t_view_editor), TRUE);
 //-----------------------------------------------------------------------------
 	// Properties for 'frame' widget.	
 	gtk_frame_set_shadow_type(GTK_FRAME(frame), GTK_SHADOW_ETCHED_IN);		
 //-----------------------------------------------------------------------------	
-	// Packs 'button3' & 'button4' into 'boxTop'.
-	gtk_box_pack_start(GTK_BOX(boxTop), button3, FALSE, TRUE, 2);
-	gtk_box_pack_start(GTK_BOX(boxTop), button5, FALSE, TRUE, 2);
-	gtk_box_pack_start(GTK_BOX(boxTop), button4, FALSE, TRUE, 2); 
+	// Packs 'button_3' & 'button_4' into 'box_top'.
+	gtk_box_pack_start(GTK_BOX(box_top), button_3, FALSE, TRUE, 2);
+	gtk_box_pack_start(GTK_BOX(box_top), button_5, FALSE, TRUE, 2);
+	gtk_box_pack_start(GTK_BOX(box_top), button_4, FALSE, TRUE, 2); 
 //-----------------------------------------------------------------------------	
 	// Buttonbox setup and packing.	
-	gtk_container_add(GTK_CONTAINER(button2), arrowRight);
-	gtk_container_add(GTK_CONTAINER(button6), arrowLeft);	
+	gtk_container_add(GTK_CONTAINER(button_2), arrow_right);
+	gtk_container_add(GTK_CONTAINER(button_6), arrow_left);	
 		                          
-	gtk_widget_set_tooltip_text(GTK_WIDGET(button6), "-1/2 step");
-	gtk_widget_set_tooltip_text(GTK_WIDGET(button2), "+1/2 step");	
+	gtk_widget_set_tooltip_text(GTK_WIDGET(button_6), "-1/2 step");
+	gtk_widget_set_tooltip_text(GTK_WIDGET(button_2), "+1/2 step");	
 	
-	gtk_button_box_set_layout(GTK_BUTTON_BOX(boxBottom), 
+	gtk_button_box_set_layout(GTK_BUTTON_BOX(box_bottom), 
 	                          GTK_BUTTONBOX_CENTER);	
 	
-	gtk_container_add(GTK_CONTAINER(boxBottom), button6);
-	gtk_container_add(GTK_CONTAINER(boxBottom), button2);	
+	gtk_container_add(GTK_CONTAINER(box_bottom), button_6);
+	gtk_container_add(GTK_CONTAINER(box_bottom), button_2);	
 
-	gtk_button_box_set_child_non_homogeneous(GTK_BUTTON_BOX(boxBottom),
-	                                         GTK_WIDGET(button6), TRUE);
-	gtk_button_box_set_child_non_homogeneous(GTK_BUTTON_BOX(boxBottom),
-	                                         GTK_WIDGET(button2), TRUE);
+	gtk_button_box_set_child_non_homogeneous(GTK_BUTTON_BOX(box_bottom),
+	                                         GTK_WIDGET(button_6), TRUE);
+	gtk_button_box_set_child_non_homogeneous(GTK_BUTTON_BOX(box_bottom),
+	                                         GTK_WIDGET(button_2), TRUE);
 //-----------------------------------------------------------------------------
-	// Packs 'button1' & 'button2' widgets into 'boxBottom' widget.
-	gtk_box_pack_start(GTK_BOX(boxMiddle), label5, FALSE, TRUE, 2); 
-	gtk_box_pack_start(GTK_BOX(boxMiddle), boxBottom, FALSE, TRUE, 2);
-	gtk_box_pack_start(GTK_BOX(boxMiddle), button1, FALSE, TRUE, 2);
+	// Packs 'button_1' & 'button_2' widgets into 'box_bottom' widget.
+	gtk_box_pack_start(GTK_BOX(box_middle), label_5, FALSE, TRUE, 2); 
+	gtk_box_pack_start(GTK_BOX(box_middle), box_bottom, FALSE, TRUE, 2);
+	gtk_box_pack_start(GTK_BOX(box_middle), button_1, FALSE, TRUE, 2);
 	
-	// Packs 'textView' widget inside of 'scrolledWindow' widget.	
-	gtk_container_add(GTK_CONTAINER(scrolledWindow), tViewEditor);
+	// Packs 'textView' widget inside of 'scrolled_window' widget.	
+	gtk_container_add(GTK_CONTAINER(scrolled_window), t_view_editor);
 	
-	// Packs 'scrolledWindow' widget into 'frame2' widget.
-	gtk_container_add(GTK_CONTAINER(frame), scrolledWindow);
+	// Packs 'scrolled_window' widget into 'frame2' widget.
+	gtk_container_add(GTK_CONTAINER(frame), scrolled_window);
 	
 	// Adds accelChord to toplevel window.
 	//gtk_window_add_accel_group(GTK_WINDOW(window), accelChord);
 	
-	//gtk_widget_add_accelerator(button1, "clicked", accelChord, GDK_KEY_i, 
+	//gtk_widget_add_accelerator(button_1, "clicked", accelChord, GDK_KEY_i, 
 	                           //GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
 //-----------------------------------------------------------------------------    
     // Attaches widgets to widget grid.	
-	gtk_grid_attach(GTK_GRID(grid), label1, 3, 1, 1, 1);
-	gtk_grid_attach(GTK_GRID(grid), label2, 3, 2, 1, 1);	
-	gtk_grid_attach_next_to(GTK_GRID(grid), entryTitle, label1, GTK_POS_RIGHT, 100, 1);
-	gtk_grid_attach_next_to(GTK_GRID(grid), entryArtist, label2, GTK_POS_RIGHT, 100, 1);
-	gtk_grid_attach(GTK_GRID(grid), label3, 115, 1, 1, 1);
-	gtk_grid_attach_next_to(GTK_GRID(grid), entryGenre, label3, GTK_POS_RIGHT, 1, 1);
-	gtk_grid_attach_next_to(GTK_GRID(grid), label4, label3, GTK_POS_BOTTOM, 1, 1);
-	gtk_grid_attach_next_to(GTK_GRID(grid), entryKey, label4, GTK_POS_RIGHT, 1, 1);
+	gtk_grid_attach(GTK_GRID(grid), label_1, 3, 1, 1, 1);
+	gtk_grid_attach(GTK_GRID(grid), label_2, 3, 2, 1, 1);	
+	gtk_grid_attach_next_to(GTK_GRID(grid), entry_title, label_1, GTK_POS_RIGHT, 100, 1);
+	gtk_grid_attach_next_to(GTK_GRID(grid), entry_artist, label_2, GTK_POS_RIGHT, 100, 1);
+	gtk_grid_attach(GTK_GRID(grid), label_3, 115, 1, 1, 1);
+	gtk_grid_attach_next_to(GTK_GRID(grid), entry_genre, label_3, GTK_POS_RIGHT, 1, 1);
+	gtk_grid_attach_next_to(GTK_GRID(grid), label_4, label_3, GTK_POS_BOTTOM, 1, 1);
+	gtk_grid_attach_next_to(GTK_GRID(grid), entry_key, label_4, GTK_POS_RIGHT, 1, 1);
 	gtk_grid_attach(GTK_GRID(grid), frame, 0, 3, 150, 175);
-	gtk_grid_attach_next_to(GTK_GRID(grid), boxTop, frame, GTK_POS_RIGHT, 1, 50);
-	gtk_grid_attach_next_to(GTK_GRID(grid), boxMiddle, boxTop, GTK_POS_BOTTOM, 1, 1);
+	gtk_grid_attach_next_to(GTK_GRID(grid), box_top, frame, GTK_POS_RIGHT, 1, 50);
+	gtk_grid_attach_next_to(GTK_GRID(grid), box_middle, box_top, GTK_POS_BOTTOM, 1, 1);
 	
 	// Sets row & column spacing between widgets inside 'grid' widget.
 	gtk_grid_set_row_spacing(GTK_GRID(grid), 3);
 	gtk_grid_set_column_spacing(GTK_GRID(grid), 3);	
 //-----------------------------------------------------------------------------
-	g_signal_connect(button5, "toggled", G_CALLBACK(editSong), NULL);	
-	g_signal_connect(button1, "clicked", G_CALLBACK(insertChord), NULL);
-	g_signal_connect(button4, "clicked", G_CALLBACK(save), NULL);
-	g_signal_connect(button3, "clicked", G_CALLBACK(newSong), button5);	
-	g_signal_connect(button2, "clicked", G_CALLBACK(transposeUp), button5);
-	g_signal_connect(button6, "clicked", G_CALLBACK(transposeDown), button5);	
+	g_signal_connect(button_5, "toggled", G_CALLBACK(edit_song), NULL);	
+	g_signal_connect(button_1, "clicked", G_CALLBACK(insert_chord), NULL);
+	g_signal_connect(button_4, "clicked", G_CALLBACK(save), NULL);
+	g_signal_connect(button_3, "clicked", G_CALLBACK(new_song), button_5);	
+	g_signal_connect(button_2, "clicked", G_CALLBACK(transpose_up), button_5);
+	g_signal_connect(button_6, "clicked", G_CALLBACK(transpose_down), button_5);	
 }

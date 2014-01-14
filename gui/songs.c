@@ -12,12 +12,12 @@
 #include "editor.h"
 #include "display.h"
 /*****************************************************************************/
-GtkWidget *treeView,
-          *tViewDisplay;
+GtkWidget *tree_view,
+          *t_view_display;
           
-GtkTextBuffer *tBufferDisplay;
+GtkTextBuffer *t_buffer_display;
 
-GtkListStore *listStore;
+GtkListStore *list_store;
 
 GtkTreeSelection *selection;
 
@@ -25,196 +25,196 @@ GtkTreeModel *model;
 
 GtkTreeViewColumn *column;
 
-GtkTextBuffer *tBufferDisplay;
+GtkTextBuffer *t_buffer_display;
 
 GtkTreeIter iter;
 
 gchar song[50],
       directory[75], 
-      songPath[100], 
-      displayBody[2000];
+      song_path[100], 
+      display_body[2000];
       
-const gchar *titleDisplay;
+const gchar *title_display;
 
-extern GtkWidget *entryTitle, 
-                 *entryArtist, 
-                 *entryKey, 
-                 *entryGenre,
-				 *tViewEditor, 
-				 *button5,
+extern GtkWidget *entry_title, 
+                 *entry_artist, 
+                 *entry_key, 
+                 *entry_genre,
+				 *t_view_editor, 
+				 *button_5,
 				 *window;
 				 
-extern GtkTextBuffer *tBufferEditor;
+extern GtkTextBuffer *t_buffer_editor;
 /*****************************************************************************/
-void saveDialog(void)
+void save_dialog(void)
 {
-	GtkWidget *messageWindow;
+	GtkWidget *message_window;
 	
 	gint run;
 	
-	messageWindow = gtk_message_dialog_new(NULL,
+	message_window = gtk_message_dialog_new(NULL,
 	                                       GTK_DIALOG_MODAL, 
 	                                       GTK_MESSAGE_QUESTION,
 	                                       GTK_BUTTONS_NONE,
 	                                       "Do you want to save changes?"
 	                                       );
 	
-	gtk_dialog_add_button(GTK_DIALOG(messageWindow), "No", 1);	
+	gtk_dialog_add_button(GTK_DIALOG(message_window), "No", 1);	
 	
-	gtk_dialog_add_button(GTK_DIALOG(messageWindow), "Yes", 2);
+	gtk_dialog_add_button(GTK_DIALOG(message_window), "Yes", 2);
 	
-	run = gtk_dialog_run(GTK_DIALOG(messageWindow));
+	run = gtk_dialog_run(GTK_DIALOG(message_window));
 	
 	if(run == 2)
 	{
-		save(messageWindow, NULL);	
+		save(message_window, NULL);	
 		
-		gtk_widget_destroy(messageWindow);
+		gtk_widget_destroy(message_window);
 	}
 	else 
 	{                            
-		gtk_widget_destroy(messageWindow);	                     
+		gtk_widget_destroy(message_window);	                     
 	}
 }
 /*****************************************************************************/
-void createDir(void)
+void create_dir(void)
 {
 	gchar user[30];
 	
-	gchar *userVariable; 
-	gchar *homeDir; 
-	gchar *programDir; 
+	gchar *user_variable; 
+	gchar *home_dir; 
+	gchar *program_dir; 
 	
-	userVariable = "USER";
-	homeDir = "home";
-	programDir = "W2C";
+	user_variable = "USER";
+	home_dir = "home";
+	program_dir = "W2C";
 	
 	// Checks environment's user variable. 
-	sprintf(user, "%s", getenv(userVariable));
+	sprintf(user, "%s", getenv(user_variable));
 	
 	// Prints out program directory for directory creation.
-	sprintf(directory, "/%s/%s/%s/", homeDir, user, programDir);
+	sprintf(directory, "/%s/%s/%s/", home_dir, user, program_dir);
 
 	// Creates directory.
 	mkdir(directory, S_IRWXU);
 }
 /*****************************************************************************/
-void modifiedEntry(void)
+void modified_entry(void)
 {	
-	display(tBufferDisplay, tViewDisplay);
+	display(t_buffer_display, t_view_display);
 }
 /*****************************************************************************/
-void modifiedBuffer(GtkTextBuffer *buffer, gpointer data)
+void modified_buffer(GtkTextBuffer *buffer, gpointer data)
 {	
-	display(tBufferDisplay, tViewDisplay);
+	display(t_buffer_display, t_view_display);
 }
 /*****************************************************************************/
-void activateRow(GtkTreeView *treeView, gpointer data)
+void activate_row(GtkTreeView *tree_view, gpointer data)
 {
 	GtkEntryBuffer *buffer;	
 		
 	gint title;
 	
-	gboolean check1,
-	         check2;
+	gboolean check_1,
+	         check_2;
 	
-	buffer = gtk_entry_get_buffer(GTK_ENTRY(entryTitle));	
-	check1 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button5));
-	check2 = gtk_text_buffer_get_modified(tBufferEditor);
+	buffer = gtk_entry_get_buffer(GTK_ENTRY(entry_title));	
+	check_1 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button_5));
+	check_2 = gtk_text_buffer_get_modified(t_buffer_editor);
 	title = gtk_entry_buffer_get_length(buffer);
 	
-	if((check1 == TRUE) && (title != 0) && (check2 == TRUE))
+	if((check_1 == TRUE) && (title != 0) && (check_2 == TRUE))
 	{
-		saveDialog();	
+		save_dialog();	
 	}
 
-	gint i, n,  line1, line2, line3, line4;
+	gint i, n,  line_1, line_2, line_3, line_4;
 	
 	gchar chars[2000];	
 	
 	n = 0;
 	
-	n = getLineCount(songPath);
+	n = get_line_count(song_path);
 		
 	gchar text[n][COLUMN_N];
 	
-	getTextForEachLine(text, n);
+	get_text_for_each_line(text, n);
 		
-	line1 = getLineCharCount(text, 0);
-	line2 = getLineCharCount(text, 1);
-	line3 = getLineCharCount(text, 2);
-	line4 = getLineCharCount(text, 3);
+	line_1 = get_line_char_count(text, 0);
+	line_2 = get_line_char_count(text, 1);
+	line_3 = get_line_char_count(text, 2);
+	line_4 = get_line_char_count(text, 3);
 	
 	// Sets title entry.	
-	setText(chars, songPath, 8);
-	gtk_entry_set_text(GTK_ENTRY(entryTitle), chars);
-	gtk_editable_set_editable(GTK_EDITABLE(entryTitle), FALSE);
+	set_text(chars, song_path, 8);
+	gtk_entry_set_text(GTK_ENTRY(entry_title), chars);
+	gtk_editable_set_editable(GTK_EDITABLE(entry_title), FALSE);
 	
 	// Sets artist entry.	
-	setText(chars, songPath, line1 + 11);
-	gtk_entry_set_text(GTK_ENTRY(entryArtist), chars);
-	gtk_editable_set_editable(GTK_EDITABLE(entryArtist), FALSE);
+	set_text(chars, song_path, line_1 + 11);
+	gtk_entry_set_text(GTK_ENTRY(entry_artist), chars);
+	gtk_editable_set_editable(GTK_EDITABLE(entry_artist), FALSE);
 	
 	// Sets genre entry.	
-	setText(chars, songPath, line1 + line2 + 7);
-	gtk_entry_set_text(GTK_ENTRY(entryGenre), chars);
-	gtk_editable_set_editable(GTK_EDITABLE(entryGenre), FALSE);
+	set_text(chars, song_path, line_1 + line_2 + 7);
+	gtk_entry_set_text(GTK_ENTRY(entry_genre), chars);
+	gtk_editable_set_editable(GTK_EDITABLE(entry_genre), FALSE);
 	
 	// Sets key entry.	
-	setText(chars, songPath, line1 + line2 + line3 + 6);
-	gtk_entry_set_text(GTK_ENTRY(entryKey), chars);
-	gtk_editable_set_editable(GTK_EDITABLE(entryKey), FALSE);
+	set_text(chars, song_path, line_1 + line_2 + line_3 + 6);
+	gtk_entry_set_text(GTK_ENTRY(entry_key), chars);
+	gtk_editable_set_editable(GTK_EDITABLE(entry_key), FALSE);
 	
 	
-	i = getChars(chars, songPath, line1 + line2 + line3 + line4 + 1);
-	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(tBufferEditor), chars, i);
-	gtk_text_view_set_editable(GTK_TEXT_VIEW(tViewEditor), FALSE);
+	i = get_chars(chars, song_path, line_1 + line_2 + line_3 + line_4 + 1);
+	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(t_buffer_editor), chars, i);
+	gtk_text_view_set_editable(GTK_TEXT_VIEW(t_view_editor), FALSE);
 	
 	g_print("Variable i: %d\n", i);
 	
-	display(tBufferDisplay, tViewDisplay);
+	display(t_buffer_display, t_view_display);
 	
-	gtk_text_buffer_set_modified(tBufferEditor, FALSE);	
+	gtk_text_buffer_set_modified(t_buffer_editor, FALSE);	
 	
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button5), FALSE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button_5), FALSE);
 }
 /*****************************************************************************/
-void songSelect(GtkTreeSelection *selection, gpointer data)
+void song_select(GtkTreeSelection *selection, gpointer data)
 {
 	//GtkTreeIter iter;	
 	
-	gchar *getSong;	
+	gchar *get_song;	
 		                                           	
 	if(gtk_tree_selection_get_selected(selection, &model, &iter))
 	{		
-		gtk_tree_model_get(GTK_TREE_MODEL(listStore), &iter, 0, 
-					       &getSong, -1);	
+		gtk_tree_model_get(GTK_TREE_MODEL(list_store), &iter, 0, 
+					       &get_song, -1);	
 					       
-		sprintf(song, "%s.chordpro", getSong);
-		sprintf(songPath, "%s%s", directory, song);		
+		sprintf(song, "%s.chordpro", get_song);
+		sprintf(song_path, "%s%s", directory, song);		
 		
-		g_free(getSong);		                                               
+		g_free(get_song);		                                               
 	}
 }
 /*****************************************************************************/
-void listFiles(void)
+void list_files(void)
 {		
-	DIR *pdir;
+	DIR *p_dir;
 	
-	struct dirent *pentry;
+	struct dirent *p_entry;
 	
-	createDir();
+	create_dir();
 	
-	pdir = opendir(directory);
+	p_dir = opendir(directory);
 	
-	if(pdir == NULL)
+	if(p_dir == NULL)
 	{
 		printf("\nERROR!");	
 	}
 
-	while((pentry = readdir(pdir)) != NULL)
+	while((p_entry = readdir(p_dir)) != NULL)
 	{		
-		gchar *files = pentry -> d_name;
+		gchar *files = p_entry -> d_name;
 		gint length;
 		
 		length = strlen(files);
@@ -223,7 +223,7 @@ void listFiles(void)
 		
 		if(length >= 3)
 		{						
-			gtk_list_store_insert_with_values(GTK_LIST_STORE(listStore), 
+			gtk_list_store_insert_with_values(GTK_LIST_STORE(list_store), 
 											  &iter, -1, 0, files, -1);		
 			//g_print("%s\n", files);
 		}
@@ -233,25 +233,25 @@ void listFiles(void)
 		}	
 	}
 
-	closedir(pdir);
+	closedir(p_dir);
 }
 /*****************************************************************************/
-void songList(void)
+void song_list(void)
 {
 	GtkCellRenderer *cell;
 		
-	listStore = gtk_list_store_new(1, G_TYPE_STRING);		
-	treeView = gtk_tree_view_new_with_model(GTK_TREE_MODEL(listStore));
+	list_store = gtk_list_store_new(1, G_TYPE_STRING);		
+	tree_view = gtk_tree_view_new_with_model(GTK_TREE_MODEL(list_store));
 	
-	tViewDisplay = gtk_text_view_new();
-	tBufferDisplay = gtk_text_view_get_buffer(GTK_TEXT_VIEW(tViewDisplay));
+	t_view_display = gtk_text_view_new();
+	t_buffer_display = gtk_text_view_get_buffer(GTK_TEXT_VIEW(t_view_display));
 		
-	g_object_unref(listStore);	
+	g_object_unref(list_store);	
 				
 	cell = gtk_cell_renderer_text_new();	
 	column = gtk_tree_view_column_new_with_attributes("Songs", cell, "text", NULL);
-	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(treeView));
-	model = gtk_tree_view_get_model(GTK_TREE_VIEW(treeView));	
+	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree_view));
+	model = gtk_tree_view_get_model(GTK_TREE_VIEW(tree_view));	
 	
 	gtk_tree_view_column_set_sort_column_id(GTK_TREE_VIEW_COLUMN(column), 0);	
 	
@@ -259,13 +259,13 @@ void songList(void)
 	
 	gtk_tree_selection_set_mode(selection, GTK_SELECTION_BROWSE);
 		
-	listFiles();	
+	list_files();	
 	
-	/* Add column to treeView1 */	
-	gtk_tree_view_append_column(GTK_TREE_VIEW(treeView), column);
+	/* Add column to tree_view1 */	
+	gtk_tree_view_append_column(GTK_TREE_VIEW(tree_view), column);
 	
 	gtk_tree_view_column_clicked(column);
 	
-	g_signal_connect(selection, "changed", G_CALLBACK(songSelect), NULL);
-	g_signal_connect(treeView, "row-activated", G_CALLBACK(activateRow), NULL);
+	g_signal_connect(selection, "changed", G_CALLBACK(song_select), NULL);
+	g_signal_connect(tree_view, "row-activated", G_CALLBACK(activate_row), NULL);
 }

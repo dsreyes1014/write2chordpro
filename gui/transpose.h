@@ -6,11 +6,11 @@
 
 // Prototypes.
 
-gint slashChordDown(void);
-gint slashChordUp(void);
-gint chordUp(void);
-gint chordDown(void);
-void transposeDown(GtkWidget *button, gpointer data);
-void transposeUp(GtkWidget *button, gpointer data);
+gint slash_chord_down(void);
+gint slash_chord_up(void);
+gint chord_up(void);
+gint chord_down(void);
+void transpose_down(GtkWidget *button, gpointer data);
+void transpose_up(GtkWidget *button, gpointer data);
 
 #endif

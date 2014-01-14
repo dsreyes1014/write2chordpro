@@ -5,14 +5,14 @@
 #define SONGS_H
 
 // Prototypes.
-void createDir(void);
-void saveDialog(void);
-void activateRow(GtkTreeView *treeView, gpointer data);
-void songSelect(GtkTreeSelection *selection, gpointer data);
-void listFiles(void);
-void songList(void);
-void modifiedEntry(void);
-void modifiedBuffer(GtkTextBuffer *buffer, gpointer data);
+void create_dir(void);
+void save_dialog(void);
+void activate_row(GtkTreeView *tree_view, gpointer data);
+void song_select(GtkTreeSelection *selection, gpointer data);
+void list_files(void);
+void song_list(void);
+void modified_entry(void);
+void modified_buffer(GtkTextBuffer *buffer, gpointer data);
 
 #endif
 

@@ -6,10 +6,10 @@
 
 // Prototypes.
 
-void display(GtkTextBuffer *buffer, GtkWidget *tView);
+void display(GtkTextBuffer *buffer, GtkWidget *t_view);
 //gint searchCharPos(gchar body[], gchar ch);
 //gint charCount(gchar body[], gchar ch);
-gint setChordPosition(GtkWidget *tView, GtkTextBuffer *buffer);
+gint set_chord_position(GtkWidget *t_view, GtkTextBuffer *buffer);
 
 #endif
 

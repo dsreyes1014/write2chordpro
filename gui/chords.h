@@ -5,10 +5,10 @@
 #define CHORDS_H
 
 // Prototypes.
-void listChords(void);
-void activateChordRow(GtkTreeView *treeView, gpointer data);
-void chordSelect(GtkTreeSelection *selection, gpointer data);
-void insertChord(GtkWidget *widget, gpointer data);
+void list_chords(void);
+void activate_chord_row(GtkTreeView *tree_view, gpointer data);
+void chord_select(GtkTreeSelection *selection, gpointer data);
+void insert_chord(GtkWidget *widget, gpointer data);
 
 #endif
 

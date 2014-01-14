@@ -7,11 +7,11 @@
 
 #include "menu.h"
 
-GtkWidget *menuBar;
+GtkWidget *menu_bar;
 extern GtkWidget *window;
-const gchar *fileMenuTitles[] = {"Open", "Save", "Quit"}; // Declared for 'menuItemFile' named "File".
+const gchar *file_menu_titles[] = {"Open", "Save", "Quit"}; // Declared for 'menu_item_file' named "File".
 
-void fileMenuCallBack(GtkMenuItem *item, gpointer data)
+void file_menu_callback(GtkMenuItem *item, gpointer data)
 {
 	GtkWidget *dialog;	
 	
@@ -46,32 +46,32 @@ void fileMenuCallBack(GtkMenuItem *item, gpointer data)
 	}
 }
 
-void menuFunction(void)
+void menu_function(void)
 {
 					           // Creates menu
-	GtkWidget *fileMenu;       // widgets to
-	GtkWidget *menuItemFile;   // complete menu.
+	GtkWidget *file_menu;       // widgets to
+	GtkWidget *menu_item_file;   // complete menu.
 	
 	gint i;    // Used in the next for loop.
 	
-	menuBar = gtk_menu_bar_new();     // Instantiates (assigns) 'menuBar'.                     
-	fileMenu = gtk_menu_new();           // Instantiates (assigns) 'fileMenu'.
+	menu_bar = gtk_menu_bar_new();     // Instantiates (assigns) 'menu_bar'.                     
+	file_menu = gtk_menu_new();           // Instantiates (assigns) 'file_menu'.
 	
-	menuItemFile = gtk_menu_item_new_with_label("File");    // Instantiate (assigns) 'menuItemFile'
+	menu_item_file = gtk_menu_item_new_with_label("File");    // Instantiate (assigns) 'menu_item_file'
 	                                                        // and creates submenu named 'File'. 
 	
-	// Reads the menu items packed into 'menuBar' from left to right.	
-	gtk_menu_bar_set_pack_direction(GTK_MENU_BAR(menuBar), GTK_PACK_DIRECTION_LTR);
+	// Reads the menu items packed into 'menu_bar' from left to right.	
+	gtk_menu_bar_set_pack_direction(GTK_MENU_BAR(menu_bar), GTK_PACK_DIRECTION_LTR);
 	
-	// Creates menuitem 'File' and its menu for menuBar. 
+	// Creates menuitem 'File' and its menu for menu_bar. 
 	for(i = 0; i < 3; i++)
 	{
-		GtkWidget *menuItem = gtk_menu_item_new_with_label(fileMenuTitles[i]);
+		GtkWidget *menuItem = gtk_menu_item_new_with_label(file_menu_titles[i]);
 		
-		gtk_menu_shell_append(GTK_MENU_SHELL(fileMenu), menuItem);
-		g_signal_connect(menuItem, "activate", G_CALLBACK(fileMenuCallBack), NULL);
+		gtk_menu_shell_append(GTK_MENU_SHELL(file_menu), menuItem);
+		g_signal_connect(menuItem, "activate", G_CALLBACK(file_menu_callback), NULL);
 	}
 		
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuItemFile), fileMenu);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar), menuItemFile);
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_item_file), file_menu);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu_bar), menu_item_file);
 }
