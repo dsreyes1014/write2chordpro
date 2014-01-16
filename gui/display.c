@@ -173,7 +173,9 @@ gint text_tags(GtkTextBuffer *buffer, const gchar *text)
 	{
 		tag = gtk_text_buffer_create_tag(buffer, NULL, 
 									     "font", "italic 12", 
-									     "weight", 650, NULL);
+									     "weight", 650, "underline", 
+									     PANGO_UNDERLINE_SINGLE, 
+									     NULL);
 
 		gtk_text_buffer_apply_tag(buffer, tag, &match_start, &match_end);
 		
@@ -246,9 +248,9 @@ void display(GtkTextBuffer *buffer, GtkWidget *t_view)
 //-----------------------------------------------------------------------------			
 	// Inserts text 'by:' before artist with attributes.
 	tag = gtk_text_buffer_create_tag(buffer, NULL, "font", 
-	                                 "monospace italic 12", 
+	                                 "monospace 10", 
 		    						 "weight-set", TRUE, 
-		    						 "weight", 550, NULL);
+		    						 "weight", 650, NULL);
 		    						 
 	gtk_text_buffer_get_iter_at_line(buffer, &start, 0);
 	
@@ -263,7 +265,7 @@ void display(GtkTextBuffer *buffer, GtkWidget *t_view)
 	
 	gtk_text_buffer_place_cursor(buffer, &start);
 	
-	gtk_text_buffer_insert_at_cursor(buffer, "artist: ", -1);
+	gtk_text_buffer_insert_at_cursor(buffer, "Artist: ", -1);
 	
 	gtk_text_buffer_get_iter_at_line(buffer, &start, 1);
 	
@@ -290,15 +292,15 @@ void display(GtkTextBuffer *buffer, GtkWidget *t_view)
 	
 	gtk_text_iter_forward_to_line_end(&end);			
 	
-	tag = gtk_text_buffer_create_tag(buffer, NULL, "weight", 600,
+	tag = gtk_text_buffer_create_tag(buffer, NULL, "weight", 500,
 									 "weight-set", TRUE, 
-									 "font", "monospace 18", NULL);
+									 "font", "monospace italic 12", NULL);
 												  
 	gtk_text_buffer_apply_tag(buffer, tag, &start, &end);	
 //-----------------------------------------------------------------------------	
 	tag = gtk_text_buffer_create_tag(buffer, NULL, "font", 
-	                                 "monospace italic 12", 
-		    						 "weight", 550, NULL);
+	                                 "monospace 10", 
+		    						 "weight", 650, NULL);
 	
 	gtk_text_buffer_get_iter_at_line(buffer, &start, 1);
 	
@@ -313,7 +315,7 @@ void display(GtkTextBuffer *buffer, GtkWidget *t_view)
 	
 	gtk_text_buffer_place_cursor(buffer, &start);
 	
-	gtk_text_buffer_insert_at_cursor(buffer, "key: ", -1);
+	gtk_text_buffer_insert_at_cursor(buffer, "Key: ", -1);
 	
 	gtk_text_buffer_get_iter_at_line(buffer, &start, 2);
 	
@@ -339,9 +341,9 @@ void display(GtkTextBuffer *buffer, GtkWidget *t_view)
 	
 	gtk_text_iter_forward_to_line_end(&end);			
 	
-	tag = gtk_text_buffer_create_tag(buffer, NULL, "weight", 600,
+	tag = gtk_text_buffer_create_tag(buffer, NULL, "weight", 500,
 									 "weight-set", TRUE, 
-									 "font", "monospace 14", NULL);
+									 "font", "monospace italic 12", NULL);
 												  
 	gtk_text_buffer_apply_tag(buffer, tag, &start, &end);
 //-----------------------------------------------------------------------------	

@@ -23,6 +23,10 @@ GtkEntryBuffer *entry_buffer;
 
 GtkTextBuffer *t_buffer_editor;
 
+GtkTreePath *tree_path_1;
+
+gchar *path_string;
+
 const gchar *get_key,
             *get_title, 
             *get_genre,
@@ -39,7 +43,12 @@ extern GtkWidget *tree_view,
                  
 extern GtkTextBuffer *t_buffer_display;
 
+extern GtkTreePath *tree_path;
+
+extern GtkTreeViewColumn *column;
+
 extern gchar song_path[];
+
 /*****************************************************************************/
 gint set_text(gchar *text, gchar *file_path, gint pos)
 {
@@ -61,6 +70,7 @@ gint set_text(gchar *text, gchar *file_path, gint pos)
 	
 	return 0;
 }
+
 /*****************************************************************************/
 // Grabs text starting from 'pos' to 'EOF' and outputs text to 'text'.
 // Returns char count through to 'i'. 
@@ -160,13 +170,16 @@ gint get_line_count(gchar *file_path)
 
 	return line_count;
 }
-/*****************************************************************************/
+/******** 'save' function ****************************************************/
 void save(GtkWidget *widget, gpointer data)
 {	
 	GtkTextIter end,
 	            start;
-	            	
+	
+	gchar value[75];	
+		
 	gchar *body;
+	      
 	
 	char new_file[45];
 	
@@ -179,7 +192,8 @@ void save(GtkWidget *widget, gpointer data)
 	get_artist = gtk_entry_get_text(GTK_ENTRY(entry_artist));
 	get_genre = gtk_entry_get_text(GTK_ENTRY(entry_genre));
 	get_key = gtk_entry_get_text(GTK_ENTRY(entry_key));	
-	body = gtk_text_buffer_get_text(GTK_TEXT_BUFFER(t_buffer_editor), &start, &end, TRUE);
+	body = gtk_text_buffer_get_text(GTK_TEXT_BUFFER(t_buffer_editor), 
+	                                &start, &end, TRUE);
 	
 	sprintf(new_file, "%s%s.chordpro", directory, get_title);
 	
@@ -195,29 +209,22 @@ void save(GtkWidget *widget, gpointer data)
 	
 	g_free(body);	
 	
-	//gtk_tree_view_set_model(GTK_TREE_VIEW(tree_view), NULL);
-	//list_store = gtk_list_store_new(1, G_TYPE_STRING);
-	//gtk_tree_view_set_model(GTK_TREE_VIEW(tree_view), GTK_TREE_MODEL(list_store));
-	//g_object_unref(list_store);
-	
-	// Have to clear 'list_store' to show newly added songs.
-	gtk_list_store_clear(list_store);
-	
-	list_files();	
-	
 	gtk_text_buffer_set_modified(t_buffer_editor, FALSE);
 	
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button_5), FALSE);
 	
+	sprintf(value, "%s.chordpro", get_title);	
 	
+	append_to_list(value);	
 }
+
 /*****************************************************************************/
 void new_song(GtkWidget *widget, gpointer button)
 {
 	GtkTextIter start, end;	
 	
 	// Unselects all in 'songList' so it will not appear in song editor.	
-	//gtk_tree_selection_unselect_all(GTK_TREE_SELECTION(selection));	
+	gtk_tree_selection_unselect_all(GTK_TREE_SELECTION(selection));	
 	
 	if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button_5)) == TRUE)
 	{

@@ -11,6 +11,7 @@
 #include "songs.h"
 #include "editor.h"
 #include "display.h"
+
 /*****************************************************************************/
 GtkWidget *tree_view,
           *t_view_display;
@@ -25,9 +26,9 @@ GtkTreeModel *model;
 
 GtkTreeViewColumn *column;
 
-GtkTextBuffer *t_buffer_display;
+GtkTreePath *tree_path;
 
-GtkTreeIter iter;
+GtkTextBuffer *t_buffer_display;
 
 gchar song[50],
       directory[75], 
@@ -45,6 +46,63 @@ extern GtkWidget *entry_title,
 				 *window;
 				 
 extern GtkTextBuffer *t_buffer_editor;
+
+/****** 'append_to_list' function ********************************************/
+void append_to_list(gchar *value)
+{
+	GtkTreePath *path;	
+	
+	gboolean check;
+	
+	GtkTreeIter iter;
+	
+	gchar *path_string;	
+	
+	check = gtk_tree_selection_get_selected(selection, &model, &iter);	
+	
+	if(check == TRUE)
+	{
+		path = gtk_tree_model_get_path(GTK_TREE_MODEL(list_store), &iter);		
+		
+		path_string = gtk_tree_path_to_string(path);	
+		
+		gtk_list_store_clear(list_store);
+		
+		list_files();
+		
+		path = gtk_tree_path_new_from_string(path_string);
+		
+		gtk_tree_selection_select_path(selection, path);
+		
+		gtk_tree_view_row_activated(GTK_TREE_VIEW(tree_view),
+	                                path, column);		
+	}
+	else 
+	{
+		gtk_list_store_append(list_store, &iter);
+		
+		gtk_list_store_set(list_store, &iter, 0, value, -1);
+		
+		gtk_tree_view_column_clicked(column);
+		gtk_tree_view_column_clicked(column);
+		
+		path = gtk_tree_model_get_path(GTK_TREE_MODEL(list_store), &iter);
+		
+		path_string = gtk_tree_path_to_string(path);
+		
+		gtk_list_store_clear(list_store);
+		
+		list_files();
+		
+		path = gtk_tree_path_new_from_string(path_string);
+		
+		gtk_tree_selection_select_path(selection, path);
+		
+		gtk_tree_view_row_activated(GTK_TREE_VIEW(tree_view),
+	                                path, column);			
+	}
+}
+
 /*****************************************************************************/
 void save_dialog(void)
 {
@@ -179,13 +237,17 @@ void activate_row(GtkTreeView *tree_view, gpointer data)
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button_5), FALSE);
 }
 /*****************************************************************************/
-void song_select(GtkTreeSelection *selection, gpointer data)
-{
-	//GtkTreeIter iter;	
+void song_select(GtkTreeSelection *tree_selection, gpointer data)
+{	
+	GtkTreeIter iter;	
 	
-	gchar *get_song;	
+	gchar *get_song;
+	
+	gboolean check;
+	
+	check = gtk_tree_selection_get_selected(tree_selection, &model, &iter);
 		                                           	
-	if(gtk_tree_selection_get_selected(selection, &model, &iter))
+	if(check == TRUE)
 	{		
 		gtk_tree_model_get(GTK_TREE_MODEL(list_store), &iter, 0, 
 					       &get_song, -1);	
@@ -193,7 +255,7 @@ void song_select(GtkTreeSelection *selection, gpointer data)
 		sprintf(song, "%s.chordpro", get_song);
 		sprintf(song_path, "%s%s", directory, song);		
 		
-		g_free(get_song);		                                               
+		g_free(get_song);			                                               
 	}
 }
 /*****************************************************************************/
@@ -215,6 +277,9 @@ void list_files(void)
 	while((p_entry = readdir(p_dir)) != NULL)
 	{		
 		gchar *files = p_entry -> d_name;
+		
+		GtkTreeIter iter;
+		
 		gint length;
 		
 		length = strlen(files);
@@ -235,6 +300,7 @@ void list_files(void)
 
 	closedir(p_dir);
 }
+
 /*****************************************************************************/
 void song_list(void)
 {
@@ -261,7 +327,7 @@ void song_list(void)
 		
 	list_files();	
 	
-	/* Add column to tree_view1 */	
+	/* Add column to tree_view */	
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tree_view), column);
 	
 	gtk_tree_view_column_clicked(column);
