@@ -422,6 +422,7 @@ void insert_chord(GtkWidget *widget, gpointer data)
 	GtkCellRenderer *cell; 
 	GtkTextIter iter;
 	GtkTreeSelection *selection;
+	GtkAccelGroup *accel_group;
 	gchar *brackets;
 	
 	brackets = "[]";	//Instantiates (assigns) 'brackets'. 				
@@ -437,7 +438,8 @@ void insert_chord(GtkWidget *widget, gpointer data)
 	bottom_half = gtk_dialog_get_action_area(GTK_DIALOG(chord_dialog));	
 	label = gtk_label_new("Choose Chord");
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree_view));	
-	model = gtk_tree_view_get_model(GTK_TREE_VIEW(tree_view));		
+	model = gtk_tree_view_get_model(GTK_TREE_VIEW(tree_view));	
+	accel_group = gtk_accel_group_new();	
 	
 	if(gtk_text_view_get_editable(GTK_TEXT_VIEW(t_view_editor)) == TRUE)	
 	{
@@ -460,7 +462,12 @@ void insert_chord(GtkWidget *widget, gpointer data)
 	gtk_container_add(GTK_CONTAINER(top_half), label);
 	gtk_container_add(GTK_CONTAINER(bottom_half), frame);		
 	
-	gtk_widget_show_all(chord_dialog);	
+	gtk_widget_show_all(chord_dialog);
+	
+	gtk_window_add_accel_group(GTK_WINDOW(chord_dialog), accel_group);	
+	
+	gtk_widget_add_accelerator(tree_view, "row-expanded",
+	                           accel_group, GDK_KEY_Right, 0, GTK_ACCEL_VISIBLE);
 	
 	g_object_unref(tree_store);	
 	

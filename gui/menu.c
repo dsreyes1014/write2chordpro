@@ -8,8 +8,10 @@
 #include "menu.h"
 
 GtkWidget *menu_bar;
+
 extern GtkWidget *window;
-const gchar *file_menu_titles[] = {"Open", "Save", "Quit"}; // Declared for 'menu_item_file' named "File".
+
+const gchar *file_menu_titles[] = {"Quit"}; // Declared for 'menu_item_file' named "File".
 
 void file_menu_callback(GtkMenuItem *item, gpointer data)
 {
@@ -64,7 +66,7 @@ void menu_function(void)
 	gtk_menu_bar_set_pack_direction(GTK_MENU_BAR(menu_bar), GTK_PACK_DIRECTION_LTR);
 	
 	// Creates menuitem 'File' and its menu for menu_bar. 
-	for(i = 0; i < 3; i++)
+	for(i = 0; i < 1; i++)
 	{
 		GtkWidget *menuItem = gtk_menu_item_new_with_label(file_menu_titles[i]);
 		

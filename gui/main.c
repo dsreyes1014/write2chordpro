@@ -26,9 +26,28 @@ extern GtkWidget *menu_bar,
                  *entry_title,                
                  *t_view_display;
                  
-extern GtkTextBuffer *t_buffer_editor;       
+extern GtkTextBuffer *t_buffer_editor;     
+
+/******* 'detach_tab' Function ***********************************************/
+
+void detach_tab(GtkNotebook *notebook, GtkWidget *page,
+                gint x, gint y, gpointer data)
+{
+	GtkWidget *window_2,
+	          *notebook_2;
+
+	window_2 = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	notebook_2 = gtk_notebook_new();	
+	
+	gtk_notebook_set_group_name(GTK_NOTEBOOK(notebook), "songs"); 	
+	
+	gtk_container_add(GTK_CONTAINER(window_2), notebook_2);	
+	
+	gtk_widget_show_all(window_2);
+}               
          
-/******* 'close_window' function *********************************************/
+/******* 'close_window' Function *********************************************/
+
 void close_window(GtkWidget *widget, gpointer data) 
 {
 	GtkEntryBuffer *buffer;	
@@ -52,6 +71,7 @@ void close_window(GtkWidget *widget, gpointer data)
 }
 
 /****** 'main' function ******************************************************/
+
 int main(int argc, char *argv[])
 {
 	GtkWidget *grid,
@@ -63,11 +83,11 @@ int main(int argc, char *argv[])
 	          *notebook,
 	          *tab_label,
 	          *scrolled_window_1,
-	          *scrolled_window_2;	
+	          *scrolled_window_2;		                  
 	
 	gtk_init(&argc, &argv);
 	
-	grid = gtk_grid_new();	
+	grid = gtk_grid_new();
 	notebook = gtk_notebook_new();
 	frame_1 = gtk_frame_new(NULL);
 	frame_2 = gtk_frame_new("Song");
@@ -76,10 +96,8 @@ int main(int argc, char *argv[])
 	paned = gtk_paned_new(GTK_ORIENTATION_HORIZONTAL);	
 	scrolled_window_1 = gtk_scrolled_window_new(NULL, NULL);
     scrolled_window_2 = gtk_scrolled_window_new(NULL, NULL);
-    
-    
    
-	// This creates toplevel 'window' widget titled "Write 2 Chordpro".
+	// This creates toplevel 'window' widget titled 'Write 2 Chordpro'.
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title(GTK_WINDOW(window), "Write 2 Chordpro");
 	
@@ -105,19 +123,25 @@ int main(int argc, char *argv[])
 	gtk_container_add(GTK_CONTAINER(scrolled_window_2), t_view_display);
 	gtk_box_pack_start(GTK_BOX(box_2), scrolled_window_2, TRUE, TRUE, 2);
 
-	// Creates tabs for 'notebook' widget.
-	gtk_notebook_append_page(GTK_NOTEBOOK(notebook), box_2, NULL);
-	gtk_notebook_append_page(GTK_NOTEBOOK(notebook), grid, NULL);
+	//----- Creates tabs for 'notebook' widget and tab labels. ----------------
 	
-	// Sets labels for 'notebook' widget tabs.	
-	tab_label = gtk_label_new("Display");	
-	gtk_notebook_set_tab_label(GTK_NOTEBOOK(notebook), box_2, tab_label);	
-	tab_label = gtk_label_new("Song Editor");	
-	gtk_notebook_set_tab_label(GTK_NOTEBOOK(notebook), grid, tab_label);
+	tab_label = gtk_label_new("Display");
+	gtk_notebook_insert_page(GTK_NOTEBOOK(notebook), box_2, tab_label, 0);
+	tab_label = gtk_label_new("Song Editor");
+	gtk_notebook_insert_page(GTK_NOTEBOOK(notebook), grid, tab_label, 1);	
 	
-	gtk_notebook_set_tab_detachable(GTK_NOTEBOOK(notebook), window, TRUE);
+	gtk_notebook_set_tab_detachable(GTK_NOTEBOOK(notebook), box_2, TRUE);	
 	
-	// Packs 'frame' & 'notebook' widgets inside pane 1 & 2 respectively.
+	gtk_notebook_popup_enable(GTK_NOTEBOOK(notebook));
+	
+	gtk_notebook_set_group_name(GTK_NOTEBOOK(notebook), "songs"); 
+	
+	g_signal_connect(notebook, "create-window", G_CALLBACK(detach_tab), NULL);                
+	                    
+	//g_signal_connect(notebook_2, "create-window", G_CALLBACK(detach_tab), NULL);
+			
+	//-- Packs 'frame' & 'notebook' widgets inside pane 1 & 2 respectively. ---
+	 
 	gtk_paned_pack1(GTK_PANED(paned), frame_1, TRUE, FALSE);
 	gtk_paned_pack2(GTK_PANED(paned), notebook, TRUE, FALSE);
 	

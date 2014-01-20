@@ -12,6 +12,8 @@
 #include "transpose.h"
 #include "display.h"
 
+/******** Global Variables ***************************************************/
+
 GtkWidget *button_5,
           *entry_key,
           *entry_genre,
@@ -22,10 +24,6 @@ GtkWidget *button_5,
 GtkEntryBuffer *entry_buffer;
 
 GtkTextBuffer *t_buffer_editor;
-
-GtkTreePath *tree_path_1;
-
-gchar *path_string;
 
 const gchar *get_key,
             *get_title, 
@@ -49,7 +47,8 @@ extern GtkTreeViewColumn *column;
 
 extern gchar song_path[];
 
-/*****************************************************************************/
+/********** 'set_text' Function **********************************************/
+
 gint set_text(gchar *text, gchar *file_path, gint pos)
 {
 	FILE *fp;
@@ -71,7 +70,8 @@ gint set_text(gchar *text, gchar *file_path, gint pos)
 	return 0;
 }
 
-/*****************************************************************************/
+/************* 'get_chars' Function ******************************************/
+
 // Grabs text starting from 'pos' to 'EOF' and outputs text to 'text'.
 // Returns char count through to 'i'. 
 gint get_chars(gchar *text, gchar *file_path, gint pos)
@@ -103,8 +103,10 @@ gint get_chars(gchar *text, gchar *file_path, gint pos)
 		
 		return i;
 	}
-}	
-/*****************************************************************************/
+}
+	
+/*********** 'get_line_char_count' Function **********************************/
+
 gint get_line_char_count(gchar line[][COLUMN_N], gint line_num)
 {
 	gint char_count;
@@ -113,15 +115,16 @@ gint get_line_char_count(gchar line[][COLUMN_N], gint line_num)
 	
 	return char_count;
 }
-/*****************************************************************************/
+
+/********** 'get_text_for_each_line' Function ********************************/
+
 gint get_text_for_each_line(gchar lines[][COLUMN_N], gint line_num)
 {
 	gint i;
 	
 	FILE *fp;	
 	
-	// This will read each line for 
-	// future text manipulation.
+	// This will read each line for future text manipulation.
 	if((fp = fopen(song_path, "r")) == NULL)            
 	{														
 		g_print("Error\n");
@@ -140,7 +143,9 @@ gint get_text_for_each_line(gchar lines[][COLUMN_N], gint line_num)
 
 	return 0;
 }
-/*****************************************************************************/
+
+/*********** 'get_line_count' Function ***************************************/
+
 gint get_line_count(gchar *file_path)
 {
 	gchar ch;	
@@ -170,7 +175,9 @@ gint get_line_count(gchar *file_path)
 
 	return line_count;
 }
+
 /******** 'save' function ****************************************************/
+
 void save(GtkWidget *widget, gpointer data)
 {	
 	GtkTextIter end,
@@ -218,7 +225,8 @@ void save(GtkWidget *widget, gpointer data)
 	append_to_list(value);	
 }
 
-/*****************************************************************************/
+/********* 'new_song' Function ************************************************/
+
 void new_song(GtkWidget *widget, gpointer button)
 {
 	GtkTextIter start, end;	
@@ -248,11 +256,11 @@ void new_song(GtkWidget *widget, gpointer button)
 		gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(t_buffer_editor), &end);
 	
 		gtk_text_buffer_delete(GTK_TEXT_BUFFER(t_buffer_editor), &start, &end);
-	
-		//gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
 	}	
 }
-/*****************************************************************************/
+
+/************* 'edit_song' Function ******************************************/
+
 void edit_song(GtkToggleButton *button, gpointer data)
 {
 	if(gtk_toggle_button_get_active(button) == TRUE)
@@ -280,7 +288,9 @@ void edit_song(GtkToggleButton *button, gpointer data)
 		gtk_text_view_set_editable(GTK_TEXT_VIEW(t_view_editor), FALSE);
 	}
 }
-/*****************************************************************************/
+
+/************ 'editor' Function **********************************************/
+
 void editor(GtkWidget *grid, GtkWidget *window)
 {
 	GtkWidget *frame,
@@ -300,9 +310,6 @@ void editor(GtkWidget *grid, GtkWidget *window)
 	          *arrow_left,
 	          *arrow_right,
 	          *scrolled_window;
-	
-	//GtkTextIter end,
-	            //start;
 			    		
 	frame = gtk_frame_new(NULL);	
 	entry_key = gtk_entry_new();
@@ -345,18 +352,19 @@ void editor(GtkWidget *grid, GtkWidget *window)
 	                               "Enter title");
 	gtk_entry_set_placeholder_text(GTK_ENTRY(entry_artist), 
 	                               "Enter artist");
-//-----------------------------------------------------------------------------	
-	// Sets cursor to visible. I think it's set by default 
-	// but adding it to make sure.
+
 	gtk_text_view_set_cursor_visible(GTK_TEXT_VIEW(t_view_editor), TRUE);
-//-----------------------------------------------------------------------------
-	// Properties for 'frame' widget.	
+
+//---- Properties for 'frame' widget ------------------------------------------
+	
 	gtk_frame_set_shadow_type(GTK_FRAME(frame), GTK_SHADOW_ETCHED_IN);		
-//-----------------------------------------------------------------------------	
-	// Packs 'button_3' & 'button_4' into 'box_top'.
+	
+//--- Packs 'button3', 'button 4', & button 5' into 'box_top'------------------	
+	
 	gtk_box_pack_start(GTK_BOX(box_top), button_3, FALSE, TRUE, 2);
 	gtk_box_pack_start(GTK_BOX(box_top), button_5, FALSE, TRUE, 2);
-	gtk_box_pack_start(GTK_BOX(box_top), button_4, FALSE, TRUE, 2); 
+	gtk_box_pack_start(GTK_BOX(box_top), button_4, FALSE, TRUE, 2);
+	 
 //-----------------------------------------------------------------------------	
 	// Buttonbox setup and packing.	
 	gtk_container_add(GTK_CONTAINER(button_2), arrow_right);

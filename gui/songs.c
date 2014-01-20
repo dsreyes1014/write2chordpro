@@ -12,21 +12,20 @@
 #include "editor.h"
 #include "display.h"
 
-/*****************************************************************************/
-GtkWidget *tree_view,
-          *t_view_display;
-          
-GtkTextBuffer *t_buffer_display;
-
-GtkListStore *list_store;
-
-GtkTreeSelection *selection;
+/********* Global Variables **************************************************/
 
 GtkTreeModel *model;
 
+GtkWidget *tree_view,
+          *t_view_display;
+          
+GtkTreePath *tree_path;
+
+GtkListStore *list_store;
+
 GtkTreeViewColumn *column;
 
-GtkTreePath *tree_path;
+GtkTreeSelection *selection;
 
 GtkTextBuffer *t_buffer_display;
 
@@ -47,7 +46,8 @@ extern GtkWidget *entry_title,
 				 
 extern GtkTextBuffer *t_buffer_editor;
 
-/****** 'append_to_list' function ********************************************/
+/****** 'append_to_list' Function ********************************************/
+
 void append_to_list(gchar *value)
 {
 	GtkTreePath *path;	
@@ -73,9 +73,8 @@ void append_to_list(gchar *value)
 		path = gtk_tree_path_new_from_string(path_string);
 		
 		gtk_tree_selection_select_path(selection, path);
-		
-		gtk_tree_view_row_activated(GTK_TREE_VIEW(tree_view),
-	                                path, column);		
+	                                
+		activate_row(tree_view, NULL);	                                		
 	}
 	else 
 	{
@@ -97,15 +96,15 @@ void append_to_list(gchar *value)
 		path = gtk_tree_path_new_from_string(path_string);
 		
 		gtk_tree_selection_select_path(selection, path);
-		
-		gtk_tree_view_row_activated(GTK_TREE_VIEW(tree_view),
-	                                path, column);			
+	                                
+		activate_row(tree_view, NULL);	                                			
 	}
 }
 
-/*****************************************************************************/
+/********** 'save_dialog' Function *******************************************/
+
 void save_dialog(void)
-{
+{	
 	GtkWidget *message_window;
 	
 	gint run;
@@ -134,14 +133,17 @@ void save_dialog(void)
 		gtk_widget_destroy(message_window);	                     
 	}
 }
-/*****************************************************************************/
+
+/****** 'create_dir' Function ************************************************/
+
 void create_dir(void)
 {
-	gchar user[30];
-	
-	gchar *user_variable; 
-	gchar *home_dir; 
-	gchar *program_dir; 
+	gchar user[30],
+	      *home_dir,
+	      *program_dir,
+	      *user_variable; 
+	 
+	 
 	
 	user_variable = "USER";
 	home_dir = "home";
@@ -156,18 +158,10 @@ void create_dir(void)
 	// Creates directory.
 	mkdir(directory, S_IRWXU);
 }
-/*****************************************************************************/
-void modified_entry(void)
-{	
-	display(t_buffer_display, t_view_display);
-}
-/*****************************************************************************/
-void modified_buffer(GtkTextBuffer *buffer, gpointer data)
-{	
-	display(t_buffer_display, t_view_display);
-}
-/*****************************************************************************/
-void activate_row(GtkTreeView *tree_view, gpointer data)
+
+/******** 'activate_row' Function ********************************************/
+
+void activate_row(GtkWidget *widget, gpointer data)
 {
 	GtkEntryBuffer *buffer;	
 		
@@ -186,7 +180,12 @@ void activate_row(GtkTreeView *tree_view, gpointer data)
 		save_dialog();	
 	}
 
-	gint i, n,  line_1, line_2, line_3, line_4;
+	gint i, 
+	     n,  
+	     line_1, 
+	     line_2, 
+	     line_3, 
+	     line_4;
 	
 	gchar chars[2000];	
 	
@@ -223,7 +222,7 @@ void activate_row(GtkTreeView *tree_view, gpointer data)
 	gtk_entry_set_text(GTK_ENTRY(entry_key), chars);
 	gtk_editable_set_editable(GTK_EDITABLE(entry_key), FALSE);
 	
-	
+	// Sets body.
 	i = get_chars(chars, song_path, line_1 + line_2 + line_3 + line_4 + 1);
 	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(t_buffer_editor), chars, i);
 	gtk_text_view_set_editable(GTK_TEXT_VIEW(t_view_editor), FALSE);
@@ -236,7 +235,9 @@ void activate_row(GtkTreeView *tree_view, gpointer data)
 	
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button_5), FALSE);
 }
-/*****************************************************************************/
+
+/******* 'song_select' Function **********************************************/
+
 void song_select(GtkTreeSelection *tree_selection, gpointer data)
 {	
 	GtkTreeIter iter;	
@@ -258,7 +259,9 @@ void song_select(GtkTreeSelection *tree_selection, gpointer data)
 		g_free(get_song);			                                               
 	}
 }
-/*****************************************************************************/
+
+/******** 'list_files' Function **********************************************/
+
 void list_files(void)
 {		
 	DIR *p_dir;
@@ -290,18 +293,14 @@ void list_files(void)
 		{						
 			gtk_list_store_insert_with_values(GTK_LIST_STORE(list_store), 
 											  &iter, -1, 0, files, -1);		
-			//g_print("%s\n", files);
-		}
-		else 
-		{
-			//g_print("%s\n", files);		
 		}	
 	}
 
 	closedir(p_dir);
 }
 
-/*****************************************************************************/
+/******* 'song_list' Function ************************************************/
+
 void song_list(void)
 {
 	GtkCellRenderer *cell;
