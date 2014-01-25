@@ -17,7 +17,7 @@ GtkTreePath *path;
 
 gchar *string_path;
 extern GtkTextBuffer *t_buffer_editor;
-extern GtkWidget *button_5, *t_view_editor;
+extern GtkWidget *button_5, *t_view_editor, *window;
 
 /*---------------------------------------------------------------------------*/
 void activate_chord_row(GtkTreeView *tree_view, gpointer data)
@@ -462,11 +462,11 @@ void insert_chord(GtkWidget *widget, gpointer data)
 	gtk_container_add(GTK_CONTAINER(top_half), label);
 	gtk_container_add(GTK_CONTAINER(bottom_half), frame);		
 	
-	gtk_widget_show_all(chord_dialog);
+	//gtk_widget_show_all(chord_dialog);
 	
 	gtk_window_add_accel_group(GTK_WINDOW(chord_dialog), accel_group);	
 	
-	gtk_widget_add_accelerator(tree_view, "row-expanded",
+	gtk_widget_add_accelerator(tree_view, "expand-collapse-cursor-row",
 	                           accel_group, GDK_KEY_Right, 0, GTK_ACCEL_VISIBLE);
 	
 	g_object_unref(tree_store);	
@@ -489,4 +489,6 @@ void insert_chord(GtkWidget *widget, gpointer data)
 	
 	g_signal_connect(selection, "changed", G_CALLBACK(chord_select), NULL);	
 	g_signal_connect(tree_view, "row-activated", G_CALLBACK(activate_chord_row), NULL);		
+
+	gtk_widget_show_all(chord_dialog);
 }

@@ -92,7 +92,7 @@ gint set_chord_position(GtkWidget *t_view, GtkTextBuffer *buffer)
 	//g_print("Lineoffset of start:end bracket:\n%d\n%d\n", line_offset_1, line_offset_2);
 		
 	// If chord found is found more than two lines down
-	// refresh global values of 'line_count_V' and 'line_num_C'. 
+	// refresh global values of 'line_count_C' and 'line_num_C'. 
 	if(line_num_1 > (line_num_C + 1))	
 	{
 		line_num_C = line_num_1;
@@ -212,7 +212,8 @@ void display(GtkTextBuffer *buffer, GtkWidget *t_view)
 								  "Verse 3:","Bridge:", "Bridge 1:",
 								  "Bridge 2:", "Bridge 3:", "Intro:",
 								  "End:", "PreChorus:", "Verso:",
-								  "Chorus:", "Coro:", "Puente:"};
+								  "Chorus:", "Coro:", "Puente:", 
+								  "Key Shift:"};
 								  
 //-----------------------------------------------------------------------------				
 	gtk_text_buffer_get_start_iter(buffer, &start);
@@ -397,7 +398,7 @@ void display(GtkTextBuffer *buffer, GtkWidget *t_view)
 	char_line = 0;
 	char_line_offset = 0;
 	
-	for(i = 0; i < 15;)
+	for(i = 0; i < 16;)
 	{
 		for(j = 0; j == 0;)
 		{
