@@ -9,9 +9,10 @@
 
 GtkWidget *menu_bar;
 
-extern GtkWidget *window;
+extern GtkWidget *window,
+                 *t_view_display;
 
-const gchar *file_menu_titles[] = {"Quit"}; // Declared for 'menu_item_file' named "File".
+const gchar *file_menu_titles[] = {"Print", "Quit"}; 
 
 void file_menu_callback(GtkMenuItem *item, gpointer data)
 {
@@ -48,11 +49,24 @@ void file_menu_callback(GtkMenuItem *item, gpointer data)
 	}
 }
 
+/******** 'print_func' Function **********************************************/
+void print_func(GtkWidget *widget, gpointer data)
+{
+	GtkPrintOperation *print;
+	
+	print = gtk_print_operation_new();
+	
+	gtk_print_operation_run(print, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,
+	                        GTK_WINDOW(window), NULL);
+	                        
+	gtk_print_operation_set_support_selection(print, TRUE);	                        
+}
+
 void menu_function(void)
 {
-					           // Creates menu
-	GtkWidget *file_menu;       // widgets to
-	GtkWidget *menu_item_file;   // complete menu.
+					           
+	GtkWidget *file_menu;       
+	GtkWidget *menu_item_file;  
 	
 	gint i;    // Used in the next for loop.
 	
@@ -66,12 +80,14 @@ void menu_function(void)
 	gtk_menu_bar_set_pack_direction(GTK_MENU_BAR(menu_bar), GTK_PACK_DIRECTION_LTR);
 	
 	// Creates menuitem 'File' and its menu for menu_bar. 
-	for(i = 0; i < 1; i++)
+	for(i = 0; i < 2; i++)
 	{
 		GtkWidget *menuItem = gtk_menu_item_new_with_label(file_menu_titles[i]);
 		
 		gtk_menu_shell_append(GTK_MENU_SHELL(file_menu), menuItem);
+
 		g_signal_connect(menuItem, "activate", G_CALLBACK(file_menu_callback), NULL);
+		g_signal_connect(menuItem, "activate", G_CALLBACK(print_func), NULL);		
 	}
 		
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_item_file), file_menu);

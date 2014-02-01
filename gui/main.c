@@ -28,24 +28,45 @@ extern GtkWidget *menu_bar,
                  
 extern GtkTextBuffer *t_buffer_editor;     
 
-/******* 'detach_tab' Function ***********************************************/
-
-void detach_tab(GtkNotebook *notebook, GtkWidget *page,
-                gint x, gint y, gpointer data)
+/******* 'tab_drag_drop' Function *********************************************/
+gboolean 
+tab_drag_drop(GtkWidget *widget, 
+              GdkDragContext *context,
+              gint x,
+              gint y,
+              guint time,
+              gpointer data)
 {
-	GtkWidget *window_2,
-	          *notebook_2;
-
-	window_2 = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	notebook_2 = gtk_notebook_new();	
 	
-	gtk_notebook_set_group_name(GTK_NOTEBOOK(notebook), "songs"); 	
+}                   
+/******* 'tab_drag_begin' Function *********************************************/
+void tab_drag_begin(GtkWidget *widget, GdkDragContext *context, gpointer data)
+{
+	GtkWidget *box,
+	          *window,
+	          *notebook;
 	
-	gtk_container_add(GTK_CONTAINER(window_2), notebook_2);	
+	const gchar *group_name;	
 	
-	gtk_widget_show_all(window_2);
-}               
-         
+	box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);		          
+	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	notebook = gtk_notebook_new();
+	
+	gtk_notebook_set_group_name(GTK_NOTEBOOK(notebook), "display_tab");	
+	
+	group_name = gtk_notebook_get_group_name(GTK_NOTEBOOK(notebook));	
+	
+	g_print("%s\n", group_name);	
+	
+	gtk_container_add(GTK_CONTAINER(box), notebook);
+	gtk_container_add(GTK_CONTAINER(window), box);
+	
+	gtk_widget_set_size_request(window, 320, 320);	
+	
+	g_signal_connect(notebook, "drag-drop", G_CALLBACK(tab_drag_drop), NULL);	
+	
+	gtk_widget_show_all(window);
+}         
 /******* 'close_window' Function *********************************************/
 
 void close_window(GtkWidget *widget, gpointer data) 
@@ -80,10 +101,12 @@ int main(int argc, char *argv[])
 	          *paned,
 	          *frame_1, 
 	          *frame_2,
-	          *notebook,
+	          *notebook,	         
 	          *tab_label,
 	          *scrolled_window_1,
-	          *scrolled_window_2;		                  
+	          *scrolled_window_2;		
+	     
+	const gchar *group_name;         
 	
 	gtk_init(&argc, &argv);
 	
@@ -123,7 +146,7 @@ int main(int argc, char *argv[])
 	gtk_container_add(GTK_CONTAINER(scrolled_window_2), t_view_display);
 	gtk_box_pack_start(GTK_BOX(box_2), scrolled_window_2, TRUE, TRUE, 2);
 
-	//----- Creates tabs for 'notebook' widget and tab labels. ----------------
+//----- Creates tabs for 'notebook' widget and tab labels. --------------------
 	
 	tab_label = gtk_label_new("Display");
 	gtk_notebook_insert_page(GTK_NOTEBOOK(notebook), box_2, tab_label, 0);
@@ -134,12 +157,16 @@ int main(int argc, char *argv[])
 	
 	gtk_notebook_popup_enable(GTK_NOTEBOOK(notebook));
 	
-	gtk_notebook_set_group_name(GTK_NOTEBOOK(notebook), "songs"); 
+	gtk_notebook_set_group_name(GTK_NOTEBOOK(notebook), "display_tab");	
 	
-	g_signal_connect(notebook, "create-window", G_CALLBACK(detach_tab), NULL);                
-	                    
-	//g_signal_connect(notebook_2, "create-window", G_CALLBACK(detach_tab), NULL);
-			
+	group_name = gtk_notebook_get_group_name(GTK_NOTEBOOK(notebook));
+	
+	g_signal_connect(notebook, "drag-begin", G_CALLBACK(tab_drag_begin), NULL);
+	
+	g_print("%s\n", group_name);
+
+//-----------------------------------------------------------------------------
+	                 			
 	//-- Packs 'frame' & 'notebook' widgets inside pane 1 & 2 respectively. ---
 	 
 	gtk_paned_pack1(GTK_PANED(paned), frame_1, TRUE, FALSE);
