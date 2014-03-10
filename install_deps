@@ -2,7 +2,6 @@
 
 export INSTALL_DIR="$(pwd)"
 #--------------------------------------
-sudo mkdir -pv ${INSTALL_DIR}
 sudo mkdir -pv ${INSTALL_DIR}/lib
 sudo mkdir -pv ${INSTALL_DIR}/share
 sudo mkdir -pv ${INSTALL_DIR}/bin
@@ -222,19 +221,19 @@ sudo rm -rf atk-2.11.4
 #######################################
 # Build gdk-pixbuf                    #
 #######################################
-tar -Jxf gdk-pixbuf-2.30.2.tar.xz
-cd gdk-pixbuf-2.30.2
+tar -Jxf gdk-pixbuf-2.30.3.tar.xz
+cd gdk-pixbuf-2.30.3
 ./configure --prefix=${INSTALL_DIR} \
 	--with-x11
 ${LDFLAGS} ${CPPFLAGS} make
 sudo make install
 cd ..
-sudo rm -rf gdk-pixbuf-2.30.2
+sudo rm -rf gdk-pixbuf-2.30.3
 #######################################
 # Build GTK+3                         #
 #######################################
-tar -Jxf gtk+-3.10.6.tar.xz
-cd gtk+-3.10.6
+tar -Jxf gtk+-3.10.7.tar.xz
+cd gtk+-3.10.7
 ./configure --prefix=${INSTALL_DIR} \
 	--sysconfdir=${INSTALL_DIR}/etc \
 	--enable-broadway-backend \
@@ -243,5 +242,5 @@ cd gtk+-3.10.6
 ${LDFLAGS} ${CPPFLAGS} make
 sudo make install
 cd ..
-sudo rm -rf gtk+-3.10.6
+sudo rm -rf gtk+-3.10.7
 #######################################	
